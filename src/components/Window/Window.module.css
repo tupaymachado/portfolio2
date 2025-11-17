@@ -1,0 +1,105 @@
+.window {
+  /* Posicionamento e Tamanho Inicial */
+  position: absolute;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4); 
+
+  /* Borda principal da janela */
+  border: 1px solid var(--xp-blue-title-active-start);
+  background-color: var(--xp-gray-button);
+}
+
+/* Estilo base para todas as alças */
+.resizeHandle {
+  position: absolute;
+  /* background-color: rgba(255, 0, 0, 0.2); Descomente para visualizar as alças */
+}
+
+/* --- Alças das Bordas --- */
+.n, .s { left: 8px; right: 8px; height: 8px; cursor: ns-resize; }
+.e, .w { top: 8px; bottom: 8px; width: 8px; cursor: ew-resize; }
+.n { top: -4px; }
+.s { bottom: -4px; }
+.e { right: -4px; }
+.w { left: -4px; }
+
+/* --- Alças dos Cantos --- */
+.ne, .nw, .se, .sw { width: 12px; height: 12px; }
+.ne { top: -4px; right: -4px; cursor: nesw-resize; }
+.nw { top: -4px; left: -4px; cursor: nwse-resize; }
+.se { bottom: -4px; right: -4px; cursor: nwse-resize; }
+.sw { bottom: -4px; left: -4px; cursor: nesw-resize; }
+
+.resizing {
+  transition: all 0.2s ease-in-out;
+}
+
+.maximized {
+  /* Usamos !important para sobrescrever os estilos 'top' e 'left' que são aplicados inline */
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: calc(100vh - 30px) !important;
+}
+
+.titleBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 28px;
+  padding: 0 4px;
+  background-color: #245DDA;
+  /* background: linear-gradient(to right,
+      var(--xp-gray-title-inactive-start),
+      var(--xp-gray-title-inactive-end)); */
+  transition: background 0.1s ease-in-out;
+}
+
+.titleBar.active {
+  background: linear-gradient(to right, 
+    var(--xp-blue-title-active-start), 
+    var(--xp-blue-title-active-end)
+  );
+}
+
+.icon {
+  height: 18px;
+  width: 18px;
+  margin-right: 5px;
+}
+
+.title {
+  color: var(--xp-text-color-light);
+  font-weight: bold;
+  font-size: 13px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.windowControls {
+  display: flex;
+  gap: 3px;
+}
+
+.windowButton {
+  width: 21px;
+  height: 21px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "MS Sans Serif", "Tahoma";
+  font-weight: bold;
+  font-size: 12px;
+  background-color: var(--xp-gray-button);
+  border: 1px solid var(--xp-gray-border);
+  box-shadow: inset -1px -1px 1px var(--xp-gray-button-shadow);
+  color: var(--xp-text-color-dark);
+}
+
+.windowButton:hover {
+  filter: brightness(110%);
+}
+
+.closeButton {
+  background-color: #e81123;
+  color: var(--xp-text-color-light);
+  font-weight: bold;
+}

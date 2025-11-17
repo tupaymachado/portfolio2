@@ -1,0 +1,12 @@
+.desktop {
+  /* Posicionamento e Tamanho */
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100vw; /* 100% da largura da tela (viewport) */
+  height: 100vh; /* 100% da altura da tela */
+  
+  background-size: cover; /* Faz a imagem cobrir toda a área */
+  background-position: center; /* Centraliza a imagem */
+  background-repeat: no-repeat; /* Impede que a imagem se repita */
+}
