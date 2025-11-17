@@ -4,22 +4,19 @@
   padding: 3px 15px 3px 8px;
   height: 30px;
 
-  /* --- Forma --- */
   border-radius: 0px 12px 12px 0px;
-  
-  /* --- Cor de Fundo (Gradiente) --- */
-  /* As variáveis específicas do botão verde ainda são a melhor escolha aqui */
-  background: linear-gradient(
-    to top, 
-    var(--xp-green-start-button-start), 
-    var(--xp-green-start-button-end)
-  );
-  
+
+  background: linear-gradient(to top,
+      var(--xp-green-start-button-start),
+      var(--xp-green-start-button-end));
+
   /* --- Profundidade e Contorno --- */
   border: 1px solid var(--xp-green-start-button-border);
-  box-shadow: 
-    inset 1px 1px 1px rgba(255, 255, 255, 0.4), /* Efeito de brilho interno */
-    1px 1px 2px rgba(0, 0, 0, 0.2);             /* Sombra externa sutil */
+  box-shadow:
+    inset 1px 1px 1px rgba(255, 255, 255, 0.4),
+    /* Efeito de brilho interno */
+    1px 1px 2px rgba(0, 0, 0, 0.2);
+  /* Sombra externa sutil */
 
   /* --- Animação de Interação --- */
   transition: all 0.1s ease-in-out;
@@ -33,24 +30,30 @@
 
 .startText {
   /* O texto do botão iniciar é branco, assim como o texto sobre áreas destacadas */
-  color: var(--color-text-on-highlight); 
+  color: var(--color-text-on-highlight);
   font-family: Tahoma, sans-serif;
   font-style: italic;
-  font-weight: 500; /* O texto 'iniciar' original é em negrito */
+  font-weight: 500;
+  /* O texto 'iniciar' original é em negrito */
   font-size: 16px;
   letter-spacing: 1.3px;
-  
+
   /* A sombra é crucial para a legibilidade sobre o fundo verde */
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .startBtn:hover {
   /* Ilumina o botão ao passar o mouse, simulando reflexo de luz */
-  filter: brightness(1.1); 
+  filter: brightness(1.1);
 }
 
 .startBtn:active {
   /* Escurece o botão ao ser pressionado, simulando o efeito "afundado" */
   filter: brightness(0.9);
-  transform: scale(0.98); /* Aumentei um pouco o efeito de clique */
+  transform: scale(0.98);
+  /* Aumentei um pouco o efeito de clique */
+}
+
+.startBtnCssRef {
+  /* Não precisa de nenhum estilo, é apenas um marcador */
 }

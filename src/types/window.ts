@@ -1,5 +1,7 @@
 export type WindowDisplayState = 'normal' | 'minimized' | 'maximized';
 
+export type ResizeHandle = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
+
 export interface WindowInstance {
   // --- IDENTIFICAÇÃO ---
   id: number;           // ID único DESTA INSTÂNCIA (gerado com Date.now())

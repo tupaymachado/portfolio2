@@ -1,11 +1,24 @@
 import styles from './StartBtn.module.css';
 import WinLogo from '../../assets/icons/win-logo.png';
+import { useWindowStore } from '../../stores/useWindowStore';
 
 export function StartBtn() {
+    const toggleStartMenu = useWindowStore(state => state.toggleStartMenu);
+    const handleClick = () => {
+        console.log('%c[StartBtn] onClick executado!', 'color: green; font-weight: bold;');
+        toggleStartMenu();
+    };
+
     return (
-        <button className={styles.startBtn}>
-            <img src={WinLogo} alt="Windows Logo" className={styles.startIcon} />
-            <span className={styles.startText}>Iniciar</span>
+        <button className={styles.startBtn} onClick={handleClick} data-id="start-button">
+            <img
+                src={WinLogo}
+                className={styles.startIcon}
+                alt="Windows Logo"
+            />
+            <span className={styles.startText}>
+                Iniciar
+            </span>
         </button>
     );
 }

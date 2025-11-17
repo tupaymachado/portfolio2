@@ -1,0 +1,114 @@
+/* Contêiner Principal do Menu Iniciar */
+.startMenu {
+  position: absolute;
+  bottom: 30px; /* Alinha com o topo da Taskbar */
+  left: 0;
+  width: 380px;
+  height: 480px;
+  background-color: white;
+  border: 1px solid var(--color-title-bar-active-start);
+  box-shadow: 2px -2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 999; /* Fica abaixo da Taskbar mas acima do Desktop */
+  
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px 4px 0 0;
+}
+
+/* 1. Header (Topo Azul com Perfil) */
+.header {
+  height: 60px;
+  flex-shrink: 0;
+  background: linear-gradient(to bottom, 
+    var(--color-title-bar-active-start),
+    var(--color-title-bar-active-end)
+  );
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 2px solid #5d88dd;
+  gap: 10px;
+  border-radius: 4px 4px 0 0;
+}
+
+.profilePic {
+  width: 42px;
+  height: 42px;
+  background-color: #f0f0f0;
+  border: 2px solid white;
+}
+
+.username {
+  color: var(--color-text-on-highlight);
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* 2. Conteúdo Principal (Duas Colunas) */
+.mainContent {
+  flex-grow: 1;
+  display: flex;
+  min-height: 0; /* Correção de bug do Flexbox */
+}
+
+/* Coluna da Esquerda (Programas do Usuário) */
+.programList {
+  width: 55%;
+  padding: 5px;
+  overflow-y: auto; /* Adiciona scroll se a lista for grande */
+  border-right: 1px solid var(--color-border-window);
+}
+
+/* Coluna da Direita (Pastas do Sistema) */
+.systemList {
+  width: 45%;
+  padding: 5px;
+  background-color: #d6e8ff;
+}
+
+
+/* Itens do Menu (para ambas as colunas) */
+.menuItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 5px 8px;
+  text-align: left;
+  border: 1px solid transparent;
+}
+
+.menuItem:hover {
+  background-color: var(--color-highlight-background);
+  color: var(--color-highlight-text);
+  border: 1px solid #1a56c8;
+}
+
+.menuItemIcon {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+}
+
+.menuItemName {
+  font-weight: bold;
+}
+/* Estilos para texto secundário se você adicionar */
+.menuItemDescription {
+  font-size: 11px;
+}
+
+
+/* 3. Footer (Rodapé com Botões de Energia) */
+.footer {
+  height: 40px;
+  flex-shrink: 0;
+  background: linear-gradient(to top, 
+    var(--color-title-bar-active-start),
+    var(--color-title-bar-active-end)
+  );
+  border-top: 1px solid #5d88dd;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0 10px;
+}
