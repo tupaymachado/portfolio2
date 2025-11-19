@@ -1,4 +1,5 @@
 import type { ProgramDefinition } from '../types/program';
+import ExplorerApp from '../components/apps/ExplorerApp/ExplorerApp';
 
 // Importe seus componentes de conteúdo. Eles podem ser placeholders por enquanto.
 const NotepadContent = () => <div style={{ padding: '10px' }}>Um editor de texto simples.</div>;
@@ -10,6 +11,15 @@ const ShutDownContent = () => <div style={{ padding: '10px' }}>Desligando...</di
 
 // A nossa "base de dados" de programas instalados no sistema.
 export const PROGRAMS: ProgramDefinition[] = [
+  {
+    id: 'explorer',
+    name: 'Windows Explorer', // O título mudará dinamicamente depois, mas este é o padrão
+    iconUrl: 'src/assets/icons/explorer.png', // Você precisará de um ícone de pasta
+    component: <ExplorerApp />,
+    defaultSize: { width: 800, height: 600 },
+    minSize: { width: 400, height: 300 },
+    isResizable: true,
+  },
   {
     id: 'about-me',
     name: 'Sobre Mim',
@@ -43,9 +53,9 @@ export const PROGRAMS: ProgramDefinition[] = [
     iconUrl: '/icons/minesweeper.png',
     component: <MinesweeperContent />,
     // O jogo Campo Minado clássico não era redimensionável
-    isResizable: false, 
+    isResizable: false,
     // defaultSize não é necessário se não for redimensionável, mas podemos definir.
-    defaultSize: { width: 300, height: 400 }, 
+    defaultSize: { width: 300, height: 400 },
   },
   {
     id: 'shutdown',

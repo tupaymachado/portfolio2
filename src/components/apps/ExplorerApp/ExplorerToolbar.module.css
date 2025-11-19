@@ -1,0 +1,83 @@
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background-ui); /* Aquele bege padrão */
+  border-bottom: 1px solid #D6D3D1;
+  padding-bottom: 2px;
+}
+
+/* Linha 1: Menus de Texto */
+.rowStandard {
+  display: flex;
+  gap: 10px;
+  padding: 2px 6px;
+  font-size: 11px;
+  border-bottom: 1px solid #D6D3D1;
+}
+
+/* Linha 2: Botões Grandes */
+.rowButtons {
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  gap: 4px;
+  border-bottom: 1px solid #D6D3D1;
+}
+
+.toolBtn {
+  display: flex;
+  align-items: center;
+  padding: 2px 6px;
+  border: 1px solid transparent;
+  background: none;
+  font-size: 11px;
+  color: var(--color-text-default);
+}
+.toolBtn:hover {
+  border: 1px solid var(--color-button-shadow-dark);
+  background-color: var(--color-button-shadow-light); /* Efeito hover sutil */
+}
+
+.separator {
+  width: 1px;
+  height: 20px;
+  background-color: var(--color-button-shadow-dark);
+  margin: 0 2px;
+}
+
+/* Linha 3: Barra de Endereço */
+.rowAddress {
+  display: flex;
+  align-items: center;
+  padding: 4px 6px;
+  gap: 8px;
+  font-size: 11px;
+  border-top: 1px solid var(--color-button-shadow-light); /* Efeito 3D com a borda da linha anterior */
+}
+
+.addressInputWrapper {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: 1px solid var(--color-button-shadow-very-dark); /* Inset */
+  padding: 1px;
+}
+
+.addressInput {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 11px;
+  font-family: Tahoma, sans-serif;
+}
+
+.goBtn {
+  display: flex;
+  align-items: center;
+  padding: 2px 8px;
+  background-color: var(--xp-green-start-button-end); /* Verde estilo XP */
+  color: white;
+  border: 1px solid var(--xp-green-start-button-border);
+  border-radius: 2px;
+}

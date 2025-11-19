@@ -1,0 +1,48 @@
+.explorerContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: var(--color-background-window-content);
+}
+
+.mainArea {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden; /* Importante para scroll */
+}
+
+.sidebar {
+  width: 204px;
+  background: linear-gradient(to bottom, #788bf8 0%, #5369e4 100%); /* O gradiente azul clássico */
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.sidebarBox {
+    background-color: white;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.sidebarHeader {
+    background: linear-gradient(to right, #ffffff 0%, #c6d3f7 100%);
+    padding: 4px;
+    font-weight: bold;
+    color: #003399;
+    font-size: 11px;
+    cursor: pointer;
+}
+.sidebarContent {
+    padding: 8px;
+    font-size: 11px;
+}
+
+
+.contentView {
+  flex-grow: 1;
+  background-color: white;
+  overflow-y: auto;
+  position: relative;
+}
