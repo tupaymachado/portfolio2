@@ -1,45 +1,91 @@
 import styles from './Desktop.module.css';
-import { useState } from 'react';
+// Adicione o useMemo aqui
+import { useMemo } from 'react'; 
 import blissWallpaper from '../../assets/bgs/bliss-normal.jpg';
 import DesktopIcon from '../DesktopIcon/DesktopIcon';
-import type { DesktopShortcut } from '../../types/desktopShortcut';
 import { PROGRAMS } from '../../data/programs';
-import { useWindowStore } from '../../stores/useWindowStore'; // <-- Mágica aqui
+import { useWindowStore } from '../../stores/useWindowStore';
+import { useFileSystemStore } from '../../stores/useFileSystemStore';
+import type { MenuItem } from '../../stores/useWindowStore';
+
+const GRID_CELL_WIDTH = 90;
+const GRID_CELL_HEIGHT = 100;
 
 export default function Desktop() {
-  // Pega apenas a ação 'openWindow' do store. Sem props!
   const openWindow = useWindowStore(state => state.openWindow);
   const deselectAllWindows = useWindowStore(state => state.deselectAllWindows);
+  const openContextMenu = useWindowStore(state => state.openContextMenu);
+  
+  // 1. Selecione TODOS os itens do store (isso é barato e estável)
+  const allItems = useFileSystemStore(state => state.items);
 
-  const [shortcuts, setShortcuts] = useState<DesktopShortcut[]>([
-    { id: 'shortcut-1', programId: 'about-me', gridPosition: { row: 0, col: 0 } },
-    { id: 'shortcut-2', programId: 'my-projects', gridPosition: { row: 1, col: 0 } },
-    { id: 'shortcut-3', programId: 'notepad', gridPosition: { row: 0, col: 1 } },
-  ]);
+  // 2. Filtre localmente usando useMemo
+  // Isso só vai rodar de novo se 'allItems' mudar de verdade.
+  const desktopItems = useMemo(() => {
+    return Object.values(allItems).filter(item => item.parentId === 'desktop');
+  }, [allItems]);
+
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const items: MenuItem[] = [
+      {
+        label: 'Atualizar',
+        onClick: () => window.location.reload() 
+      },
+      {
+        label: 'Novo',
+        disabled: true, 
+        onClick: () => console.log('Criar novo...')
+      },
+      {
+        label: 'Propriedades',
+        onClick: () => alert('Propriedades de Vídeo em breve!')
+      },
+    ];
+    openContextMenu(e.clientX, e.clientY, items);
+  };
 
   return (
-    // Lembre-se de parar a propagação para a deseleção
     <main
       className={styles.desktop}
       style={{ backgroundImage: `url(${blissWallpaper})` }}
       onMouseDown={deselectAllWindows}
+      onContextMenu={handleContextMenu}
     >
-      {shortcuts.map(shortcut => {
-        const program = PROGRAMS.find(p => p.id === shortcut.programId);
-        if (!program) return null;
+      {desktopItems.map(item => {
+        
+        let iconUrl = ''; 
+        let onDoubleClick = () => {};
+
+        if (item.type === 'file' && item.programId) {
+           const program = PROGRAMS.find(p => p.id === item.programId);
+           
+           if (program) {
+             iconUrl = program.iconUrl;
+             onDoubleClick = () => openWindow(program.id);
+           } else {
+             iconUrl = '/icons/unknown-file.png'; 
+           }
+        } 
+
+        if (!item.gridPosition) return null;
 
         const style = {
-          top: `${shortcut.gridPosition.row * 100}px`,
-          left: `${shortcut.gridPosition.col * 90}px`,
+          top: `${item.gridPosition.row * GRID_CELL_HEIGHT}px`,
+          left: `${item.gridPosition.col * GRID_CELL_WIDTH}px`,
         };
 
         return (
-          <div key={shortcut.id} className={styles.iconContainer} style={style}>
+          <div 
+            key={item.id} 
+            className={styles.iconContainer} 
+            style={style}
+            onMouseDown={(e) => e.stopPropagation()}
+          >
             <DesktopIcon
-              label={program.name}
-              iconUrl={program.iconUrl}
-              // Chama a ação do store diretamente
-              onDoubleClick={() => openWindow(program.id)}
+              label={item.name} 
+              iconUrl={iconUrl}
+              onDoubleClick={onDoubleClick}
             />
           </div>
         );

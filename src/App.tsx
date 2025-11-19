@@ -1,6 +1,7 @@
 import Desktop from './components/Desktop/Desktop';
 import Taskbar from './components/Taskbar/Taskbar';
 import Window from './components/Window/Window';
+import ContextMenu from './components/ContextMenu/ContextMenu';
 import { useWindowStore } from './stores/useWindowStore'; // 1. Importe o store
 import { PROGRAMS } from './data/programs';
 
@@ -13,9 +14,11 @@ function App() {
   return (
     // 3. O handler de deselecionar agora vive no contêiner principal
     <div onMouseDown={deselectAllWindows}>
-      <Desktop />
-      <Taskbar />
-
+      <div>
+        <Desktop />
+        <Taskbar />
+      </div>
+      <ContextMenu />
       {openWindows.map(win => {
         const program = PROGRAMS.find(p => p.id === win.programId);
         if (!program) return null;

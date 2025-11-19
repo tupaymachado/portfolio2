@@ -8,14 +8,12 @@ export default function StartMenu() {
   const { isStartMenuOpen, toggleStartMenu, openWindow } = useWindowStore();
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Lógica para "clicar fora para fechar"
   useEffect(() => {
-    if (!isStartMenuOpen) return; // Só execute se o menu estiver aberto
+    if (!isStartMenuOpen) return; 
 
     function handleClickOutside(event: MouseEvent) {
       const clickedStartButton = (event.target as HTMLElement).closest('[data-id="start-button"]');
 
-      // A lógica principal permanece a mesma
       if (menuRef.current && !menuRef.current.contains(event.target as Node) && !clickedStartButton) {
           toggleStartMenu();
       }

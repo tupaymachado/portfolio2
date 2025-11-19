@@ -2,6 +2,12 @@ import { create } from 'zustand';
 import type { WindowInstance } from '../types/window';
 import { PROGRAMS } from '../data/programs';
 
+export type MenuItem = {
+    label: string;
+    onClick: () => void;
+    disabled?: boolean;
+};
+
 // Definimos a "forma" do nosso store: o estado e as ações
 interface WindowState {
     openWindows: WindowInstance[];
@@ -18,7 +24,16 @@ interface WindowState {
     updateWindowSize: (id: number, size: { width: number; height: number }) => void;
     isStartMenuOpen: boolean;
     toggleStartMenu: () => void;
-}
+    closeStartMenu: () => void;
+
+    contextMenu: {
+        isOpen: boolean;
+        position: { x: number; y: number };
+        items: MenuItem[];
+    };
+    openContextMenu: (x: number, y: number, items: MenuItem[]) => void;
+    closeContextMenu: () => void;
+};
 
 export const useWindowStore = create<WindowState>((set, get) => ({
     // --- ESTADO INICIAL ---
@@ -26,8 +41,34 @@ export const useWindowStore = create<WindowState>((set, get) => ({
     activeWindowId: null,
     zIndexCounter: 1,
     isStartMenuOpen: false,
+    contextMenu: {
+        isOpen: false,
+        position: { x: 0, y: 0 },
+        items: [],
+    },
 
     // --- AÇÕES ---
+
+    openContextMenu: (x, y, items) => {
+        // Ao abrir um context menu, sempre feche o start menu, e vice-versa.
+        get().closeStartMenu(); // Supondo que você tenha uma ação closeStartMenu
+        set({
+            contextMenu: {
+                isOpen: true,
+                position: { x, y },
+                items,
+            }
+        });
+    },
+
+    closeContextMenu: () => set(state => ({
+        contextMenu: {
+            ...state.contextMenu, // Mantém a posição e os itens para não piscar
+            isOpen: false,
+        }
+    })),
+
+    closeStartMenu: () => set({ isStartMenuOpen: false }),
 
     toggleStartMenu: () => set(state => ({
         isStartMenuOpen: !state.isStartMenuOpen
@@ -61,7 +102,7 @@ export const useWindowStore = create<WindowState>((set, get) => ({
             zIndexCounter: state.zIndexCounter + 1,
             activeWindowId: newId,
         }));
-        
+
     },
 
     closeWindow: (id) => set(state => ({
@@ -86,6 +127,9 @@ export const useWindowStore = create<WindowState>((set, get) => ({
 
     bringToFront: (id) => {
         const { activeWindowId, zIndexCounter } = get();
+
+        get().closeContextMenu();
+        get().closeStartMenu();
 
         // Se a janela já estiver ativa, não faça nada. APENAS RETORNE.
         if (id === activeWindowId) {
