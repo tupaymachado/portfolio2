@@ -67,10 +67,8 @@ export const useFileSystemStore = create<FileSystemStore>((set, get) => ({
     items: INITIAL_ITEMS,
     rootId: 'root',
 
-    // Seletor útil para pegar itens de uma pasta específica
     getItemsByParent: (parentId: string) => {
         const { items } = get();
-        // Converte o objeto em array e filtra
         return Object.values(items).filter(item => item.parentId === parentId);
     },
 }));
