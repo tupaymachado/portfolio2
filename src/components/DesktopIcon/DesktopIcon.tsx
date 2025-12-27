@@ -9,13 +9,15 @@ interface DesktopIconProps {
 
 const DesktopIcon = ({ label, iconUrl, onDoubleClick, variant = 'desktop' }: DesktopIconProps) => {
   return (
-    <button 
+    <div
       className={`${styles.iconButton} ${styles[variant]}`}
       onDoubleClick={onDoubleClick}
+      tabIndex={0}
+      role="button"
     >
-      <img src={iconUrl} alt={`${label} icon`} className={styles.iconImage} />
+      <img src={iconUrl} alt={`${label} icon`} className={styles.iconImage} draggable={false} />
       <span className={styles.iconLabel}>{label}</span>
-    </button>
+    </div>
   );
 };
 

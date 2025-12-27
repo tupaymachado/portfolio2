@@ -76,26 +76,23 @@ export const useFileSystemStore = create<FileSystemStore>((set, get) => ({
         set(state => {
             const newItems = { ...state.items };
 
-            // Função recursiva para mover itens e resolver colisões
             const moveItem = (id: string, pos: { row: number; col: number }) => {
-                // Verifica se a posição está ocupada por OUTRO item (que não seja o próprio)
                 const occupantId = Object.keys(newItems).find(
                     key => key !== id &&
                         newItems[key].parentId === 'desktop' &&
                         newItems[key].gridPosition?.row === pos.row &&
                         newItems[key].gridPosition?.col === pos.col
                 );
-                // Move o item atual para a nova posição
+
                 newItems[id] = {
                     ...newItems[id],
                     gridPosition: pos
                 };
-                // Se havia um ocupante, move ele para a próxima posição disponível
+
                 if (occupantId) {
                     let nextRow = pos.row + 1;
                     let nextCol = pos.col;
 
-                    // Se estourar o limite de linhas, vai para a próxima coluna
                     if (nextRow >= maxRows) {
                         nextRow = 0;
                         nextCol = pos.col + 1;
@@ -104,7 +101,9 @@ export const useFileSystemStore = create<FileSystemStore>((set, get) => ({
                     moveItem(occupantId, { row: nextRow, col: nextCol });
                 }
             };
+
             moveItem(itemId, newPosition);
+
             return { items: newItems };
         });
     },

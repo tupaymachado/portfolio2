@@ -1,5 +1,5 @@
 import styles from './Desktop.module.css';
-import { useMemo, useState, useRef, useEffect } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import blissWallpaper from '../../assets/bgs/bliss-normal.jpg';
 import DesktopIcon from '../DesktopIcon/DesktopIcon';
 import { PROGRAMS } from '../../data/programs';
@@ -27,60 +27,56 @@ export default function Desktop() {
   const [draggingItemId, setDraggingItemId] = useState<string | null>(null);
   const [dragPosition, setDragPosition] = useState<{ x: number; y: number } | null>(null);
   const dragOffsetRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const draggingItemIdRef = useRef<string | null>(null);
 
   const handleMouseDown = (e: React.MouseEvent, itemId: string, currentLeft: number, currentTop: number) => {
-    e.stopPropagation(); // Prevent desktop selection
-    closeStartMenu(); // Close start menu when clicking on an icon
-    // Only left click
+    e.stopPropagation();
+    closeStartMenu();
+
     if (e.button !== 0) return;
 
+    if (draggingItemIdRef.current !== null) return;
+
+    draggingItemIdRef.current = itemId;
     setDraggingItemId(itemId);
+
     const offsetX = e.clientX - currentLeft;
     const offsetY = e.clientY - currentTop;
     dragOffsetRef.current = { x: offsetX, y: offsetY };
     setDragPosition({ x: currentLeft, y: currentTop });
-  };
 
-  useEffect(() => {
-    if (!draggingItemId) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (ev: MouseEvent) => {
       setDragPosition({
-        x: e.clientX - dragOffsetRef.current.x,
-        y: e.clientY - dragOffsetRef.current.y,
+        x: ev.clientX - dragOffsetRef.current.x,
+        y: ev.clientY - dragOffsetRef.current.y,
       });
     };
 
-    const handleMouseUp = (e: MouseEvent) => {
-      if (draggingItemId) {
-        // Calculate new grid position
-        // We use the current mouse position minus offset to get the top-left of the icon
-        const finalX = e.clientX - dragOffsetRef.current.x;
-        const finalY = e.clientY - dragOffsetRef.current.y;
+    const handleMouseUp = (ev: MouseEvent) => {
+      if (draggingItemIdRef.current) {
+        const finalX = ev.clientX - dragOffsetRef.current.x;
+        const finalY = ev.clientY - dragOffsetRef.current.y;
 
         let col = Math.round(finalX / GRID_CELL_WIDTH);
         let row = Math.round(finalY / GRID_CELL_HEIGHT);
 
-        // Ensure non-negative
         if (col < 0) col = 0;
         if (row < 0) row = 0;
 
         const maxRows = Math.floor(window.innerHeight / GRID_CELL_HEIGHT);
-        updateItemGridPosition(draggingItemId, { row, col }, maxRows);
+        updateItemGridPosition(draggingItemIdRef.current, { row, col }, maxRows);
       }
 
+      draggingItemIdRef.current = null;
       setDraggingItemId(null);
       setDragPosition(null);
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [draggingItemId, updateItemGridPosition]);
+  };
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
