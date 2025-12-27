@@ -6,7 +6,18 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  border-radius: 4px; /* Adiciona um leve arredondamento para a área de foco */
+  border-radius: 4px;
+  /* Adiciona um leve arredondamento para a área de foco */
+}
+
+.desktop {
+  /* Estilos específicos para ícones no desktop */
+  color: white;
+}
+
+.explorer {
+  /* Estilos para ícones dentro de janelas (explorer) */
+  color: black;
 }
 
 .iconImage {
@@ -16,7 +27,8 @@
 
 .iconLabel {
   /* Por padrão, o texto é claro para ser legível sobre o papel de parede */
-  color: var(--color-text-on-highlight); /* Usa a variável para "texto branco" */
+  color: var(--color-text-on-highlight);
+  /* Usa a variável para "texto branco" */
   font-family: Tahoma, sans-serif;
   font-size: 12px;
   text-align: center;
@@ -25,19 +37,23 @@
   -webkit-user-select: none;
   /* Sombra para legibilidade é crucial sobre fundos complexos como o wallpaper */
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-  
+
   line-height: 1.2;
-  padding: 1px 3px; /* Adiciona um pequeno espaçamento interno para o fundo da seleção */
+  padding: 1px 3px;
+  /* Adiciona um pequeno espaçamento interno para o fundo da seleção */
 }
 
 /* Aplica o fundo azul apenas ao texto, como no Windows XP original */
-.iconButton:focus > .iconLabel {
-  background-color: var(--color-highlight-background); /* A cor de fundo de seleção */
-  color: var(--color-text-on-highlight);          /* O texto continua branco quando selecionado */
-  text-shadow: none;                               /* Remove a sombra para ficar mais nítido */
+.iconButton:focus>.iconLabel {
+  background-color: var(--color-highlight-background);
+  /* A cor de fundo de seleção */
+  color: var(--color-text-on-highlight);
+  /* O texto continua branco quando selecionado */
+  text-shadow: none;
+  /* Remove a sombra para ficar mais nítido */
 }
 
-.iconButton:focus > .iconImage {
+.iconButton:focus>.iconImage {
   /* Efeito opcional para simular o ícone "mesclando" com o fundo azul */
   opacity: 0.8;
 }

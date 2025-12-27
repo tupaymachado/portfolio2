@@ -2,19 +2,20 @@
   /* --- Layout e Tamanho --- */
   display: flex;
   align-items: center;
-  flex-grow: 1; 
-  max-width: 160px; /* Um pouco mais de espaço para títulos */
-  height: calc(100% - 2px);     /* Altura padrão do botão interno */
+  flex-grow: 1;
+  max-width: 160px;
+  /* Um pouco mais de espaço para títulos */
+  height: calc(100% - 2px);
+  /* Altura padrão do botão interno */
   margin: 4px 0px 0px 2px;
-  
+
   /* --- Aparência (Estado Normal) --- */
-  background: linear-gradient(
-    to top,
-    var(--xp-blue-taskbar-start), 
-    var(--xp-blue-taskbar-end)
-  );
-  border: 1px solid #083b99; /* Cor da borda externa */
-  
+  background: linear-gradient(to top,
+      var(--xp-blue-taskbar-start),
+      var(--xp-blue-taskbar-end));
+  border: 1px solid #083b99;
+  /* Cor da borda externa */
+
   /* Efeito de "luz" interna */
   box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.4);
 
@@ -26,16 +27,16 @@
 /* --- ESTADO ATIVO (Botão Pressionado/Janela Focada) --- */
 .taskbarButton.active {
   /* Gradiente mais escuro para simular o botão "afundado" */
-  background: linear-gradient(
-    to top,
-    #1c388f, /* Cor escura do gradiente ativo */
-    var(--xp-blue-taskbar-start)
-  );
+  background: linear-gradient(to top,
+      #1c388f,
+      /* Cor escura do gradiente ativo */
+      var(--xp-blue-taskbar-start));
 
   /* A sombra interna escura é a chave do efeito "pressionado" */
   box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.4);
-  
-  border-color: #0c2b6f; /* Borda um pouco mais escura */
+
+  border-color: #0c2b6f;
+  /* Borda um pouco mais escura */
 }
 
 .taskbarButton:hover {
@@ -48,12 +49,15 @@
   margin-right: 6px;
 }
 
-.title { /* Sua classe estava .name, mas .title é mais consistente */
-  color: var(--color-text-on-highlight); /* Usa a variável para texto branco */
+.title {
+  /* Sua classe estava .name, mas .title é mais consistente */
+  color: var(--color-text-on-highlight);
+  /* Usa a variável para texto branco */
   font-size: 12px;
-  
+
   /* Garante que o texto não quebre e exiba "..." se for muito longo */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  user-select: none;
 }

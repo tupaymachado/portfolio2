@@ -1,10 +1,10 @@
-
 import { create } from 'zustand';
 import type { FileSystemItem, FileSystemState } from '../types/fileSystem';
 
 interface FileSystemStore extends FileSystemState {
     // Ações
     getItemsByParent: (parentId: string) => FileSystemItem[];
+    updateItemGridPosition: (itemId: string, newPosition: { row: number; col: number }, maxRows?: number) => void;
     // Futuras ações: createItem, deleteItem, renameItem, moveItem...
 }
 
@@ -70,5 +70,42 @@ export const useFileSystemStore = create<FileSystemStore>((set, get) => ({
     getItemsByParent: (parentId: string) => {
         const { items } = get();
         return Object.values(items).filter(item => item.parentId === parentId);
+    },
+
+    updateItemGridPosition: (itemId, newPosition, maxRows = 10) => {
+        set(state => {
+            const newItems = { ...state.items };
+
+            // Função recursiva para mover itens e resolver colisões
+            const moveItem = (id: string, pos: { row: number; col: number }) => {
+                // Verifica se a posição está ocupada por OUTRO item (que não seja o próprio)
+                const occupantId = Object.keys(newItems).find(
+                    key => key !== id &&
+                        newItems[key].parentId === 'desktop' &&
+                        newItems[key].gridPosition?.row === pos.row &&
+                        newItems[key].gridPosition?.col === pos.col
+                );
+                // Move o item atual para a nova posição
+                newItems[id] = {
+                    ...newItems[id],
+                    gridPosition: pos
+                };
+                // Se havia um ocupante, move ele para a próxima posição disponível
+                if (occupantId) {
+                    let nextRow = pos.row + 1;
+                    let nextCol = pos.col;
+
+                    // Se estourar o limite de linhas, vai para a próxima coluna
+                    if (nextRow >= maxRows) {
+                        nextRow = 0;
+                        nextCol = pos.col + 1;
+                    }
+
+                    moveItem(occupantId, { row: nextRow, col: nextCol });
+                }
+            };
+            moveItem(itemId, newPosition);
+            return { items: newItems };
+        });
     },
 }));

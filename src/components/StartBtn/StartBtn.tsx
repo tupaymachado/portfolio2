@@ -5,7 +5,6 @@ import { useWindowStore } from '../../stores/useWindowStore';
 export function StartBtn() {
     const toggleStartMenu = useWindowStore(state => state.toggleStartMenu);
     const handleClick = () => {
-        console.log('%c[StartBtn] onClick executado!', 'color: green; font-weight: bold;');
         toggleStartMenu();
     };
 
