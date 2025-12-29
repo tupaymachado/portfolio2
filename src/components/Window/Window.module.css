@@ -24,7 +24,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 28px;
+  height: 25px;
   padding: 0 4px;
   background-color: #245DDA;
   background: linear-gradient(to right,
@@ -51,7 +51,7 @@
 
 .title {
   font-weight: bold;
-  font-size: 13px;
+  font-size: 11px;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
   white-space: nowrap;
   overflow: hidden;
@@ -72,8 +72,8 @@
 }
 
 .windowButton {
-  width: 21px;
-  height: 21px;
+  width: 18px;
+  height: 18px;
   display: flex;
   justify-content: center;
   align-items: center;
