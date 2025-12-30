@@ -14,6 +14,7 @@ export default function Desktop() {
   const openWindow = useWindowStore(state => state.openWindow);
   const deselectAllWindows = useWindowStore(state => state.deselectAllWindows);
   const openContextMenu = useWindowStore(state => state.openContextMenu);
+  const closeContextMenu = useWindowStore(state => state.closeContextMenu);
   const closeStartMenu = useWindowStore(state => state.closeStartMenu);
 
   const allItems = useFileSystemStore(state => state.items);
@@ -108,6 +109,7 @@ export default function Desktop() {
       {desktopItems.map(item => {
 
         let iconUrl = '';
+        let onClick = () => closeContextMenu();
         let onDoubleClick = () => { };
 
         if (item.type === 'file' && item.programId) {
@@ -150,6 +152,7 @@ export default function Desktop() {
             <DesktopIcon
               label={item.name}
               iconUrl={iconUrl}
+              onClick={onClick}
               onDoubleClick={onDoubleClick}
             />
           </div>
