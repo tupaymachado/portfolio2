@@ -78,6 +78,8 @@ export const useWindowStore = create<WindowState>((set, get) => ({
         const program = PROGRAMS.find(p => p.id === programId);
         if (!program) return;
 
+        get().closeContextMenu();
+        get().closeStartMenu();
         const { openWindows, bringToFront } = get();
         const alreadyOpen = openWindows.find(win => win.programId === programId);
         if (alreadyOpen) {

@@ -1,0 +1,79 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-background-ui);
+    margin-top: 0.5rem
+}
+
+.container img {
+    height: 18px;
+}
+
+.container .titleBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 8px;
+    color: white;
+    background: linear-gradient(to right, #2563eb 0%, #2158e1 50%, #1d4ed8 100%);
+}
+
+.title {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.toggle {
+    width: 16px;
+    height: 16px;
+    background-color: #2563eb;
+    border: 1px solid white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.toggle svg {
+    width: 10px;
+    height: 10px;
+    fill: white;
+    transition: transform 0.3s ease;
+}
+
+.toggle.rotated svg {
+    transform: rotate(180deg);
+}
+
+.contentContainer {
+    background: linear-gradient(to bottom, #eeeff7 0%, #e1e4fa 50%, #d3d9fc 100%);
+    color: #2563eb;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.show {
+    max-height: 500px;
+    padding: 0px 8px 8px 8px;
+}
+
+.hidden {
+    max-height: 0;
+    padding: 0 8px;
+}
+
+.contentLine {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.contentLine img {
+    margin-left: 4px;
+}
+
+.description {
+    font-size: 11px;
+    margin: 0 8px;
+}
