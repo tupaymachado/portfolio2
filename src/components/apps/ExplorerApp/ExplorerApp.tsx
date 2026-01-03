@@ -1,7 +1,10 @@
+import { useState, useCallback } from 'react';
 import styles from './ExplorerApp.module.css';
 import ExplorerToolbar from './ExplorerToobar';
+import FolderContentView from './FolderContentView';
 import ShortcutCard from './ShortcutCard';
 import type { cardContent } from './ShortcutCard';
+import { useFileSystemStore } from '../../../stores/useFileSystemStore';
 import startMenuPrograms from '../../../assets/icons/start-menu-programs.png'
 import programs from '../../../assets/icons/programs.png'
 import search from '../../../assets/icons/search.png'
@@ -63,9 +66,66 @@ const card3: cardContent[] = [
 ]
 
 export default function ExplorerApp() {
+  const [currentFolderId, setCurrentFolderId] = useState('root');
+  const [history, setHistory] = useState<string[]>(['root']);
+  const [historyIndex, setHistoryIndex] = useState(0);
+
+  const getPath = useFileSystemStore(state => state.getPath);
+  const getItem = useFileSystemStore(state => state.getItem);
+
+  const currentPath = getPath(currentFolderId);
+  const currentFolder = getItem(currentFolderId);
+
+  const navigate = useCallback((folderId: string) => {
+    console.log('[NAV] navigate to:', folderId);
+    console.log('[NAV] before:', { history, historyIndex });
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push(folderId);
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+    setCurrentFolderId(folderId);
+    console.log('[NAV] after:', { newHistory, newIndex: newHistory.length - 1 });
+  }, [history, historyIndex]);
+
+  const goBack = useCallback(() => {
+    console.log('[NAV] goBack');
+    console.log('[NAV] state:', { history, historyIndex, canGoBack: historyIndex > 0 });
+    if (historyIndex > 0) {
+      const newIndex = historyIndex - 1;
+      setHistoryIndex(newIndex);
+      setCurrentFolderId(history[newIndex]);
+      console.log('[NAV] going to index:', newIndex, 'folder:', history[newIndex]);
+    }
+  }, [history, historyIndex]);
+
+  const goForward = useCallback(() => {
+    console.log('[NAV] goForward');
+    console.log('[NAV] state:', { history, historyIndex, canGoForward: historyIndex < history.length - 1 });
+    if (historyIndex < history.length - 1) {
+      const newIndex = historyIndex + 1;
+      setHistoryIndex(newIndex);
+      setCurrentFolderId(history[newIndex]);
+      console.log('[NAV] going to index:', newIndex, 'folder:', history[newIndex]);
+    }
+  }, [history, historyIndex]);
+
+  const goUp = useCallback(() => {
+    if (currentFolder?.parentId) {
+      navigate(currentFolder.parentId);
+    }
+  }, [currentFolder, navigate]);
+
   return (
     <div className={styles.explorerContainer}>
-      <ExplorerToolbar />
+      <ExplorerToolbar
+        currentPath={currentPath}
+        canGoBack={historyIndex > 0}
+        canGoForward={historyIndex < history.length - 1}
+        canGoUp={!!currentFolder?.parentId}
+        onBack={goBack}
+        onForward={goForward}
+        onUp={goUp}
+      />
 
       <div className={styles.mainArea}>
         {/* Sidebar Esquerda (Tarefas) */}
@@ -76,10 +136,7 @@ export default function ExplorerApp() {
         </div>
 
         {/* Área de Conteúdo (Ícones) */}
-        <div className={styles.contentView}>
-          {/* Aqui faremos o map() dos arquivos, igual ao Desktop! */}
-          <p style={{ padding: 20 }}>Conteúdo da pasta aqui...</p>
-        </div>
+        <FolderContentView folderId={currentFolderId} onNavigate={navigate} />
       </div>
     </div>
   );

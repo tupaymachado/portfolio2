@@ -1,0 +1,21 @@
+.contentView {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 8px;
+  padding: 8px;
+  background-color: white;
+  overflow-y: auto;
+}
+
+.iconWrapper {
+  width: 80px;
+  text-align: center;
+}
+
+.emptyMessage {
+  color: #666;
+  font-size: 12px;
+  padding: 20px;
+}

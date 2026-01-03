@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { WindowInstance } from '../types/window';
 import { PROGRAMS } from '../data/programs';
+import { useSystemStore } from './useSystemStore';
 
 export type MenuItem = {
     label: string;
@@ -87,11 +88,15 @@ export const useWindowStore = create<WindowState>((set, get) => ({
             return;
         }
 
+        // Check if we're on a mobile/small screen device
+        const { isMobile, isSmallScreen } = useSystemStore.getState();
+        const shouldMaximize = isMobile || isSmallScreen;
+
         const newId = Date.now();
         const newWindow: WindowInstance = {
             id: newId,
             programId,
-            displayState: 'normal',
+            displayState: shouldMaximize ? 'maximized' : 'normal',
             zIndex: get().zIndexCounter,
             position: { x: 150 + openWindows.length * 20, y: 100 + openWindows.length * 20 },
             size: program.defaultSize || { width: 600, height: 400 },
@@ -107,6 +112,7 @@ export const useWindowStore = create<WindowState>((set, get) => ({
 
     },
 
+
     closeWindow: (id) => set(state => ({
         openWindows: state.openWindows.filter(win => win.id !== id),
     })),
@@ -119,13 +125,51 @@ export const useWindowStore = create<WindowState>((set, get) => ({
     })),
 
     toggleMaximize: (id) => {
-        set(state => ({
-            openWindows: state.openWindows.map(win =>
-                win.id === id ? { ...win, displayState: win.displayState === 'normal' ? 'maximized' : 'normal' } : win
-            ),
-        }));
+        set(state => {
+            const win = state.openWindows.find(w => w.id === id);
+            if (!win) return state;
+
+            const isRestoring = win.displayState === 'maximized';
+
+            if (isRestoring) {
+                // When restoring, ensure window fits within viewport
+                const viewportWidth = window.innerWidth;
+                const viewportHeight = window.innerHeight;
+                const taskbarHeight = 40; // Approximate taskbar height
+
+                // Clamp size to fit viewport
+                const maxWidth = viewportWidth - 20; // 10px margin on each side
+                const maxHeight = viewportHeight - taskbarHeight - 20;
+
+                const newWidth = Math.min(win.size.width, maxWidth);
+                const newHeight = Math.min(win.size.height, maxHeight);
+
+                // Clamp position to keep window visible
+                const newX = Math.min(win.position.x, viewportWidth - newWidth - 10);
+                const newY = Math.min(win.position.y, viewportHeight - taskbarHeight - newHeight - 10);
+
+                return {
+                    openWindows: state.openWindows.map(w =>
+                        w.id === id ? {
+                            ...w,
+                            displayState: 'normal' as const,
+                            size: { width: newWidth, height: newHeight },
+                            position: { x: Math.max(0, newX), y: Math.max(0, newY) }
+                        } : w
+                    ),
+                };
+            } else {
+                // Maximizing - just toggle state
+                return {
+                    openWindows: state.openWindows.map(w =>
+                        w.id === id ? { ...w, displayState: 'maximized' as const } : w
+                    ),
+                };
+            }
+        });
         get().bringToFront(id);
     },
+
 
     bringToFront: (id) => {
         const { activeWindowId, zIndexCounter } = get();

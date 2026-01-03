@@ -4,8 +4,9 @@ import type { FileSystemItem, FileSystemState } from '../types/fileSystem';
 interface FileSystemStore extends FileSystemState {
     // Ações
     getItemsByParent: (parentId: string) => FileSystemItem[];
+    getItem: (id: string) => FileSystemItem | undefined;
+    getPath: (id: string) => string;
     updateItemGridPosition: (itemId: string, newPosition: { row: number; col: number }, maxRows?: number) => void;
-    // Futuras ações: createItem, deleteItem, renameItem, moveItem...
 }
 
 // Dados Iniciais (O "Formato" do seu HD)
@@ -70,6 +71,19 @@ export const useFileSystemStore = create<FileSystemStore>((set, get) => ({
     getItemsByParent: (parentId: string) => {
         const { items } = get();
         return Object.values(items).filter(item => item.parentId === parentId);
+    },
+
+    getItem: (id: string) => {
+        const { items } = get();
+        return items[id];
+    },
+
+    getPath: (id: string) => {
+        const { items, getPath } = get();
+        const item = items[id];
+        if (!item) return '';
+        if (!item.parentId) return item.name; // root
+        return `${getPath(item.parentId)}\\${item.name}`;
     },
 
     updateItemGridPosition: (itemId, newPosition, maxRows = 10) => {

@@ -5,12 +5,16 @@ import DesktopIcon from '../DesktopIcon/DesktopIcon';
 import { PROGRAMS } from '../../data/programs';
 import { useWindowStore } from '../../stores/useWindowStore';
 import { useFileSystemStore } from '../../stores/useFileSystemStore';
+import { useSystemStore } from '../../stores/useSystemStore';
 import type { MenuItem } from '../../stores/useWindowStore';
 
 const GRID_CELL_WIDTH = 90;
 const GRID_CELL_HEIGHT = 100;
 
 export default function Desktop() {
+  const isMobile = useSystemStore(state => state.isMobile);
+  const isSmallScreen = useSystemStore(state => state.isSmallScreen);
+
   const openWindow = useWindowStore(state => state.openWindow);
   const deselectAllWindows = useWindowStore(state => state.deselectAllWindows);
   const openContextMenu = useWindowStore(state => state.openContextMenu);
@@ -23,6 +27,9 @@ export default function Desktop() {
   const desktopItems = useMemo(() => {
     return Object.values(allItems).filter(item => item.parentId === 'desktop');
   }, [allItems]);
+
+  // Log mobile state for debugging (remove later)
+  console.log('[Desktop] isMobile:', isMobile, 'isSmallScreen:', isSmallScreen);
 
   // --- DRAG AND DROP STATE ---
   const [draggingItemId, setDraggingItemId] = useState<string | null>(null);

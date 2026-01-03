@@ -1,18 +1,24 @@
+import { useEffect } from 'react';
 import Desktop from './components/Desktop/Desktop';
 import Taskbar from './components/Taskbar/Taskbar';
 import Window from './components/Window/Window';
 import ContextMenu from './components/ContextMenu/ContextMenu';
-import { useWindowStore } from './stores/useWindowStore'; // 1. Importe o store
+import { useWindowStore } from './stores/useWindowStore';
+import { useSystemStore } from './stores/useSystemStore';
 import { PROGRAMS } from './data/programs';
 
 function App() {
-  // 2. "Selecione" apenas os dados de que você precisa para a renderização
   const openWindows = useWindowStore(state => state.openWindows);
-  const activeWindowId = useWindowStore(state => state.activeWindowId);
   const deselectAllWindows = useWindowStore(state => state.deselectAllWindows);
+  const initializeMobileDetection = useSystemStore(state => state.initializeMobileDetection);
+
+  // Initialize mobile detection on mount
+  useEffect(() => {
+    const cleanup = initializeMobileDetection();
+    return cleanup;
+  }, [initializeMobileDetection]);
 
   return (
-    // 3. O handler de deselecionar agora vive no contêiner principal
     <div onMouseDown={deselectAllWindows}>
       <div>
         <Desktop />
@@ -24,7 +30,6 @@ function App() {
         if (!program) return null;
 
         return (
-          // 4. Passamos os dados e os IDs para o Window, ele buscará as ações no store
           <Window
             key={win.id}
             instanceId={win.id}
