@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import styles from './App.module.css';
 import Desktop from './components/Desktop/Desktop';
 import Taskbar from './components/Taskbar/Taskbar';
 import Window from './components/Window/Window';
@@ -19,7 +20,10 @@ function App() {
   }, [initializeMobileDetection]);
 
   return (
-    <div onMouseDown={deselectAllWindows}>
+    <div
+      className={styles.appContainer}
+      onMouseDown={deselectAllWindows}
+    >
       <div>
         <Desktop />
         <Taskbar />
