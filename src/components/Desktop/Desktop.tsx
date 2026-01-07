@@ -1,5 +1,5 @@
 import styles from './Desktop.module.css';
-import { useMemo, useState, useRef } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import blissWallpaper from '../../assets/bgs/bliss-normal.jpg';
 import DesktopIcon from '../DesktopIcon/DesktopIcon';
 import { PROGRAMS } from '../../data/programs';
@@ -28,42 +28,72 @@ export default function Desktop() {
     return Object.values(allItems).filter(item => item.parentId === 'desktop');
   }, [allItems]);
 
-  // Log mobile state for debugging (remove later)
-  console.log('[Desktop] isMobile:', isMobile, 'isSmallScreen:', isSmallScreen);
-
   // --- DRAG AND DROP STATE ---
   const [draggingItemId, setDraggingItemId] = useState<string | null>(null);
   const [dragPosition, setDragPosition] = useState<{ x: number; y: number } | null>(null);
   const dragOffsetRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const draggingItemIdRef = useRef<string | null>(null);
 
-  const handleMouseDown = (e: React.MouseEvent, itemId: string, currentLeft: number, currentTop: number) => {
-    e.stopPropagation();
+  // --- UNIFIED DRAG START ---
+  const startDrag = (clientX: number, clientY: number, itemId: string, currentLeft: number, currentTop: number) => {
     closeStartMenu();
-
-    if (e.button !== 0) return;
 
     if (draggingItemIdRef.current !== null) return;
 
     draggingItemIdRef.current = itemId;
     setDraggingItemId(itemId);
 
-    const offsetX = e.clientX - currentLeft;
-    const offsetY = e.clientY - currentTop;
+    const offsetX = clientX - currentLeft;
+    const offsetY = clientY - currentTop;
     dragOffsetRef.current = { x: offsetX, y: offsetY };
     setDragPosition({ x: currentLeft, y: currentTop });
+  };
 
-    const handleMouseMove = (ev: MouseEvent) => {
-      setDragPosition({
-        x: ev.clientX - dragOffsetRef.current.x,
-        y: ev.clientY - dragOffsetRef.current.y,
-      });
+  // --- MOUSE HANDLER ---
+  const handleMouseDown = (e: React.MouseEvent, itemId: string, currentLeft: number, currentTop: number) => {
+    e.stopPropagation();
+    if (e.button !== 0) return;
+    startDrag(e.clientX, e.clientY, itemId, currentLeft, currentTop);
+  };
+
+  // --- TOUCH HANDLER ---
+  const handleTouchStart = (e: React.TouchEvent, itemId: string, currentLeft: number, currentTop: number) => {
+    e.stopPropagation();
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    startDrag(touch.clientX, touch.clientY, itemId, currentLeft, currentTop);
+  };
+
+  // --- GLOBAL MOVE/END HANDLERS ---
+  useEffect(() => {
+    if (!draggingItemId) return;
+
+    const getEventPosition = (e: MouseEvent | TouchEvent): { x: number; y: number } => {
+      if ('touches' in e) {
+        const touch = e.touches[0] || e.changedTouches[0];
+        return { x: touch.clientX, y: touch.clientY };
+      }
+      return { x: e.clientX, y: e.clientY };
     };
 
-    const handleMouseUp = (ev: MouseEvent) => {
+    const handleMove = (e: MouseEvent | TouchEvent) => {
+      const pos = getEventPosition(e);
+      setDragPosition({
+        x: pos.x - dragOffsetRef.current.x,
+        y: pos.y - dragOffsetRef.current.y,
+      });
+
+      // Prevent scrolling on touch
+      if ('touches' in e) {
+        e.preventDefault();
+      }
+    };
+
+    const handleEnd = (e: MouseEvent | TouchEvent) => {
       if (draggingItemIdRef.current) {
-        const finalX = ev.clientX - dragOffsetRef.current.x;
-        const finalY = ev.clientY - dragOffsetRef.current.y;
+        const pos = getEventPosition(e);
+        const finalX = pos.x - dragOffsetRef.current.x;
+        const finalY = pos.y - dragOffsetRef.current.y;
 
         let col = Math.round(finalX / GRID_CELL_WIDTH);
         let row = Math.round(finalY / GRID_CELL_HEIGHT);
@@ -78,14 +108,27 @@ export default function Desktop() {
       draggingItemIdRef.current = null;
       setDraggingItemId(null);
       setDragPosition(null);
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-  };
+    // Mouse events
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mouseup', handleEnd);
 
+    // Touch events
+    window.addEventListener('touchmove', handleMove, { passive: false });
+    window.addEventListener('touchend', handleEnd);
+    window.addEventListener('touchcancel', handleEnd);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('mouseup', handleEnd);
+      window.removeEventListener('touchmove', handleMove);
+      window.removeEventListener('touchend', handleEnd);
+      window.removeEventListener('touchcancel', handleEnd);
+    };
+  }, [draggingItemId, updateItemGridPosition]);
+
+  // --- CONTEXT MENU ---
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
     const items: MenuItem[] = [
@@ -146,15 +189,19 @@ export default function Desktop() {
         const style = {
           top: `${top}px`,
           left: `${left}px`,
-          zIndex: isDragging ? 1000 : 1, // Bring to front when dragging
+          zIndex: isDragging ? 1000 : 1,
         };
+
+        const currentLeft = item.gridPosition.col * GRID_CELL_WIDTH;
+        const currentTop = item.gridPosition.row * GRID_CELL_HEIGHT;
 
         return (
           <div
             key={item.id}
             className={styles.iconContainer}
             style={style}
-            onMouseDown={(e) => handleMouseDown(e, item.id, item.gridPosition!.col * GRID_CELL_WIDTH, item.gridPosition!.row * GRID_CELL_HEIGHT)}
+            onMouseDown={(e) => handleMouseDown(e, item.id, currentLeft, currentTop)}
+            onTouchStart={(e) => handleTouchStart(e, item.id, currentLeft, currentTop)}
           >
             <DesktopIcon
               label={item.name}
