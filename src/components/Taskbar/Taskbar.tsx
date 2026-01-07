@@ -55,7 +55,7 @@ export default function Taskbar() {
               title={program.name}
               iconUrl={program.iconUrl}
               onClick={() => handleTaskbarClick(win.id)}
-              isActive={win.id === activeWindowId && win.displayState !== 'minimized'}
+              isActive={win.id === activeWindowId && !win.isMinimized}
             />
           );
         })}

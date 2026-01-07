@@ -9,7 +9,6 @@ export type MenuItem = {
     disabled?: boolean;
 };
 
-// Definimos a "forma" do nosso store: o estado e as ações
 interface WindowState {
     openWindows: WindowInstance[];
     activeWindowId: number | null;
@@ -51,8 +50,7 @@ export const useWindowStore = create<WindowState>((set, get) => ({
     // --- AÇÕES ---
 
     openContextMenu: (x, y, items) => {
-        // Ao abrir um context menu, sempre feche o start menu, e vice-versa.
-        get().closeStartMenu(); // Supondo que você tenha uma ação closeStartMenu
+        get().closeStartMenu();
         set({
             contextMenu: {
                 isOpen: true,
@@ -64,7 +62,7 @@ export const useWindowStore = create<WindowState>((set, get) => ({
 
     closeContextMenu: () => set(state => ({
         contextMenu: {
-            ...state.contextMenu, // Mantém a posição e os itens para não piscar
+            ...state.contextMenu,
             isOpen: false,
         }
     })),
@@ -84,6 +82,12 @@ export const useWindowStore = create<WindowState>((set, get) => ({
         const { openWindows, bringToFront } = get();
         const alreadyOpen = openWindows.find(win => win.programId === programId);
         if (alreadyOpen) {
+            // Se já está aberta, traz pra frente e desmimimiza
+            set(state => ({
+                openWindows: state.openWindows.map(w =>
+                    w.id === alreadyOpen.id ? { ...w, isMinimized: false } : w
+                ),
+            }));
             bringToFront(alreadyOpen.id);
             return;
         }
@@ -96,7 +100,8 @@ export const useWindowStore = create<WindowState>((set, get) => ({
         const newWindow: WindowInstance = {
             id: newId,
             programId,
-            displayState: shouldMaximize ? 'maximized' : 'normal',
+            isMinimized: false,
+            isMaximized: shouldMaximize,
             zIndex: get().zIndexCounter,
             position: { x: 150 + openWindows.length * 20, y: 100 + openWindows.length * 20 },
             size: program.defaultSize || { width: 600, height: 400 },
@@ -109,17 +114,16 @@ export const useWindowStore = create<WindowState>((set, get) => ({
             zIndexCounter: state.zIndexCounter + 1,
             activeWindowId: newId,
         }));
-
     },
-
 
     closeWindow: (id) => set(state => ({
         openWindows: state.openWindows.filter(win => win.id !== id),
+        activeWindowId: state.activeWindowId === id ? null : state.activeWindowId,
     })),
 
     minimizeWindow: (id) => set(state => ({
         openWindows: state.openWindows.map(win =>
-            win.id === id ? { ...win, displayState: 'minimized' } : win
+            win.id === id ? { ...win, isMinimized: true } : win
         ),
         activeWindowId: state.activeWindowId === id ? null : state.activeWindowId,
     })),
@@ -129,22 +133,18 @@ export const useWindowStore = create<WindowState>((set, get) => ({
             const win = state.openWindows.find(w => w.id === id);
             if (!win) return state;
 
-            const isRestoring = win.displayState === 'maximized';
-
-            if (isRestoring) {
-                // When restoring, ensure window fits within viewport
+            if (win.isMaximized) {
+                // Restaurando: ajustar tamanho para caber na viewport
                 const viewportWidth = window.innerWidth;
                 const viewportHeight = window.innerHeight;
-                const taskbarHeight = 40; // Approximate taskbar height
+                const taskbarHeight = 40;
 
-                // Clamp size to fit viewport
-                const maxWidth = viewportWidth - 20; // 10px margin on each side
+                const maxWidth = viewportWidth - 20;
                 const maxHeight = viewportHeight - taskbarHeight - 20;
 
                 const newWidth = Math.min(win.size.width, maxWidth);
                 const newHeight = Math.min(win.size.height, maxHeight);
 
-                // Clamp position to keep window visible
                 const newX = Math.min(win.position.x, viewportWidth - newWidth - 10);
                 const newY = Math.min(win.position.y, viewportHeight - taskbarHeight - newHeight - 10);
 
@@ -152,17 +152,17 @@ export const useWindowStore = create<WindowState>((set, get) => ({
                     openWindows: state.openWindows.map(w =>
                         w.id === id ? {
                             ...w,
-                            displayState: 'normal' as const,
+                            isMaximized: false,
                             size: { width: newWidth, height: newHeight },
                             position: { x: Math.max(0, newX), y: Math.max(0, newY) }
                         } : w
                     ),
                 };
             } else {
-                // Maximizing - just toggle state
+                // Maximizando
                 return {
                     openWindows: state.openWindows.map(w =>
-                        w.id === id ? { ...w, displayState: 'maximized' as const } : w
+                        w.id === id ? { ...w, isMaximized: true } : w
                     ),
                 };
             }
@@ -170,19 +170,16 @@ export const useWindowStore = create<WindowState>((set, get) => ({
         get().bringToFront(id);
     },
 
-
     bringToFront: (id) => {
         const { activeWindowId, zIndexCounter } = get();
 
         get().closeContextMenu();
         get().closeStartMenu();
 
-        // Se a janela já estiver ativa, não faça nada. APENAS RETORNE.
         if (id === activeWindowId) {
             return;
         }
 
-        // Se a janela NÃO estava ativa, atualize tudo.
         set(state => ({
             openWindows: state.openWindows.map(win =>
                 win.id === id ? { ...win, zIndex: zIndexCounter } : win
@@ -213,15 +210,24 @@ export const useWindowStore = create<WindowState>((set, get) => ({
         const win = openWindows.find(w => w.id === id);
         if (!win) return;
 
-        if (win.id === activeWindowId && win.displayState !== 'minimized') {
+        // Caso 1: Janela ativa e visível → minimiza
+        if (win.id === activeWindowId && !win.isMinimized) {
             minimizeWindow(id);
-        } else {
+            return;
+        }
+
+        // Caso 2: Janela minimizada → restaura (mantém isMaximized)
+        if (win.isMinimized) {
             set(state => ({
                 openWindows: state.openWindows.map(w =>
-                    w.id === id ? { ...w, displayState: 'normal' } : w
+                    w.id === id ? { ...w, isMinimized: false } : w
                 ),
             }));
             bringToFront(id);
+            return;
         }
+
+        // Caso 3: Janela não ativa e não minimizada → traz pra frente
+        bringToFront(id);
     },
 }));

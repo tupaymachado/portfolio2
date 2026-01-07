@@ -1,5 +1,3 @@
-export type WindowDisplayState = 'normal' | 'minimized' | 'maximized';
-
 export type ResizeHandle = 'n' | 'ne' | 'e' | 'se' | 's' | 'sw' | 'w' | 'nw';
 
 export interface WindowInstance {
@@ -7,8 +5,11 @@ export interface WindowInstance {
   id: number;           // ID único DESTA INSTÂNCIA (gerado com Date.now())
   programId: string;    // Qual programa esta janela está executando? (ex: "notepad")
 
-  // --- ESTADO DINÂMICO ---
-  displayState: WindowDisplayState; // A janela está normal, minimizada ou maximizada?
+  // --- ESTADO DE VISIBILIDADE ---
+  isMinimized: boolean; // A janela está escondida (na taskbar)?
+  isMaximized: boolean; // A janela ocupa a tela toda?
+
+  // --- ESTADO DE POSIÇÃO/TAMANHO ---
   position: { x: number; y: number }; // Onde a janela está na tela?
   size: { width: number; height: number }; // Qual o tamanho atual da janela?
   minSize: { width: number; height: number };

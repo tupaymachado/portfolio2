@@ -8,7 +8,6 @@ import { useWindowStore } from '../../stores/useWindowStore';
 import { PROGRAMS } from '../../data/programs';
 import type { ResizeHandle } from '../../types/window';
 
-// Interface das novas, e muito mais simples, props
 interface WindowProps {
   instanceId: number;
   programId: string;
@@ -16,20 +15,20 @@ interface WindowProps {
 
 export default function Window({ instanceId, programId }: WindowProps) {
   // --- SELEÇÃO DE DADOS E AÇÕES DO STORE ---
-  const { 
-    closeWindow, 
-    updateWindowPosition, 
-    bringToFront, 
-    toggleMaximize, 
-    updateWindowSize, 
-    minimizeWindow 
+  const {
+    closeWindow,
+    updateWindowPosition,
+    bringToFront,
+    toggleMaximize,
+    updateWindowSize,
+    minimizeWindow
   } = useWindowStore();
 
   const instance = useWindowStore(state => state.openWindows.find(w => w.id === instanceId));
   const activeWindowId = useWindowStore(state => state.activeWindowId);
   const program = PROGRAMS.find(p => p.id === programId);
 
-  // --- LÓGICA DE DRAG E RESIZE (continua interna ao componente) ---
+  // --- ESTADO DE DRAG E RESIZE ---
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const dragOffsetRef = useRef({ x: 0, y: 0 });
@@ -40,7 +39,7 @@ export default function Window({ instanceId, programId }: WindowProps) {
     initialMousePos: { x: number; y: number };
   } | null>(null);
 
-  // Se a instância ou programa não forem encontrados, não renderize nada (segurança)
+  // Se a instância ou programa não forem encontrados, não renderize nada
   if (!instance || !program) {
     return null;
   }
@@ -49,15 +48,36 @@ export default function Window({ instanceId, programId }: WindowProps) {
   const MIN_WIDTH = minSize?.width || 150;
   const MIN_HEIGHT = minSize?.height || 100;
 
-  // --- HANDLERS DE MOUSEDOWN ---
-  const onMouseDown_Drag = (e: React.MouseEvent<HTMLElement>) => { 
-
-    // Não permita arrastar uma janela maximizada
-    if (instance.displayState === 'maximized') return;    
-    setIsDragging(true);
-    dragOffsetRef.current = { x: e.clientX - instance.position.x, y: e.clientY - instance.position.y };
+  // --- FUNÇÕES AUXILIARES ---
+  const getEventPosition = (e: MouseEvent | TouchEvent): { x: number; y: number } => {
+    if ('touches' in e) {
+      const touch = e.touches[0] || e.changedTouches[0];
+      return { x: touch.clientX, y: touch.clientY };
+    }
+    return { x: e.clientX, y: e.clientY };
   };
 
+  // --- DRAG HANDLERS (Mouse + Touch) ---
+  const startDrag = (clientX: number, clientY: number) => {
+    if (instance.isMaximized) return;
+    setIsDragging(true);
+    dragOffsetRef.current = {
+      x: clientX - instance.position.x,
+      y: clientY - instance.position.y
+    };
+  };
+
+  const onMouseDown_Drag = (e: React.MouseEvent<HTMLElement>) => {
+    startDrag(e.clientX, e.clientY);
+  };
+
+  const onTouchStart_Drag = (e: React.TouchEvent<HTMLElement>) => {
+    if (e.touches.length !== 1) return;
+    const touch = e.touches[0];
+    startDrag(touch.clientX, touch.clientY);
+  };
+
+  // --- RESIZE HANDLERS ---
   const onMouseDown_Resize = (e: React.MouseEvent<HTMLDivElement>, handle: ResizeHandle) => {
     setIsResizing(true);
     resizeStartData.current = {
@@ -68,19 +88,27 @@ export default function Window({ instanceId, programId }: WindowProps) {
     };
   };
 
-  const handleFocusAndStopPropagation = (e: React.MouseEvent) => {
-    bringToFront(instanceId); // Sempre tenta focar
-    e.stopPropagation(); // Impede o evento de "vazar" para o Desktop/App
-  }
+  // --- FOCUS HANDLER ---
+  const handleFocusAndStopPropagation = (e: React.MouseEvent | React.TouchEvent) => {
+    bringToFront(instanceId);
+    e.stopPropagation();
+  };
 
-  // --- GERENCIADOR GLOBAL DE EVENTOS (useEffect) ---
+  // --- GLOBAL EVENT LISTENERS ---
   useEffect(() => {
-    const onMouseMove_Global = (e: MouseEvent) => {
+    if (!isDragging && !isResizing) return;
+
+    const onMove = (e: MouseEvent | TouchEvent) => {
+      const pos = getEventPosition(e);
+
       if (isResizing && resizeStartData.current) {
         const { handle, initialSize, initialPosition, initialMousePos } = resizeStartData.current;
-        const dx = e.clientX - initialMousePos.x;
-        const dy = e.clientY - initialMousePos.y;
-        let newWidth = initialSize.width, newHeight = initialSize.height, newLeft = initialPosition.x, newTop = initialPosition.y;
+        const dx = pos.x - initialMousePos.x;
+        const dy = pos.y - initialMousePos.y;
+        let newWidth = initialSize.width;
+        let newHeight = initialSize.height;
+        let newLeft = initialPosition.x;
+        let newTop = initialPosition.y;
 
         if (handle.includes('e')) newWidth = initialSize.width + dx;
         if (handle.includes('w')) newWidth = initialSize.width - dx;
@@ -91,52 +119,68 @@ export default function Window({ instanceId, programId }: WindowProps) {
         if (newHeight < MIN_HEIGHT) newHeight = MIN_HEIGHT;
         if (handle.includes('w')) newLeft = initialPosition.x + (initialSize.width - newWidth);
         if (handle.includes('n')) newTop = initialPosition.y + (initialSize.height - newHeight);
-        
-        // Em vez de 'setState', chamamos as ações do store, mas de forma otimizada no mouseUp
+
         updateWindowSize(instanceId, { width: newWidth, height: newHeight });
         updateWindowPosition(instanceId, { x: newLeft, y: newTop });
       } else if (isDragging) {
-        updateWindowPosition(instanceId, { x: e.clientX - dragOffsetRef.current.x, y: e.clientY - dragOffsetRef.current.y });
+        updateWindowPosition(instanceId, {
+          x: pos.x - dragOffsetRef.current.x,
+          y: pos.y - dragOffsetRef.current.y
+        });
+      }
+
+      // Prevent scrolling on touch devices while dragging
+      if ('touches' in e) {
+        e.preventDefault();
       }
     };
 
-    const onMouseUp_Global = () => {
+    const onEnd = () => {
       setIsDragging(false);
       setIsResizing(false);
     };
 
-    if (isDragging || isResizing) {
-      window.addEventListener('mousemove', onMouseMove_Global);
-      window.addEventListener('mouseup', onMouseUp_Global);
-    }
+    // Mouse events
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onEnd);
+
+    // Touch events
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onEnd);
+    window.addEventListener('touchcancel', onEnd);
 
     return () => {
-      window.removeEventListener('mousemove', onMouseMove_Global);
-      window.removeEventListener('mouseup', onMouseUp_Global);
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onEnd);
+      window.removeEventListener('touchmove', onMove);
+      window.removeEventListener('touchend', onEnd);
+      window.removeEventListener('touchcancel', onEnd);
     };
   }, [isDragging, isResizing, instanceId, updateWindowPosition, updateWindowSize, MIN_WIDTH, MIN_HEIGHT]);
 
   // --- RENDERIZAÇÃO ---
   const isActive = instance.id === activeWindowId;
-  const maximizeIcon = instance.displayState === 'maximized' ? restore : maximize;
+  const maximizeIcon = instance.isMaximized ? restore : maximize;
 
   return (
     <div
-        className={`${styles.window} ${isActive ? styles.active : ''} ${instance.displayState === 'maximized' ? styles.maximized : ''}`}
-        style={{
-            top: instance.position.y,
-            left: instance.position.x,
-            width: instance.size.width,
-            height: instance.size.height,
-            zIndex: instance.zIndex,
-            display: instance.displayState === 'minimized' ? 'none' : 'block'
-        }}
-        onMouseDown={handleFocusAndStopPropagation}
+      className={`${styles.window} ${isActive ? styles.active : ''} ${instance.isMaximized ? styles.maximized : ''}`}
+      style={{
+        top: instance.position.y,
+        left: instance.position.x,
+        width: instance.size.width,
+        height: instance.size.height,
+        zIndex: instance.zIndex,
+        display: instance.isMinimized ? 'none' : 'block'
+      }}
+      onMouseDown={handleFocusAndStopPropagation}
+      onTouchStart={handleFocusAndStopPropagation}
     >
       <header
         className={`${styles.titleBar} ${isActive ? styles.active : ''}`}
         style={{ cursor: isDragging ? 'move' : 'default' }}
         onMouseDown={onMouseDown_Drag}
+        onTouchStart={onTouchStart_Drag}
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <img className={styles.icon} src={program.iconUrl} alt={`${program.name} icon`} />
@@ -146,7 +190,7 @@ export default function Window({ instanceId, programId }: WindowProps) {
           <button className={styles.windowButton} onClick={() => minimizeWindow(instanceId)}>
             <img src={minimize} alt="Minimize Button" />
           </button>
-          {isResizable !== false && ( // Só mostra o botão se a janela for redimensionável
+          {isResizable !== false && (
             <button className={styles.windowButton} onClick={() => toggleMaximize(instanceId)}>
               <img src={maximizeIcon} alt="Maximize/Restore Button" />
             </button>
@@ -159,7 +203,7 @@ export default function Window({ instanceId, programId }: WindowProps) {
       <div className={`${styles.windowBody} ${isActive ? styles.active : ''}`}>
         {program.component}
       </div>
-      {isResizable !== false && ( // Só renderiza as alças se a janela for redimensionável
+      {isResizable !== false && !instance.isMaximized && (
         <>
           <div className={`${styles.resizeHandle} ${styles.n}`} onMouseDown={(e) => onMouseDown_Resize(e, 'n')}></div>
           <div className={`${styles.resizeHandle} ${styles.ne}`} onMouseDown={(e) => onMouseDown_Resize(e, 'ne')}></div>
@@ -173,4 +217,4 @@ export default function Window({ instanceId, programId }: WindowProps) {
       )}
     </div>
   );
-} 
+}

@@ -13,6 +13,7 @@ const TaskbarButton = ({ title, isActive, onClick, iconUrl }: TaskbarButtonProps
     <button
       className={`${styles.taskbarButton} ${isActive ? styles.active : ''}`}
       onClick={onClick}
+      onMouseDown={(e) => e.stopPropagation()}
     >
       <img className={styles.icon} src={iconUrl} />
       <span className={styles.title}>{title}</span>
