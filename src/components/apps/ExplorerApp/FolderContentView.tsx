@@ -23,15 +23,25 @@ export default function FolderContentView({ folderId, onNavigate }: FolderConten
         }
     };
 
-    const getIconUrl = (item: { type: string; programId?: string }) => {
+    const getIconUrl = (item: { type: string; iconUrl?: string; programId?: string }) => {
+        // 1. Ícone customizado do próprio item (prioridade máxima)
+        if (item.iconUrl) {
+            return item.iconUrl;
+        }
+
+        // 2. Se for pasta, usa ícone padrão de pasta
         if (item.type === 'folder') {
             return 'src/assets/icons/folder.png';
         }
+
+        // 3. Se tiver programId, busca o ícone do programa
         if (item.programId) {
             const program = PROGRAMS.find(p => p.id === item.programId);
-            return program?.iconUrl || 'src/assets/icons/file.png';
+            return program?.iconUrl || 'src/assets/icons/app.png';
         }
-        return 'src/assets/icons/file.png';
+
+        // 4. Fallback
+        return 'src/assets/icons/app.png';
     };
 
     return (

@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import styles from './StartMenu.module.css';
 import { useWindowStore } from '../../stores/useWindowStore';
 import { PROGRAMS } from '../../data/programs';
+import power from '../../assets/icons/power.png';
+import logout from '../../assets/icons/logout.png';
 
 export default function StartMenu() {
   // Seleciona os dados e ações do store
@@ -9,13 +11,13 @@ export default function StartMenu() {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!isStartMenuOpen) return; 
+    if (!isStartMenuOpen) return;
 
     function handleClickOutside(event: MouseEvent) {
       const clickedStartButton = (event.target as HTMLElement).closest('[data-id="start-button"]');
 
       if (menuRef.current && !menuRef.current.contains(event.target as Node) && !clickedStartButton) {
-          toggleStartMenu();
+        toggleStartMenu();
       }
     }
 
@@ -33,7 +35,7 @@ export default function StartMenu() {
     <div className={styles.startMenu} ref={menuRef}>
       <header className={styles.header}>
         {/* Adicione sua foto de perfil aqui */}
-        <div className={styles.profilePic}></div> 
+        <div className={styles.profilePic}></div>
         <span className={styles.username}>Tupay</span>
       </header>
       <main className={styles.mainContent}>
@@ -50,7 +52,14 @@ export default function StartMenu() {
         </div>
       </main>
       <footer className={styles.footer}>
-        {/* Botões de Desligar/Logoff */}
+        <div className={styles.powerButtons} onClick={() => openWindow('logout')}>
+          <img src={logout} alt="Logout" />
+          <span>Logout</span>
+        </div>
+        <div className={styles.powerButtons} onClick={() => openWindow('power')}>
+          <img src={power} alt="Power" />
+          <span>Turn off computer</span>
+        </div>
       </footer>
     </div>
   );

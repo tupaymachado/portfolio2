@@ -1,15 +1,17 @@
 /* Contêiner Principal do Menu Iniciar */
 .startMenu {
   position: absolute;
-  bottom: 30px; /* Alinha com o topo da Taskbar */
+  bottom: 30px;
+  /* Alinha com o topo da Taskbar */
   left: 0;
   width: 380px;
   height: 480px;
   background-color: white;
   border: 1px solid var(--color-title-bar-active-start);
   box-shadow: 2px -2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 999; /* Fica abaixo da Taskbar mas acima do Desktop */
-  
+  z-index: 999;
+  /* Fica abaixo da Taskbar mas acima do Desktop */
+
   display: flex;
   flex-direction: column;
   border-radius: 4px 4px 0 0;
@@ -19,10 +21,9 @@
 .header {
   height: 60px;
   flex-shrink: 0;
-  background: linear-gradient(to bottom, 
-    var(--color-title-bar-active-start),
-    var(--color-title-bar-active-end)
-  );
+  background: linear-gradient(to bottom,
+      var(--color-title-bar-active-start),
+      var(--color-title-bar-active-end));
   display: flex;
   align-items: center;
   padding: 0 10px;
@@ -48,14 +49,16 @@
 .mainContent {
   flex-grow: 1;
   display: flex;
-  min-height: 0; /* Correção de bug do Flexbox */
+  min-height: 0;
+  /* Correção de bug do Flexbox */
 }
 
 /* Coluna da Esquerda (Programas do Usuário) */
 .programList {
   width: 55%;
   padding: 5px;
-  overflow-y: auto; /* Adiciona scroll se a lista for grande */
+  overflow-y: auto;
+  /* Adiciona scroll se a lista for grande */
   border-right: 1px solid var(--color-border-window);
 }
 
@@ -89,23 +92,33 @@
   margin-right: 10px;
 }
 
+.powerButtons {
+  display: flex;
+  margin-left: 5px;
+  color: white;
+}
+
+.powerButtons img {
+  width: 28px;
+  height: 28px;
+}
+
 .menuItemName {
   font-weight: bold;
 }
+
 /* Estilos para texto secundário se você adicionar */
 .menuItemDescription {
   font-size: 11px;
 }
 
-
 /* 3. Footer (Rodapé com Botões de Energia) */
 .footer {
   height: 40px;
   flex-shrink: 0;
-  background: linear-gradient(to top, 
-    var(--color-title-bar-active-start),
-    var(--color-title-bar-active-end)
-  );
+  background: linear-gradient(to top,
+      var(--color-title-bar-active-start),
+      var(--color-title-bar-active-end));
   border-top: 1px solid #5d88dd;
   display: flex;
   justify-content: flex-end;

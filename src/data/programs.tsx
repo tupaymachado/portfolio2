@@ -6,8 +6,6 @@ const NotepadContent = () => <div style={{ padding: '10px' }}>Um editor de texto
 const AboutMeContent = () => <div style={{ padding: '10px' }}><h1>Sobre Mim</h1><p>Desenvolvedor apaixonado...</p></div>;
 const MyProjectsContent = () => <div style={{ padding: '10px' }}><h1>Meus Projetos</h1><p>Cards dos projetos aqui...</p></div>;
 const MinesweeperContent = () => <div style={{ padding: '10px' }}>Campo Minado em breve!</div>;
-const ShutDownContent = () => <div style={{ padding: '10px' }}>Desligando...</div>;
-
 
 // A nossa "base de dados" de programas instalados no sistema.
 export const PROGRAMS: ProgramDefinition[] = [
@@ -50,20 +48,11 @@ export const PROGRAMS: ProgramDefinition[] = [
   {
     id: 'minesweeper',
     name: 'Campo Minado',
-    iconUrl: '/icons/minesweeper.png',
+    iconUrl: 'src/assets/icons/minesweeper.png',
     component: <MinesweeperContent />,
     // O jogo Campo Minado clássico não era redimensionável
     isResizable: false,
     // defaultSize não é necessário se não for redimensionável, mas podemos definir.
     defaultSize: { width: 300, height: 400 },
-  },
-  {
-    id: 'shutdown',
-    name: 'Desligar',
-    iconUrl: '/icons/shutdown.png',
-    component: <ShutDownContent />,
-    // Janelas de diálogo como "Desligar" geralmente não são redimensionáveis nem maximizáveis.
-    isResizable: false,
-    defaultSize: { width: 350, height: 200 },
   }
 ];
