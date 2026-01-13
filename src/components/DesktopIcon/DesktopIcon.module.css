@@ -13,6 +13,7 @@
 .desktop {
   /* Estilos específicos para ícones no desktop */
   color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .explorer {
@@ -26,17 +27,12 @@
 }
 
 .iconLabel {
-  /* Por padrão, o texto é claro para ser legível sobre o papel de parede */
-  color: var(--color-text-on-highlight);
-  /* Usa a variável para "texto branco" */
   font-family: Tahoma, sans-serif;
   font-size: 12px;
   text-align: center;
 
   user-select: none;
   -webkit-user-select: none;
-  /* Sombra para legibilidade é crucial sobre fundos complexos como o wallpaper */
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 
   line-height: 1.2;
   padding: 1px 3px;

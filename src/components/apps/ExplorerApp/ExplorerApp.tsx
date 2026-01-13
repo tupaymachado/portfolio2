@@ -1,10 +1,11 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import styles from './ExplorerApp.module.css';
 import ExplorerToolbar from './ExplorerToobar';
 import FolderContentView from './FolderContentView';
 import ShortcutCard from './ShortcutCard';
 import type { cardContent } from './ShortcutCard';
 import { useFileSystemStore } from '../../../stores/useFileSystemStore';
+import { useWindowStore, useWindowContext } from '../../../stores/useWindowStore';
 import startMenuPrograms from '../../../assets/icons/start-menu-programs.png'
 import programs from '../../../assets/icons/programs.png'
 import search from '../../../assets/icons/search.png'
@@ -72,9 +73,21 @@ export default function ExplorerApp() {
 
   const getPath = useFileSystemStore(state => state.getPath);
   const getItem = useFileSystemStore(state => state.getItem);
+  const updateWindowMeta = useWindowStore(state => state.updateWindowMeta);
+  const { instanceId } = useWindowContext();
 
   const currentPath = getPath(currentFolderId);
   const currentFolder = getItem(currentFolderId);
+
+  // Atualiza título e ícone da janela quando a pasta muda
+  useEffect(() => {
+    if (currentFolder) {
+      updateWindowMeta(instanceId, {
+        title: currentFolder.name,
+        iconUrl: currentFolder.iconUrl || 'src/assets/icons/folder.png',
+      });
+    }
+  }, [currentFolder, instanceId, updateWindowMeta]);
 
   const navigate = useCallback((folderId: string) => {
     console.log('[NAV] navigate to:', folderId);
@@ -118,6 +131,7 @@ export default function ExplorerApp() {
   return (
     <div className={styles.explorerContainer}>
       <ExplorerToolbar
+        iconUrl={currentFolder?.iconUrl || 'src/assets/icons/folder.png'}
         currentPath={currentPath}
         canGoBack={historyIndex > 0}
         canGoForward={historyIndex < history.length - 1}

@@ -1,8 +1,25 @@
 import { create } from 'zustand';
+import { createContext, useContext } from 'react';
 import type { WindowInstance } from '../types/window';
 import { PROGRAMS } from '../data/programs';
 import { useSystemStore } from './useSystemStore';
 
+// --- WINDOW CONTEXT (para passar instanceId para filhos) ---
+interface WindowContextValue {
+    instanceId: number;
+}
+
+export const WindowContext = createContext<WindowContextValue | null>(null);
+
+export function useWindowContext() {
+    const context = useContext(WindowContext);
+    if (!context) {
+        throw new Error('useWindowContext must be used within a WindowContext.Provider');
+    }
+    return context;
+}
+
+// --- TYPES ---
 export type MenuItem = {
     label: string;
     onClick: () => void;
@@ -33,6 +50,7 @@ interface WindowState {
     };
     openContextMenu: (x: number, y: number, items: MenuItem[]) => void;
     closeContextMenu: () => void;
+    updateWindowMeta: (id: number, meta: { title?: string; iconUrl?: string }) => void;
 };
 
 export const useWindowStore = create<WindowState>((set, get) => ({
@@ -202,6 +220,12 @@ export const useWindowStore = create<WindowState>((set, get) => ({
     updateWindowSize: (id, size) => set(state => ({
         openWindows: state.openWindows.map(win =>
             win.id === id ? { ...win, size } : win
+        ),
+    })),
+
+    updateWindowMeta: (id, meta) => set(state => ({
+        openWindows: state.openWindows.map(win =>
+            win.id === id ? { ...win, ...meta } : win
         ),
     })),
 

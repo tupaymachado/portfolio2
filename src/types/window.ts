@@ -5,6 +5,10 @@ export interface WindowInstance {
   id: number;           // ID único DESTA INSTÂNCIA (gerado com Date.now())
   programId: string;    // Qual programa esta janela está executando? (ex: "notepad")
 
+  // --- METADADOS DINÂMICOS (override do programa) ---
+  title?: string;       // Título customizado (senão usa program.name)
+  iconUrl?: string;     // Ícone customizado (senão usa program.iconUrl)
+
   // --- ESTADO DE VISIBILIDADE ---
   isMinimized: boolean; // A janela está escondida (na taskbar)?
   isMaximized: boolean; // A janela ocupa a tela toda?

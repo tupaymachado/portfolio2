@@ -4,7 +4,7 @@ import minimize from '../../assets/icons/minimize.png';
 import maximize from '../../assets/icons/maximize.png';
 import restore from '../../assets/icons/restore.png';
 import close from '../../assets/icons/close.png';
-import { useWindowStore } from '../../stores/useWindowStore';
+import { useWindowStore, WindowContext } from '../../stores/useWindowStore';
 import { PROGRAMS } from '../../data/programs';
 import type { ResizeHandle } from '../../types/window';
 
@@ -162,6 +162,10 @@ export default function Window({ instanceId, programId }: WindowProps) {
   const isActive = instance.id === activeWindowId;
   const maximizeIcon = instance.isMaximized ? restore : maximize;
 
+  // Título e ícone dinâmicos (instance override ou fallback do programa)
+  const windowTitle = instance.title || program.name;
+  const windowIcon = instance.iconUrl || program.iconUrl;
+
   return (
     <div
       className={`${styles.window} ${isActive ? styles.active : ''} ${instance.isMaximized ? styles.maximized : ''}`}
@@ -183,8 +187,8 @@ export default function Window({ instanceId, programId }: WindowProps) {
         onTouchStart={onTouchStart_Drag}
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <img className={styles.icon} src={program.iconUrl} alt={`${program.name} icon`} />
-          <span className={styles.title}>{program.name}</span>
+          <img className={styles.icon} src={windowIcon} alt={`${windowTitle} icon`} />
+          <span className={styles.title}>{windowTitle}</span>
         </div>
         <div className={styles.windowControls}>
           <button className={styles.windowButton} onClick={() => minimizeWindow(instanceId)}>
@@ -201,7 +205,9 @@ export default function Window({ instanceId, programId }: WindowProps) {
         </div>
       </header>
       <div className={`${styles.windowBody} ${isActive ? styles.active : ''}`}>
-        {program.component}
+        <WindowContext.Provider value={{ instanceId }}>
+          {program.component}
+        </WindowContext.Provider>
       </div>
       {isResizable !== false && !instance.isMaximized && (
         <>

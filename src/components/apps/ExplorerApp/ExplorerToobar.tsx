@@ -9,6 +9,7 @@ import go from '../../../assets/icons/go.png'
 import winLogo from '../../../assets/icons/win-logo.png'
 
 interface ExplorerToolbarProps {
+  iconUrl?: string;
   currentPath?: string;
   canGoBack?: boolean;
   canGoForward?: boolean;
@@ -19,6 +20,7 @@ interface ExplorerToolbarProps {
 }
 
 export default function ExplorerToolbar({
+  iconUrl,
   currentPath = 'C:\\',
   canGoBack = false,
   canGoForward = false,
@@ -82,7 +84,7 @@ export default function ExplorerToolbar({
       <div className={styles.rowAddress}>
         <span>Endereço</span>
         <div className={styles.addressInputWrapper}>
-          {/* Ícone de pasta aqui */}
+          <img src={iconUrl || folderView} alt="Pastas" />
           <input type="text" value={currentPath} readOnly className={styles.addressInput} />
         </div>
         <button className={styles.goBtn}>
