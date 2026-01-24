@@ -4,6 +4,7 @@ import Desktop from './components/Desktop/Desktop';
 import Taskbar from './components/Taskbar/Taskbar';
 import Window from './components/Window/Window';
 import ContextMenu from './components/ContextMenu/ContextMenu';
+import ShutdownDialog from './components/ShutdownDialog/ShutdownDialog';
 import { useWindowStore } from './stores/useWindowStore';
 import { useSystemStore } from './stores/useSystemStore';
 import { PROGRAMS } from './data/programs';
@@ -29,6 +30,7 @@ function App() {
         <Taskbar />
       </div>
       <ContextMenu />
+      <ShutdownDialog />
       {openWindows.map(win => {
         const program = PROGRAMS.find(p => p.id === win.programId);
         if (!program) return null;

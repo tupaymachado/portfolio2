@@ -1,0 +1,144 @@
+/* Overlay escuro atrás do dialog */
+.overlay {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: grayscale(1);
+    z-index: 9998;
+    animation: fadeToGray 3s ease forwards;
+}
+
+@keyframes fadeToGray {
+    from {
+        backdrop-filter: grayscale(0);
+    }
+
+    to {
+        backdrop-filter: grayscale(1);
+    }
+}
+
+/* Container principal do Dialog */
+.dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+
+    width: 300px;
+    height: 200px;
+    background: linear-gradient(to bottom, #3b8be8, #1c5da8);
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.3) inset,
+        0 4px 20px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+/* Header com título e logo */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background-color: #1d4ed8;
+    height: 40px;
+}
+
+.border {
+    width: 100%;
+    height: 2px;
+    background-image: linear-gradient(45deg, #466dcd, #c7ddff, #b0c9f7, #5a7edc);
+}
+
+.title {
+    color: white;
+    font-size: 16px;
+    font-weight: normal;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.winLogo {
+    width: 27px;
+    height: 24px;
+}
+
+/* Área de conteúdo com os botões de opção */
+.content {
+    height: 118px;
+    background: linear-gradient(to right, #60a5fa, #93c5fd, #3b82f6);
+}
+
+.options {
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+}
+
+/* Botões de opção (Standby, Power, Restart) */
+.optionButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 15px;
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.optionButton:hover {
+    filter: brightness(1.1);
+}
+
+.optionButton:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.optionButton img {
+    width: 32px;
+    height: 32px;
+}
+
+.optionButton span {
+    color: white;
+    font-size: 12px;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    font-weight: 700;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Footer com botão Cancelar */
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px;
+    background-color: #1d4ed8;
+    height: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cancelButton {
+    background: linear-gradient(180deg, #fff, #ecebe5 86%, #d8d0c4);
+    border: 1px solid #003c74;
+    min-width: 75px;
+    min-height: 25px;
+    border-radius: 3px;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cancelButton:hover {
+    background: linear-gradient(to bottom, #e8e8e8, #c8c8c8);
+}
+
+.cancelButton:active {
+    background: linear-gradient(to bottom, #d0d0d0, #b8b8b8);
+    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.2);
+}

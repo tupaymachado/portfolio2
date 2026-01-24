@@ -3,6 +3,9 @@
   display: flex;
   align-items: center;
   flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 0;
+  /* Permite encolher no flexbox */
   max-width: 160px;
   /* Um pouco mais de espaço para títulos */
   height: calc(100% - 2px);

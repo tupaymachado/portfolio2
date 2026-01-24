@@ -51,6 +51,11 @@ interface WindowState {
     openContextMenu: (x: number, y: number, items: MenuItem[]) => void;
     closeContextMenu: () => void;
     updateWindowMeta: (id: number, meta: { title?: string; iconUrl?: string }) => void;
+
+    // Shutdown Dialog
+    isShutdownDialogOpen: boolean;
+    openShutdownDialog: () => void;
+    closeShutdownDialog: () => void;
 };
 
 export const useWindowStore = create<WindowState>((set, get) => ({
@@ -59,6 +64,7 @@ export const useWindowStore = create<WindowState>((set, get) => ({
     activeWindowId: null,
     zIndexCounter: 1,
     isStartMenuOpen: false,
+    isShutdownDialogOpen: false,
     contextMenu: {
         isOpen: false,
         position: { x: 0, y: 0 },
@@ -90,6 +96,14 @@ export const useWindowStore = create<WindowState>((set, get) => ({
     toggleStartMenu: () => set(state => ({
         isStartMenuOpen: !state.isStartMenuOpen
     })),
+
+    openShutdownDialog: () => {
+        get().closeStartMenu();
+        get().closeContextMenu();
+        set({ isShutdownDialogOpen: true });
+    },
+
+    closeShutdownDialog: () => set({ isShutdownDialogOpen: false }),
 
     openWindow: (programId) => {
         const program = PROGRAMS.find(p => p.id === programId);

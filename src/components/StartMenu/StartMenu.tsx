@@ -4,10 +4,11 @@ import { useWindowStore } from '../../stores/useWindowStore';
 import { PROGRAMS } from '../../data/programs';
 import power from '../../assets/icons/power.png';
 import logout from '../../assets/icons/logout.png';
+import profile from '../../assets/profile/duck.webp';
 
 export default function StartMenu() {
   // Seleciona os dados e ações do store
-  const { isStartMenuOpen, toggleStartMenu, openWindow } = useWindowStore();
+  const { isStartMenuOpen, toggleStartMenu, openWindow, openShutdownDialog } = useWindowStore();
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -35,8 +36,10 @@ export default function StartMenu() {
     <div className={styles.startMenu} ref={menuRef}>
       <header className={styles.header}>
         {/* Adicione sua foto de perfil aqui */}
-        <div className={styles.profilePic}></div>
-        <span className={styles.username}>Tupay</span>
+        <div className={styles.profilePic}>
+          <img src={profile} alt="Profile" />
+        </div>
+        <span className={styles.username}>Usuário</span>
       </header>
       <main className={styles.mainContent}>
         <div className={styles.programList}>
@@ -51,14 +54,14 @@ export default function StartMenu() {
           {/* Adicione links estáticos aqui */}
         </div>
       </main>
-      <footer className={styles.footer}>
+      <footer className={styles.startMenuFooter}>
         <div className={styles.powerButtons} onClick={() => openWindow('logout')}>
-          <img src={logout} alt="Logout" />
-          <span>Logout</span>
+          <img src={logout} alt="Fazer logoff" />
+          <span>Fazer logoff</span>
         </div>
-        <div className={styles.powerButtons} onClick={() => openWindow('power')}>
-          <img src={power} alt="Power" />
-          <span>Turn off computer</span>
+        <div className={styles.powerButtons} onClick={openShutdownDialog}>
+          <img src={power} alt="Desligar" />
+          <span>Desligar o computador</span>
         </div>
       </footer>
     </div>
