@@ -5,15 +5,16 @@ import DesktopIcon from '../DesktopIcon/DesktopIcon';
 import { PROGRAMS } from '../../data/programs';
 import { useWindowStore } from '../../stores/useWindowStore';
 import { useFileSystemStore } from '../../stores/useFileSystemStore';
-import { useSystemStore } from '../../stores/useSystemStore';
+// import { useSystemStore } from '../../stores/useSystemStore'; // TODO: usar para responsividade
 import type { MenuItem } from '../../stores/useWindowStore';
 
 const GRID_CELL_WIDTH = 90;
 const GRID_CELL_HEIGHT = 100;
 
 export default function Desktop() {
-  const isMobile = useSystemStore(state => state.isMobile);
-  const isSmallScreen = useSystemStore(state => state.isSmallScreen);
+  // TODO: usar para responsividade
+  // const isMobile = useSystemStore(state => state.isMobile);
+  // const isSmallScreen = useSystemStore(state => state.isSmallScreen);
 
   const openWindow = useWindowStore(state => state.openWindow);
   const deselectAllWindows = useWindowStore(state => state.deselectAllWindows);
