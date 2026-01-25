@@ -8,6 +8,9 @@ import { useFileSystemStore } from '../../stores/useFileSystemStore';
 // import { useSystemStore } from '../../stores/useSystemStore'; // TODO: usar para responsividade
 import type { MenuItem } from '../../stores/useWindowStore';
 
+// Import de ícone fallback
+import unknownFileIcon from '../../assets/icons/app.webp';
+
 const GRID_CELL_WIDTH = 90;
 const GRID_CELL_HEIGHT = 100;
 
@@ -170,7 +173,7 @@ export default function Desktop() {
             iconUrl = program.iconUrl;
             onDoubleClick = () => openWindow(program.id);
           } else {
-            iconUrl = '/icons/unknown-file.webp';
+            iconUrl = unknownFileIcon;
           }
         }
 

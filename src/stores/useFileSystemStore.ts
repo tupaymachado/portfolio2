@@ -1,6 +1,13 @@
 import { create } from 'zustand';
 import type { FileSystemItem, FileSystemState } from '../types/fileSystem';
 
+// Imports de ícones
+import myComputerIcon from '../assets/icons/my-computer.webp';
+import myDocumentsIcon from '../assets/icons/my-documents.webp';
+import myPicturesIcon from '../assets/icons/my-pictures.webp';
+import myMusicIcon from '../assets/icons/my-music.webp';
+import myVideosIcon from '../assets/icons/my-videos.webp';
+
 interface FileSystemStore extends FileSystemState {
     // Ações
     getItemsByParent: (parentId: string) => FileSystemItem[];
@@ -17,7 +24,7 @@ const INITIAL_ITEMS: Record<string, FileSystemItem> = {
         parentId: '',
         name: 'C:',
         type: 'folder',
-        iconUrl: 'src/assets/icons/my-computer.webp',
+        iconUrl: myComputerIcon,
         createdAt: Date.now(),
     },
     'desktop': {
@@ -32,7 +39,7 @@ const INITIAL_ITEMS: Record<string, FileSystemItem> = {
         parentId: 'root',
         name: 'Meus Documentos',
         type: 'folder',
-        iconUrl: 'src/assets/icons/my-documents.webp',
+        iconUrl: myDocumentsIcon,
         createdAt: Date.now(),
     },
     'my-pictures': {
@@ -40,7 +47,7 @@ const INITIAL_ITEMS: Record<string, FileSystemItem> = {
         parentId: 'root',
         name: 'Minhas Imagens',
         type: 'folder',
-        iconUrl: 'src/assets/icons/my-pictures.webp',
+        iconUrl: myPicturesIcon,
         createdAt: Date.now(),
     },
     'my-music': {
@@ -48,7 +55,7 @@ const INITIAL_ITEMS: Record<string, FileSystemItem> = {
         parentId: 'root',
         name: 'Minha Música',
         type: 'folder',
-        iconUrl: 'src/assets/icons/my-music.webp',
+        iconUrl: myMusicIcon,
         createdAt: Date.now(),
     },
     'my-videos': {
@@ -56,7 +63,7 @@ const INITIAL_ITEMS: Record<string, FileSystemItem> = {
         parentId: 'root',
         name: 'Minhas Vídeos',
         type: 'folder',
-        iconUrl: 'src/assets/icons/my-videos.webp',
+        iconUrl: myVideosIcon,
         createdAt: Date.now(),
     },
 

@@ -4,6 +4,10 @@ import { useWindowStore } from '../../../stores/useWindowStore';
 import DesktopIcon from '../../DesktopIcon/DesktopIcon';
 import { PROGRAMS } from '../../../data/programs';
 
+// Imports de ícones para fallback
+import folderIcon from '../../../assets/icons/folder.webp';
+import appIcon from '../../../assets/icons/app.webp';
+
 interface FolderContentViewProps {
     folderId: string;
     onNavigate: (folderId: string) => void;
@@ -31,17 +35,17 @@ export default function FolderContentView({ folderId, onNavigate }: FolderConten
 
         // 2. Se for pasta, usa ícone padrão de pasta
         if (item.type === 'folder') {
-            return 'src/assets/icons/folder.webp';
+            return folderIcon;
         }
 
         // 3. Se tiver programId, busca o ícone do programa
         if (item.programId) {
             const program = PROGRAMS.find(p => p.id === item.programId);
-            return program?.iconUrl || 'src/assets/icons/app.webp';
+            return program?.iconUrl || appIcon;
         }
 
         // 4. Fallback
-        return 'src/assets/icons/app.webp';
+        return appIcon;
     };
 
     return (

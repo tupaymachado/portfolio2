@@ -16,6 +16,7 @@ import myVideos from '../../../assets/icons/my-videos.webp'
 import newFolder from '../../../assets/icons/new-folder.webp'
 import publishToInternet from '../../../assets/icons/publish-to-web.webp'
 import shareFolder from '../../../assets/icons/shared-folder.webp'
+import folderIcon from '../../../assets/icons/folder.webp'
 
 const card1: cardContent[] = [
   {
@@ -84,7 +85,7 @@ export default function ExplorerApp() {
     if (currentFolder) {
       updateWindowMeta(instanceId, {
         title: currentFolder.name,
-        iconUrl: currentFolder.iconUrl || 'src/assets/icons/folder.webp',
+        iconUrl: currentFolder.iconUrl || folderIcon,
       });
     }
   }, [currentFolder, instanceId, updateWindowMeta]);
@@ -131,7 +132,7 @@ export default function ExplorerApp() {
   return (
     <div className={styles.explorerContainer}>
       <ExplorerToolbar
-        iconUrl={currentFolder?.iconUrl || 'src/assets/icons/folder.webp'}
+        iconUrl={currentFolder?.iconUrl || folderIcon}
         currentPath={currentPath}
         canGoBack={historyIndex > 0}
         canGoForward={historyIndex < history.length - 1}
