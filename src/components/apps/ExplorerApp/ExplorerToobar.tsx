@@ -1,12 +1,12 @@
 import styles from './ExplorerToolbar.module.css';
-import back from '../../../assets/icons/back.png'
-import forward from '../../../assets/icons/forward.png'
-import folderViewClassic from '../../../assets/icons/folder-view-classic.png'
-import search from '../../../assets/icons/search.png'
-import up from '../../../assets/icons/up.png'
-import folderView from '../../../assets/icons/folder-view.png'
-import go from '../../../assets/icons/go.png'
-import winLogo from '../../../assets/icons/win-logo.png'
+import back from '../../../assets/icons/back.webp'
+import forward from '../../../assets/icons/forward.webp'
+import folderViewClassic from '../../../assets/icons/folder-view-classic.webp'
+import search from '../../../assets/icons/search.webp'
+import up from '../../../assets/icons/up.webp'
+import folderView from '../../../assets/icons/folder-view.webp'
+import go from '../../../assets/icons/go.webp'
+import winLogo from '../../../assets/icons/win-logo.webp'
 
 interface ExplorerToolbarProps {
   iconUrl?: string;

@@ -2,8 +2,8 @@ import { useEffect, useRef } from 'react';
 import styles from './StartMenu.module.css';
 import { useWindowStore } from '../../stores/useWindowStore';
 import { PROGRAMS } from '../../data/programs';
-import power from '../../assets/icons/power.png';
-import logout from '../../assets/icons/logout.png';
+import power from '../../assets/icons/power.webp';
+import logout from '../../assets/icons/logout.webp';
 import profile from '../../assets/profile/duck.webp';
 
 export default function StartMenu() {

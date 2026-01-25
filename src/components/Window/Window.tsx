@@ -1,9 +1,9 @@
 import styles from './Window.module.css';
 import { useEffect, useRef, useState } from 'react';
-import minimize from '../../assets/icons/minimize.png';
-import maximize from '../../assets/icons/maximize.png';
-import restore from '../../assets/icons/restore.png';
-import close from '../../assets/icons/close.png';
+import minimize from '../../assets/icons/minimize.webp';
+import maximize from '../../assets/icons/maximize.webp';
+import restore from '../../assets/icons/restore.webp';
+import close from '../../assets/icons/close.webp';
 import { useWindowStore, WindowContext } from '../../stores/useWindowStore';
 import { PROGRAMS } from '../../data/programs';
 import type { ResizeHandle } from '../../types/window';

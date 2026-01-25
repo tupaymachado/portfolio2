@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 import styles from './ShutdownDialog.module.css';
 import { useWindowStore } from '../../stores/useWindowStore';
-import standbyIcon from '../../assets/icons/stand-by.png';
-import powerIcon from '../../assets/icons/power.png';
-import restartIcon from '../../assets/icons/restart.png';
-import winLogo from '../../assets/icons/win-logo.png';
+import standbyIcon from '../../assets/icons/stand-by.webp';
+import powerIcon from '../../assets/icons/power.webp';
+import restartIcon from '../../assets/icons/restart.webp';
+import winLogo from '../../assets/icons/win-logo.webp';
 
 export default function ShutdownDialog() {
     const { isShutdownDialogOpen, closeShutdownDialog } = useWindowStore();

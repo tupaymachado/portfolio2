@@ -170,7 +170,7 @@ export default function Desktop() {
             iconUrl = program.iconUrl;
             onDoubleClick = () => openWindow(program.id);
           } else {
-            iconUrl = '/icons/unknown-file.png';
+            iconUrl = '/icons/unknown-file.webp';
           }
         }
 

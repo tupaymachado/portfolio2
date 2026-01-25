@@ -12,7 +12,7 @@ export const PROGRAMS: ProgramDefinition[] = [
   {
     id: 'explorer',
     name: 'Windows Explorer', // O título mudará dinamicamente depois, mas este é o padrão
-    iconUrl: 'src/assets/icons/explorer.png', // Você precisará de um ícone de pasta
+    iconUrl: 'src/assets/icons/explorer.webp', // Você precisará de um ícone de pasta
     component: <ExplorerApp />,
     defaultSize: { width: 800, height: 600 },
     minSize: { width: 400, height: 300 },
@@ -21,7 +21,7 @@ export const PROGRAMS: ProgramDefinition[] = [
   {
     id: 'about-me',
     name: 'Sobre Mim',
-    iconUrl: 'src/assets/icons/my-computer.png', // Exemplo de caminho, coloque seus ícones na pasta /public
+    iconUrl: 'src/assets/icons/my-computer.webp', // Exemplo de caminho, coloque seus ícones na pasta /public
     component: <AboutMeContent />,
     defaultSize: { width: 550, height: 450 },
     minSize: { width: 400, height: 300 },
@@ -30,7 +30,7 @@ export const PROGRAMS: ProgramDefinition[] = [
   {
     id: 'my-projects',
     name: 'Meus Projetos',
-    iconUrl: 'src/assets/icons/my-computer.png',
+    iconUrl: 'src/assets/icons/my-computer.webp',
     component: <MyProjectsContent />,
     defaultSize: { width: 700, height: 500 },
     minSize: { width: 500, height: 400 },
@@ -39,7 +39,7 @@ export const PROGRAMS: ProgramDefinition[] = [
   {
     id: 'notepad',
     name: 'Bloco de Notas',
-    iconUrl: 'src/assets/icons/notepad.png',
+    iconUrl: 'src/assets/icons/notepad.webp',
     component: <NotepadContent />,
     defaultSize: { width: 600, height: 400 },
     minSize: { width: 250, height: 150 },
@@ -48,7 +48,7 @@ export const PROGRAMS: ProgramDefinition[] = [
   {
     id: 'minesweeper',
     name: 'Campo Minado',
-    iconUrl: 'src/assets/icons/minesweeper.png',
+    iconUrl: 'src/assets/icons/minesweeper.webp',
     component: <MinesweeperContent />,
     // O jogo Campo Minado clássico não era redimensionável
     isResizable: false,

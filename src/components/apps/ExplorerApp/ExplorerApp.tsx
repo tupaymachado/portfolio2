@@ -6,16 +6,16 @@ import ShortcutCard from './ShortcutCard';
 import type { cardContent } from './ShortcutCard';
 import { useFileSystemStore } from '../../../stores/useFileSystemStore';
 import { useWindowStore, useWindowContext } from '../../../stores/useWindowStore';
-import startMenuPrograms from '../../../assets/icons/start-menu-programs.png'
-import programs from '../../../assets/icons/programs.png'
-import search from '../../../assets/icons/search.png'
-import myComputer from '../../../assets/icons/my-computer.png'
-import myPictures from '../../../assets/icons/my-pictures.png'
-import myMusic from '../../../assets/icons/my-music.png'
-import myVideos from '../../../assets/icons/my-videos.png'
-import newFolder from '../../../assets/icons/new-folder.png'
-import publishToInternet from '../../../assets/icons/publish-to-web.png'
-import shareFolder from '../../../assets/icons/shared-folder.png'
+import startMenuPrograms from '../../../assets/icons/start-menu-programs.webp'
+import programs from '../../../assets/icons/programs.webp'
+import search from '../../../assets/icons/search.webp'
+import myComputer from '../../../assets/icons/my-computer.webp'
+import myPictures from '../../../assets/icons/my-pictures.webp'
+import myMusic from '../../../assets/icons/my-music.webp'
+import myVideos from '../../../assets/icons/my-videos.webp'
+import newFolder from '../../../assets/icons/new-folder.webp'
+import publishToInternet from '../../../assets/icons/publish-to-web.webp'
+import shareFolder from '../../../assets/icons/shared-folder.webp'
 
 const card1: cardContent[] = [
   {
@@ -84,7 +84,7 @@ export default function ExplorerApp() {
     if (currentFolder) {
       updateWindowMeta(instanceId, {
         title: currentFolder.name,
-        iconUrl: currentFolder.iconUrl || 'src/assets/icons/folder.png',
+        iconUrl: currentFolder.iconUrl || 'src/assets/icons/folder.webp',
       });
     }
   }, [currentFolder, instanceId, updateWindowMeta]);
@@ -131,7 +131,7 @@ export default function ExplorerApp() {
   return (
     <div className={styles.explorerContainer}>
       <ExplorerToolbar
-        iconUrl={currentFolder?.iconUrl || 'src/assets/icons/folder.png'}
+        iconUrl={currentFolder?.iconUrl || 'src/assets/icons/folder.webp'}
         currentPath={currentPath}
         canGoBack={historyIndex > 0}
         canGoForward={historyIndex < history.length - 1}

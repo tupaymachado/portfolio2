@@ -31,17 +31,17 @@ export default function FolderContentView({ folderId, onNavigate }: FolderConten
 
         // 2. Se for pasta, usa ícone padrão de pasta
         if (item.type === 'folder') {
-            return 'src/assets/icons/folder.png';
+            return 'src/assets/icons/folder.webp';
         }
 
         // 3. Se tiver programId, busca o ícone do programa
         if (item.programId) {
             const program = PROGRAMS.find(p => p.id === item.programId);
-            return program?.iconUrl || 'src/assets/icons/app.png';
+            return program?.iconUrl || 'src/assets/icons/app.webp';
         }
 
         // 4. Fallback
-        return 'src/assets/icons/app.png';
+        return 'src/assets/icons/app.webp';
     };
 
     return (

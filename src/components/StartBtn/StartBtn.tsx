@@ -1,5 +1,5 @@
 import styles from './StartBtn.module.css';
-import WinLogo from '../../assets/icons/win-logo.png';
+import WinLogo from '../../assets/icons/win-logo.webp';
 import { useWindowStore } from '../../stores/useWindowStore';
 
 export function StartBtn() {

@@ -17,7 +17,7 @@ const INITIAL_ITEMS: Record<string, FileSystemItem> = {
         parentId: '',
         name: 'C:',
         type: 'folder',
-        iconUrl: 'src/assets/icons/my-computer.png',
+        iconUrl: 'src/assets/icons/my-computer.webp',
         createdAt: Date.now(),
     },
     'desktop': {
@@ -32,7 +32,7 @@ const INITIAL_ITEMS: Record<string, FileSystemItem> = {
         parentId: 'root',
         name: 'Meus Documentos',
         type: 'folder',
-        iconUrl: 'src/assets/icons/my-documents.png',
+        iconUrl: 'src/assets/icons/my-documents.webp',
         createdAt: Date.now(),
     },
     'my-pictures': {
@@ -40,7 +40,7 @@ const INITIAL_ITEMS: Record<string, FileSystemItem> = {
         parentId: 'root',
         name: 'Minhas Imagens',
         type: 'folder',
-        iconUrl: 'src/assets/icons/my-pictures.png',
+        iconUrl: 'src/assets/icons/my-pictures.webp',
         createdAt: Date.now(),
     },
     'my-music': {
@@ -48,7 +48,7 @@ const INITIAL_ITEMS: Record<string, FileSystemItem> = {
         parentId: 'root',
         name: 'Minha Música',
         type: 'folder',
-        iconUrl: 'src/assets/icons/my-music.png',
+        iconUrl: 'src/assets/icons/my-music.webp',
         createdAt: Date.now(),
     },
     'my-videos': {
@@ -56,7 +56,7 @@ const INITIAL_ITEMS: Record<string, FileSystemItem> = {
         parentId: 'root',
         name: 'Minhas Vídeos',
         type: 'folder',
-        iconUrl: 'src/assets/icons/my-videos.png',
+        iconUrl: 'src/assets/icons/my-videos.webp',
         createdAt: Date.now(),
     },
 
