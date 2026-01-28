@@ -30,7 +30,7 @@ interface WindowState {
     openWindows: WindowInstance[];
     activeWindowId: number | null;
     zIndexCounter: number;
-    openWindow: (programId: string) => void;
+    openWindow: (programId: string, options?: { folderId?: string }) => void;
     closeWindow: (id: number) => void;
     minimizeWindow: (id: number) => void;
     toggleMaximize: (id: number) => void;
@@ -105,23 +105,26 @@ export const useWindowStore = create<WindowState>((set, get) => ({
 
     closeShutdownDialog: () => set({ isShutdownDialogOpen: false }),
 
-    openWindow: (programId) => {
+    openWindow: (programId, options) => {
         const program = PROGRAMS.find(p => p.id === programId);
         if (!program) return;
 
         get().closeContextMenu();
         get().closeStartMenu();
         const { openWindows, bringToFront } = get();
-        const alreadyOpen = openWindows.find(win => win.programId === programId);
-        if (alreadyOpen) {
-            // Se já está aberta, traz pra frente e desmimimiza
-            set(state => ({
-                openWindows: state.openWindows.map(w =>
-                    w.id === alreadyOpen.id ? { ...w, isMinimized: false } : w
-                ),
-            }));
-            bringToFront(alreadyOpen.id);
-            return;
+
+        // Se não tiver folderId, tenta reusar janela existente
+        if (!options?.folderId) {
+            const alreadyOpen = openWindows.find(win => win.programId === programId);
+            if (alreadyOpen) {
+                set(state => ({
+                    openWindows: state.openWindows.map(w =>
+                        w.id === alreadyOpen.id ? { ...w, isMinimized: false } : w
+                    ),
+                }));
+                bringToFront(alreadyOpen.id);
+                return;
+            }
         }
 
         // Check if we're on a mobile/small screen device
@@ -132,6 +135,7 @@ export const useWindowStore = create<WindowState>((set, get) => ({
         const newWindow: WindowInstance = {
             id: newId,
             programId,
+            initialFolderId: options?.folderId,
             isMinimized: false,
             isMaximized: shouldMaximize,
             zIndex: get().zIndexCounter,

@@ -9,6 +9,9 @@ export interface WindowInstance {
   title?: string;       // Título customizado (senão usa program.name)
   iconUrl?: string;     // Ícone customizado (senão usa program.iconUrl)
 
+  // --- DADOS INICIAIS PARA O PROGRAMA ---
+  initialFolderId?: string; // Para o Explorer: qual pasta abrir inicialmente?
+
   // --- ESTADO DE VISIBILIDADE ---
   isMinimized: boolean; // A janela está escondida (na taskbar)?
   isMaximized: boolean; // A janela ocupa a tela toda?

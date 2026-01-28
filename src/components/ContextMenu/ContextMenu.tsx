@@ -4,11 +4,12 @@ import { useWindowStore } from '../../stores/useWindowStore';
 import type { MenuItem } from '../../stores/useWindowStore';
 
 export default function ContextMenu() {
-  const { contextMenu, closeContextMenu } = useWindowStore();
+  const contextMenu = useWindowStore(state => state.contextMenu);
+  const closeContextMenu = useWindowStore(state => state.closeContextMenu);
   const { isOpen, position, items } = contextMenu;
 
   const menuRef = useRef<HTMLDivElement>(null);
-  
+
   // Estado local para a posição ajustada.
   // Inicialmente usamos a posição do clique, mas ela pode mudar antes da "pintura".
   const [adjustedPosition, setAdjustedPosition] = useState(position);
@@ -49,10 +50,10 @@ export default function ContextMenu() {
         closeContextMenu();
       }
     }
-    
+
     document.addEventListener('mousedown', handleClickOutside);
     // Listener para resize da janela também é bom, para fechar o menu se a tela mudar
-    window.addEventListener('resize', closeContextMenu); 
+    window.addEventListener('resize', closeContextMenu);
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -64,7 +65,7 @@ export default function ContextMenu() {
   if (!isOpen) {
     return null;
   }
-  
+
   const handleItemClick = (item: MenuItem) => {
     if (item.disabled) return;
     item.onClick();
@@ -72,7 +73,7 @@ export default function ContextMenu() {
   };
 
   return (
-    <div 
+    <div
       className={styles.contextMenu}
       // Usamos adjustedPosition aqui, não a position bruta do store
       style={{ top: adjustedPosition.y, left: adjustedPosition.x }}

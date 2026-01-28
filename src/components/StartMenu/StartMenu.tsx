@@ -1,15 +1,18 @@
 import { useEffect, useRef } from 'react';
 import styles from './StartMenu.module.css';
 import { useWindowStore } from '../../stores/useWindowStore';
-import { PROGRAMS } from '../../data/programs';
+import { PROGRAMS, SYSTEM_LINKS } from '../../data/programs';
 import power from '../../assets/icons/power.webp';
 import logout from '../../assets/icons/logout.webp';
 import profile from '../../assets/profile/duck.webp';
 import arrowRight from '../../assets/icons/arrow-right.webp';
 
 export default function StartMenu() {
-  // Seleciona os dados e ações do store
-  const { isStartMenuOpen, toggleStartMenu, openWindow, openShutdownDialog } = useWindowStore();
+  // Seletores individuais para evitar re-renders desnecessários
+  const isStartMenuOpen = useWindowStore(state => state.isStartMenuOpen);
+  const toggleStartMenu = useWindowStore(state => state.toggleStartMenu);
+  const openWindow = useWindowStore(state => state.openWindow);
+  const openShutdownDialog = useWindowStore(state => state.openShutdownDialog);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -56,7 +59,23 @@ export default function StartMenu() {
           </div>
         </div>
         <div className={styles.systemList}>
-          {/* Adicione links estáticos aqui */}
+          {SYSTEM_LINKS.map(link => (
+            <button
+              key={link.id}
+              className={styles.systemItem}
+              onClick={() => {
+                if (link.type === 'folder') {
+                  openWindow('explorer', { folderId: link.targetId });
+                } else {
+                  openWindow(link.targetId);
+                }
+                toggleStartMenu();
+              }}
+            >
+              <img src={link.iconUrl} alt={link.name} className={styles.systemItemIcon} />
+              <span className={styles.systemItemName}>{link.name}</span>
+            </button>
+          ))}
         </div>
       </main>
       <footer className={styles.startMenuFooter}>

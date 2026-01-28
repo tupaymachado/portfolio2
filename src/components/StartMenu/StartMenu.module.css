@@ -62,6 +62,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
 
 .border {
@@ -103,6 +104,49 @@
   width: 45%;
   padding: 5px;
   background-color: #d6e8ff;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Itens do System List */
+.systemItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 3px 8px;
+  text-align: left;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+.systemItem:hover {
+  background-color: var(--color-highlight-background);
+  color: white;
+  border: 1px solid #1a56c8;
+}
+
+.systemItemIcon {
+  width: 28px;
+  height: 28px;
+  margin-right: 8px;
+}
+
+.systemItemName {
+  font-size: 13px;
+}
+
+/* Primeiros 4 itens são bold */
+.systemItem:nth-child(-n+4) .systemItemName {
+  font-weight: bold;
+}
+
+/* Separadores visuais (após item 4 e 6) */
+.systemItem:nth-child(5),
+.systemItem:nth-child(7) {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #b4cfe8;
 }
 
 
@@ -111,7 +155,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 5px 8px;
+  padding: 3px 8px;
   text-align: left;
   border: 1px solid transparent;
 }

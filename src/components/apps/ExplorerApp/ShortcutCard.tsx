@@ -30,8 +30,8 @@ export default function ShortcutCard({ title, content }: ShortcutCardProps) {
 
             </div>
             <div className={`${styles.contentContainer} ${show ? styles.show : styles.hidden}`}>
-                {content.map((item: cardContent) => (
-                    <div className={styles.contentLine}>
+                {content.map((item: cardContent, index: number) => (
+                    <div key={index} className={styles.contentLine}>
                         <img src={item.icon} alt={item.description} />
                         <div className={styles.description}>{item.description}</div>
                     </div>

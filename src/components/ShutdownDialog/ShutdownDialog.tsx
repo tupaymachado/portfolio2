@@ -7,7 +7,8 @@ import restartIcon from '../../assets/icons/restart.webp';
 import winLogo from '../../assets/icons/win-logo.webp';
 
 export default function ShutdownDialog() {
-    const { isShutdownDialogOpen, closeShutdownDialog } = useWindowStore();
+    const isShutdownDialogOpen = useWindowStore(state => state.isShutdownDialogOpen);
+    const closeShutdownDialog = useWindowStore(state => state.closeShutdownDialog);
     const dialogRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {

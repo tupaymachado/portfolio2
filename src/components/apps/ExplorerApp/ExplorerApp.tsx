@@ -68,14 +68,20 @@ const card3: cardContent[] = [
 ]
 
 export default function ExplorerApp() {
-  const [currentFolderId, setCurrentFolderId] = useState('root');
-  const [history, setHistory] = useState<string[]>(['root']);
+  const { instanceId } = useWindowContext();
+  // Seletor otimizado: só re-renderiza quando o initialFolderId DESTA janela muda
+  const initialFolderId = useWindowStore(
+    state => state.openWindows.find(w => w.id === instanceId)?.initialFolderId
+  );
+  const initialFolder = initialFolderId || 'root';
+
+  const [currentFolderId, setCurrentFolderId] = useState(initialFolder);
+  const [history, setHistory] = useState<string[]>([initialFolder]);
   const [historyIndex, setHistoryIndex] = useState(0);
 
   const getPath = useFileSystemStore(state => state.getPath);
   const getItem = useFileSystemStore(state => state.getItem);
   const updateWindowMeta = useWindowStore(state => state.updateWindowMeta);
-  const { instanceId } = useWindowContext();
 
   const currentPath = getPath(currentFolderId);
   const currentFolder = getItem(currentFolderId);

@@ -14,15 +14,13 @@ interface WindowProps {
 }
 
 export default function Window({ instanceId, programId }: WindowProps) {
-  // --- SELEÇÃO DE DADOS E AÇÕES DO STORE ---
-  const {
-    closeWindow,
-    updateWindowPosition,
-    bringToFront,
-    toggleMaximize,
-    updateWindowSize,
-    minimizeWindow
-  } = useWindowStore();
+  // --- SELEÇÃO DE AÇÕES DO STORE (seletores individuais para evitar re-renders) ---
+  const closeWindow = useWindowStore(state => state.closeWindow);
+  const updateWindowPosition = useWindowStore(state => state.updateWindowPosition);
+  const bringToFront = useWindowStore(state => state.bringToFront);
+  const toggleMaximize = useWindowStore(state => state.toggleMaximize);
+  const updateWindowSize = useWindowStore(state => state.updateWindowSize);
+  const minimizeWindow = useWindowStore(state => state.minimizeWindow);
 
   const instance = useWindowStore(state => state.openWindows.find(w => w.id === instanceId));
   const activeWindowId = useWindowStore(state => state.activeWindowId);
