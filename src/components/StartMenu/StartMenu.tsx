@@ -132,7 +132,11 @@ export default function StartMenu() {
       <main className={styles.mainContent}>
         <div className={styles.programList}>
           {PROGRAMS.map(program => (
-            <button key={program.id} className={styles.menuItem} onClick={() => openWindow(program.id)}>
+            <button
+              key={program.id}
+              className={styles.menuItem}
+              onClick={() => openWindow(program.id)}
+            >
               <img src={program.iconUrl} alt={program.name} className={styles.menuItemIcon} />
               <span className={styles.menuItemName}>{program.name}</span>
             </button>
@@ -160,7 +164,6 @@ export default function StartMenu() {
                 } else {
                   openWindow(link.targetId);
                 }
-                toggleStartMenu();
               }}
             >
               <img src={link.iconUrl} alt={link.name} className={styles.systemItemIcon} />
@@ -193,10 +196,7 @@ export default function StartMenu() {
                 <button
                   key={program.id}
                   className={styles.submenuItem}
-                  onClick={() => {
-                    openWindow(program.id);
-                    toggleStartMenu();
-                  }}
+                  onClick={() => openWindow(program.id)}
                 >
                   <img src={program.iconUrl} alt={program.name} className={styles.submenuItemIcon} />
                   <span>{program.name}</span>
