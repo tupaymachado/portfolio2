@@ -6,12 +6,14 @@ import explorerIcon from '../assets/icons/explorer.webp';
 import myComputerIcon from '../assets/icons/my-computer.webp';
 import notepadIcon from '../assets/icons/notepad.webp';
 import minesweeperIcon from '../assets/icons/minesweeper.webp';
+import winampIcon from '../assets/icons/winamp.webp';
 
 // Importe seus componentes de conteúdo. Eles podem ser placeholders por enquanto.
 const NotepadContent = () => <div style={{ padding: '10px' }}>Um editor de texto simples.</div>;
 const AboutMeContent = () => <div style={{ padding: '10px' }}><h1>Sobre Mim</h1><p>Desenvolvedor apaixonado...</p></div>;
 const MyProjectsContent = () => <div style={{ padding: '10px' }}><h1>Meus Projetos</h1><p>Cards dos projetos aqui...</p></div>;
 const MinesweeperContent = () => <div style={{ padding: '10px' }}>Campo Minado em breve!</div>;
+const WinampContent = () => <div style={{ padding: '10px' }}>Winamp em breve!</div>;
 
 // A nossa "base de dados" de programas instalados no sistema.
 export const PROGRAMS: ProgramDefinition[] = [
@@ -56,6 +58,14 @@ export const PROGRAMS: ProgramDefinition[] = [
     name: 'Campo Minado',
     iconUrl: minesweeperIcon,
     component: <MinesweeperContent />,
+    isResizable: false,
+    defaultSize: { width: 300, height: 400 },
+  },
+  {
+    id: 'winamp',
+    name: 'Winamp',
+    iconUrl: winampIcon,
+    component: <WinampContent />,
     isResizable: false,
     defaultSize: { width: 300, height: 400 },
   }

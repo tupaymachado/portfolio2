@@ -5,6 +5,7 @@ import { PROGRAMS } from '../../data/programs';
 import power from '../../assets/icons/power.webp';
 import logout from '../../assets/icons/logout.webp';
 import profile from '../../assets/profile/duck.webp';
+import arrowRight from '../../assets/icons/arrow-right.webp';
 
 export default function StartMenu() {
   // Seleciona os dados e ações do store
@@ -49,6 +50,10 @@ export default function StartMenu() {
               <span className={styles.menuItemName}>{program.name}</span>
             </button>
           ))}
+          <div className={styles.containerAllPrograms}>
+            <div className={styles.border}></div>
+            <button className={styles.allPrograms}>Todos os programas <img src={arrowRight} alt="" /></button>
+          </div>
         </div>
         <div className={styles.systemList}>
           {/* Adicione links estáticos aqui */}
