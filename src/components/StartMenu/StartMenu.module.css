@@ -15,6 +15,8 @@
   display: flex;
   flex-direction: column;
   border-radius: 4px 4px 0 0;
+  overflow: visible;
+  /* Permite submenu ultrapassar os limites */
 }
 
 /* 1. Header (Topo Azul com Perfil) */
@@ -51,11 +53,15 @@
   display: flex;
   min-height: 0;
   /* Correção de bug do Flexbox */
+  position: relative;
+  /* Para posicionamento do submenu */
+  overflow: visible;
+  /* Permite submenu ultrapassar os limites */
 }
 
 /* Coluna da Esquerda (Programas do Usuário) */
 .programList {
-  width: 55%;
+  width: 53%;
   padding: 5px;
   overflow-y: auto;
   border-right: 1px solid var(--color-border-window);
@@ -101,7 +107,7 @@
 
 /* Coluna da Direita (Pastas do Sistema) */
 .systemList {
-  width: 45%;
+  width: 47%;
   padding: 5px;
   background-color: #d6e8ff;
   display: flex;
@@ -133,7 +139,7 @@
 }
 
 .systemItemName {
-  font-size: 13px;
+  font-size: 12px;
 }
 
 /* Primeiros 4 itens são bold */
@@ -215,4 +221,82 @@
   align-items: center;
   padding: 0 10px;
   gap: 8px;
+}
+
+/* ============================================
+   4. Submenu "Todos os programas"
+   ============================================ */
+.allProgramsSubmenu {
+  position: absolute;
+  bottom: 0;
+  right: -20px;
+  /* Posiciona fora do menu, à direita */
+  width: 200px;
+  height: fit-content;
+  background-color: white;
+  border-left: 4px solid #6b91cd;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0a246a;
+  cursor: pointer;
+}
+
+.backButton:hover {
+  background-color: var(--color-highlight-background);
+  color: white;
+  border: 1px solid #1a56c8;
+}
+
+.backButton img {
+  width: 18px;
+  height: 18px;
+}
+
+.submenuBorder {
+  margin: 2px 8px 4px 8px;
+  height: 1px;
+  background: linear-gradient(to right, #b4cfe8, #dce7f4);
+}
+
+.submenuList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 4px;
+}
+
+.submenuItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 3px 8px;
+  background: transparent;
+  border: 1px solid transparent;
+  text-align: left;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.submenuItem:hover {
+  background-color: var(--color-highlight-background);
+  color: white;
+  border: 1px solid #1a56c8;
+}
+
+.submenuItemIcon {
+  width: 22px;
+  height: 22px;
+  margin-right: 8px;
 }
