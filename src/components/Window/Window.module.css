@@ -92,7 +92,7 @@
 
 .windowBody {
   position: relative;
-  height: calc(100% - 28px);
+  height: calc(100% - 25px);
   padding-bottom: 2px;
   /* border-bottom: 2px solid var(--color-title-bar-inactive-start); */
   border-right: 2px solid var(--color-title-bar-inactive-end);
@@ -114,7 +114,6 @@
 }
 
 .windowBody.active {
-  height: calc(100% - 28px);
   /*   border-bottom: 2px solid var(--color-title-bar-active-start);*/
   border-right: 2px solid var(--color-title-bar-active-end);
   border-left: 2px solid var(--color-title-bar-active-start);
