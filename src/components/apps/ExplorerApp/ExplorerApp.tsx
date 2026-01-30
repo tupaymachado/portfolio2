@@ -6,6 +6,7 @@ import ShortcutCard from './ShortcutCard';
 import type { cardContent } from './ShortcutCard';
 import { useFileSystemStore } from '../../../stores/useFileSystemStore';
 import { useWindowStore, useWindowContext } from '../../../stores/useWindowStore';
+import { useSystemStore } from '../../../stores/useSystemStore';
 import startMenuPrograms from '../../../assets/icons/start-menu-programs.webp'
 import programs from '../../../assets/icons/programs.webp'
 import search from '../../../assets/icons/search.webp'
@@ -75,6 +76,16 @@ export default function ExplorerApp() {
   );
   const initialFolder = initialFolderId || 'root';
 
+  // Mobile Detection
+  const isMobile = useSystemStore(state => state.isMobile);
+  const isSmallScreen = useSystemStore(state => state.isSmallScreen);
+
+  // Define se mobile/tela pequena (para lógica de toggle)
+  const isCompact = isMobile || isSmallScreen;
+
+  // Sidebar começa fechada no mobile, aberta no desktop
+  const [isSidebarOpen, setIsSidebarOpen] = useState(!isCompact);
+
   const [currentFolderId, setCurrentFolderId] = useState(initialFolder);
   const [history, setHistory] = useState<string[]>([initialFolder]);
   const [historyIndex, setHistoryIndex] = useState(0);
@@ -135,6 +146,10 @@ export default function ExplorerApp() {
     }
   }, [currentFolder, navigate]);
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(prev => !prev);
+  };
+
   return (
     <div className={styles.explorerContainer}>
       <ExplorerToolbar
@@ -146,15 +161,20 @@ export default function ExplorerApp() {
         onBack={goBack}
         onForward={goForward}
         onUp={goUp}
+        onToggleSidebar={toggleSidebar}
+        isSidebarOpen={isSidebarOpen}
+        isMobile={isCompact}
       />
 
       <div className={styles.mainArea}>
-        {/* Sidebar Esquerda (Tarefas) */}
-        <div className={styles.sidebar}>
-          <ShortcutCard title="Tarefas " content={card1} />
-          <ShortcutCard title="Arquivos" content={card2} />
-          <ShortcutCard title="Ações" content={card3} />
-        </div>
+        {/* Sidebar Esquerda (Tarefas) - Controlada pelo botão Pastas */}
+        {isSidebarOpen && (
+          <div className={styles.sidebar}>
+            <ShortcutCard title="Tarefas " content={card1} />
+            <ShortcutCard title="Arquivos" content={card2} />
+            <ShortcutCard title="Ações" content={card3} />
+          </div>
+        )}
 
         {/* Área de Conteúdo (Ícones) */}
         <FolderContentView folderId={currentFolderId} onNavigate={navigate} />

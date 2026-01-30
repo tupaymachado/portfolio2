@@ -17,6 +17,9 @@ interface ExplorerToolbarProps {
   onBack?: () => void;
   onForward?: () => void;
   onUp?: () => void;
+  onToggleSidebar?: () => void;
+  isSidebarOpen?: boolean;
+  isMobile?: boolean;
 }
 
 export default function ExplorerToolbar({
@@ -27,19 +30,25 @@ export default function ExplorerToolbar({
   canGoUp = false,
   onBack,
   onForward,
-  onUp
+  onUp,
+  onToggleSidebar,
+  isSidebarOpen = true,
+  isMobile = false
 }: ExplorerToolbarProps) {
   return (
     <div className={styles.toolbar}>
       <div className={styles.rowStandard}>
         {/* Menus de Texto (Arquivo, Editar...) - Estáticos por enquanto */}
-        <div>
-          <span>Arquivo</span>
-          <span>Exibir</span>
-          <span>Favoritos</span>
-          <span>Ferramentas</span>
-          <span>Ajuda</span>
-        </div>
+        {/* Esconde menu de texto no mobile para economizar espaço */}
+        {!isMobile && (
+          <div>
+            <span>Arquivo</span>
+            <span>Exibir</span>
+            <span>Favoritos</span>
+            <span>Ferramentas</span>
+            <span>Ajuda</span>
+          </div>
+        )}
         <div className={styles.winLogoContainer}>
           <img src={winLogo} alt="Windows" />
         </div>
@@ -56,6 +65,7 @@ export default function ExplorerToolbar({
         </button>
         <button className={styles.toolBtn} onClick={onForward} disabled={!canGoForward}>
           <img src={forward} alt="Avançar" />
+          {/* Seta removida no mobile para economizar espaço se necessário, mas mantida por fidelidade desktop */}
           <svg viewBox="0 0 320 512" width="8" height="8" fill="currentColor">
             <path d="M137.4 374.6c12.5 12.5 32.8 12.5 45.3 0l128-128c9.2-9.2 11.9-22.9 6.9-34.9s-16.6-19.8-29.6-19.8L32 192c-12.9 0-24.6 7.8-29.6 19.8s-2.2 25.7 6.9 34.9l128 128z"></path>
           </svg>
@@ -68,10 +78,17 @@ export default function ExplorerToolbar({
           <img src={search} alt="Pesquisar" />
           <span>Pesquisar</span>
         </button>
-        <button className={styles.toolBtn}>
-          <img src={folderView} alt="Pastas" />
-          <span>Pastas</span>
+
+        {/* BOTÃO TOGGLE SIDEBAR (Pastas / Painel) */}
+        <button
+          className={`${styles.toolBtn} ${isSidebarOpen ? styles.active : ''}`}
+          onClick={onToggleSidebar}
+          title={isMobile ? "Mostrar/Esconder Painel Lateral" : "Pastas"}
+        >
+          <img src={isMobile ? go : folderView} alt={isMobile ? "Painel" : "Pastas"} />
+          <span>{isMobile ? (isSidebarOpen ? 'Fechar Painel' : 'Painel') : 'Pastas'}</span>
         </button>
+
         <div className={styles.separator}></div>
         <button className={styles.toolBtn}>
           <img src={folderViewClassic} alt="folder-view-classic" />
