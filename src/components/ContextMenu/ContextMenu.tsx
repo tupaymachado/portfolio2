@@ -2,9 +2,11 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styles from './ContextMenu.module.css';
 import { useWindowStore } from '../../stores/useWindowStore';
 import type { MenuItem } from '../../stores/useWindowStore';
+import { useShallow } from 'zustand/shallow';
 
 export default function ContextMenu() {
-  const contextMenu = useWindowStore(state => state.contextMenu);
+  // useShallow: evita re-render quando outras partes do store mudam
+  const contextMenu = useWindowStore(useShallow(state => state.contextMenu));
   const closeContextMenu = useWindowStore(state => state.closeContextMenu);
   const { isOpen, position, items } = contextMenu;
 

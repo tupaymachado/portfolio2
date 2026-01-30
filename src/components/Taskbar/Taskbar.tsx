@@ -2,13 +2,16 @@ import styles from './Taskbar.module.css';
 import StartBtn from '../StartBtn/StartBtn';
 import SystemTray from '../SystemTray/SystemTray';
 import TaskbarButton from '../TaskbarButton/TaskbarButton';
-import { useWindowStore } from '../../stores/useWindowStore'; // <-- Mágica aqui
-import { PROGRAMS } from '../../data/programs';
+import { useWindowStore } from '../../stores/useWindowStore';
+import { PROGRAMS_MAP } from '../../data/programs';
 import StartMenu from '../StartMenu/StartMenu';
 import type { MenuItem } from '../../stores/useWindowStore';
+import { useShallow } from 'zustand/shallow';
 
 export default function Taskbar() {
-  const openContextMenu = useWindowStore(state => state.openContextMenu); const openWindows = useWindowStore(state => state.openWindows);
+  const openContextMenu = useWindowStore(state => state.openContextMenu);
+  // useShallow: evita re-render quando outras janelas mudam internamente
+  const openWindows = useWindowStore(useShallow(state => state.openWindows));
   const activeWindowId = useWindowStore(state => state.activeWindowId);
   const handleTaskbarClick = useWindowStore(state => state.handleTaskbarClick);
   const deselectAllWindows = useWindowStore(state => state.deselectAllWindows);
@@ -46,7 +49,7 @@ export default function Taskbar() {
       <StartMenu />
       <div className={styles.taskbarPrograms}>
         {openWindows.map(win => {
-          const program = PROGRAMS.find(p => p.id === win.programId);
+          const program = PROGRAMS_MAP.get(win.programId);
           if (!program) return null;
 
           return (

@@ -1,12 +1,13 @@
 import styles from './Desktop.module.css';
 import { useMemo, useState, useRef, useEffect } from 'react';
-import blissWallpaper from '../../assets/bgs/bliss-normal.jpg';
+import blissWallpaper from '../../assets/bgs/bliss-normal.webp';
 import DesktopIcon from '../DesktopIcon/DesktopIcon';
-import { PROGRAMS } from '../../data/programs';
+import { PROGRAMS_MAP } from '../../data/programs';
 import { useWindowStore } from '../../stores/useWindowStore';
 import { useFileSystemStore } from '../../stores/useFileSystemStore';
 // import { useSystemStore } from '../../stores/useSystemStore'; // TODO: usar para responsividade
 import type { MenuItem } from '../../stores/useWindowStore';
+import { useShallow } from 'zustand/shallow';
 
 // Import de ícone fallback
 import unknownFileIcon from '../../assets/icons/app.webp';
@@ -25,7 +26,8 @@ export default function Desktop() {
   const closeContextMenu = useWindowStore(state => state.closeContextMenu);
   const closeStartMenu = useWindowStore(state => state.closeStartMenu);
 
-  const allItems = useFileSystemStore(state => state.items);
+  // useShallow: evita re-render quando itens individuais mudam (comparação rasa)
+  const allItems = useFileSystemStore(useShallow(state => state.items));
   const updateItemGridPosition = useFileSystemStore(state => state.updateItemGridPosition);
 
   const desktopItems = useMemo(() => {
@@ -167,7 +169,7 @@ export default function Desktop() {
         let onDoubleClick = () => { };
 
         if (item.type === 'file' && item.programId) {
-          const program = PROGRAMS.find(p => p.id === item.programId);
+          const program = PROGRAMS_MAP.get(item.programId);
 
           if (program) {
             iconUrl = program.iconUrl;

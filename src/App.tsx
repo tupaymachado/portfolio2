@@ -7,10 +7,12 @@ import ContextMenu from './components/ContextMenu/ContextMenu';
 import ShutdownDialog from './components/ShutdownDialog/ShutdownDialog';
 import { useWindowStore } from './stores/useWindowStore';
 import { useSystemStore } from './stores/useSystemStore';
-import { PROGRAMS } from './data/programs';
+import { PROGRAMS_MAP } from './data/programs';
+import { useShallow } from 'zustand/shallow';
 
 function App() {
-  const openWindows = useWindowStore(state => state.openWindows);
+  // useShallow: evita re-render se o array tiver mesmos itens (comparação rasa)
+  const openWindows = useWindowStore(useShallow(state => state.openWindows));
   const deselectAllWindows = useWindowStore(state => state.deselectAllWindows);
   const initializeMobileDetection = useSystemStore(state => state.initializeMobileDetection);
 
@@ -32,7 +34,7 @@ function App() {
       <ContextMenu />
       <ShutdownDialog />
       {openWindows.map(win => {
-        const program = PROGRAMS.find(p => p.id === win.programId);
+        const program = PROGRAMS_MAP.get(win.programId);
         if (!program) return null;
 
         return (

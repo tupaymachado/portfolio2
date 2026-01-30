@@ -1,7 +1,9 @@
+import { lazy } from 'react';
 import type { ProgramDefinition } from '../types/program';
-import ExplorerApp from '../components/apps/ExplorerApp/ExplorerApp';
 
-// Imports de ícones
+// ============================================================================
+// IMPORTS DE ÍCONES
+// ============================================================================
 import explorerIcon from '../assets/icons/explorer.webp';
 import myComputerIcon from '../assets/icons/my-computer.webp';
 import notepadIcon from '../assets/icons/notepad.webp';
@@ -18,7 +20,13 @@ import controlPanelIcon from '../assets/icons/control-panel.webp';
 import searchIcon from '../assets/icons/search.webp';
 import runIcon from '../assets/icons/run.webp';
 
-// Importe seus componentes de conteúdo. Eles podem ser placeholders por enquanto.
+// ============================================================================
+// COMPONENTES LEVES (Factory Functions)
+// ============================================================================
+// Estes componentes são definidos inline como factory functions.
+// O JSX só é criado quando a janela realmente abre.
+// O código ainda está no bundle principal, mas é leve.
+
 const NotepadContent = () => <div style={{ padding: '10px' }}>Um editor de texto simples.</div>;
 const AboutMeContent = () => <div style={{ padding: '10px' }}><h1>Sobre Mim</h1><p>Desenvolvedor apaixonado...</p></div>;
 const MyProjectsContent = () => <div style={{ padding: '10px' }}><h1>Meus Projetos</h1><p>Cards dos projetos aqui...</p></div>;
@@ -27,13 +35,36 @@ const WinampContent = () => <div style={{ padding: '10px' }}>Winamp em breve!</d
 const MsnContent = () => <div style={{ padding: '10px' }}>MSN em breve!</div>;
 const SolitaireContent = () => <div style={{ padding: '10px' }}>Solitaire em breve!</div>;
 
-// A nossa "base de dados" de programas instalados no sistema.
+// ============================================================================
+// COMPONENTES PESADOS (React.lazy - Code Splitting)
+// ============================================================================
+// Estes componentes são carregados sob demanda usando React.lazy.
+// O Vite cria chunks separados para eles no build.
+// O código só é baixado quando a janela é aberta pela primeira vez.
+//
+// COMO FUNCIONA:
+// 1. lazy() recebe uma função que retorna import()
+// 2. import() é um "dynamic import" - retorna Promise do módulo
+// 3. O Vite/Webpack vê import() e extrai o código para um chunk separado
+// 4. Quando o componente precisa renderizar, React carrega o chunk
+// 5. Enquanto carrega, Suspense mostra um fallback
+
+const LazyExplorerApp = lazy(() => import('../components/apps/ExplorerApp/ExplorerApp'));
+
+// ============================================================================
+// DEFINIÇÃO DOS PROGRAMAS
+// ============================================================================
+// Cada programa agora tem seu component como:
+// - Factory function: () => <Component /> (para componentes leves)
+// - Lazy component: lazy(() => import(...)) (para componentes pesados)
+
 export const PROGRAMS: ProgramDefinition[] = [
   {
     id: 'msn',
     name: 'MSN Messenger',
     iconUrl: msnIcon,
-    component: <MsnContent />,
+    // Factory function: JSX só é criado quando a janela abre
+    component: () => <MsnContent />,
     defaultSize: { width: 800, height: 600 },
     minSize: { width: 400, height: 300 },
     isResizable: true,
@@ -42,7 +73,9 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'explorer',
     name: 'Windows Explorer',
     iconUrl: explorerIcon,
-    component: <ExplorerApp />,
+    // React.lazy: código é baixado sob demanda (code-splitting)
+    // Este é o componente mais pesado do projeto
+    component: LazyExplorerApp,
     defaultSize: { width: 800, height: 600 },
     minSize: { width: 400, height: 300 },
     isResizable: true,
@@ -51,7 +84,7 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'about-me',
     name: 'Sobre Mim',
     iconUrl: myComputerIcon,
-    component: <AboutMeContent />,
+    component: () => <AboutMeContent />,
     defaultSize: { width: 550, height: 450 },
     minSize: { width: 400, height: 300 },
     isResizable: true,
@@ -60,7 +93,7 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'my-projects',
     name: 'Meus Projetos',
     iconUrl: myComputerIcon,
-    component: <MyProjectsContent />,
+    component: () => <MyProjectsContent />,
     defaultSize: { width: 700, height: 500 },
     minSize: { width: 500, height: 400 },
     isResizable: true,
@@ -69,7 +102,7 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'notepad',
     name: 'Bloco de Notas',
     iconUrl: notepadIcon,
-    component: <NotepadContent />,
+    component: () => <NotepadContent />,
     defaultSize: { width: 600, height: 400 },
     minSize: { width: 250, height: 150 },
     isResizable: true,
@@ -78,7 +111,7 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'minesweeper',
     name: 'Campo Minado',
     iconUrl: minesweeperIcon,
-    component: <MinesweeperContent />,
+    component: () => <MinesweeperContent />,
     isResizable: false,
     defaultSize: { width: 300, height: 400 },
   },
@@ -86,7 +119,7 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'solitaire',
     name: 'Solitaire',
     iconUrl: solitaireIcon,
-    component: <SolitaireContent />,
+    component: () => <SolitaireContent />,
     isResizable: false,
     defaultSize: { width: 300, height: 400 },
   },
@@ -94,11 +127,14 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'winamp',
     name: 'Winamp',
     iconUrl: winampIcon,
-    component: <WinampContent />,
+    component: () => <WinampContent />,
     isResizable: false,
     defaultSize: { width: 300, height: 400 },
   }
 ];
+
+// Map para lookup O(1) de programas por ID
+export const PROGRAMS_MAP = new Map(PROGRAMS.map(p => [p.id, p]));
 
 // Links do Sistema (coluna da direita do Start Menu)
 export interface SystemLink {

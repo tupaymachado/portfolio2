@@ -1,12 +1,14 @@
 import styles from './Window.module.css';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, Suspense } from 'react';
 import minimize from '../../assets/icons/minimize.webp';
 import maximize from '../../assets/icons/maximize.webp';
 import restore from '../../assets/icons/restore.webp';
 import close from '../../assets/icons/close.webp';
 import { useWindowStore, WindowContext } from '../../stores/useWindowStore';
-import { PROGRAMS } from '../../data/programs';
+import { PROGRAMS_MAP } from '../../data/programs';
 import type { ResizeHandle } from '../../types/window';
+import type { ProgramComponent } from '../../types/program';
+import { useShallow } from 'zustand/shallow';
 
 interface WindowProps {
   instanceId: number;
@@ -22,9 +24,14 @@ export default function Window({ instanceId, programId }: WindowProps) {
   const updateWindowSize = useWindowStore(state => state.updateWindowSize);
   const minimizeWindow = useWindowStore(state => state.minimizeWindow);
 
-  const instance = useWindowStore(state => state.openWindows.find(w => w.id === instanceId));
+  // useShallow: compara propriedades do objeto, não a referência
+  // Isso evita re-renders quando outras janelas mudam
+  // Zustand 5 usa useShallow como wrapper do seletor
+  const instance = useWindowStore(
+    useShallow(state => state.openWindows.find(w => w.id === instanceId))
+  );
   const activeWindowId = useWindowStore(state => state.activeWindowId);
-  const program = PROGRAMS.find(p => p.id === programId);
+  const program = PROGRAMS_MAP.get(programId);
 
   // --- ESTADO DE DRAG E RESIZE ---
   const [isDragging, setIsDragging] = useState(false);
@@ -45,6 +52,42 @@ export default function Window({ instanceId, programId }: WindowProps) {
   const { isResizable, minSize } = program;
   const MIN_WIDTH = minSize?.width || 150;
   const MIN_HEIGHT = minSize?.height || 100;
+
+  // ============================================================================
+  // FUNÇÃO PARA RENDERIZAR O COMPONENTE DO PROGRAMA
+  // ============================================================================
+  // Esta função diferencia entre:
+  // 1. Factory Function: typeof component === 'function' && component.length === 0
+  //    - Funções normais que retornam JSX
+  //    - Chamamos a função para obter o JSX
+  //
+  // 2. Lazy Component: possui $$typeof === Symbol.for('react.lazy')
+  //    - Componente criado com React.lazy()
+  //    - Renderizamos diretamente como <Component />
+  //
+  // Por que essa distinção é necessária?
+  // - Factory functions precisam ser CHAMADAS: component()
+  // - Lazy components precisam ser RENDERIZADOS: <Component />
+  //
+  const renderProgramComponent = (component: ProgramComponent) => {
+    // Verifica se é um lazy component checando a propriedade interna do React
+    // React.lazy() adiciona $$typeof: Symbol.for('react.lazy') ao objeto
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (typeof component === 'object' && component !== null && '$$typeof' in (component as any)) {
+      // É um lazy component - renderiza como elemento JSX
+      // Usamos 'as' porque TypeScript não infere corretamente o tipo de lazy components
+      const LazyComponent = component as React.ComponentType;
+      return <LazyComponent />;
+    }
+
+    // É uma factory function - chama para obter o JSX
+    if (typeof component === 'function') {
+      return (component as () => React.ReactNode)();
+    }
+
+    // Fallback (não deveria acontecer com os tipos corretos)
+    return null;
+  };
 
   // --- FUNÇÕES AUXILIARES ---
   const getEventPosition = (e: MouseEvent | TouchEvent): { x: number; y: number } => {
@@ -204,7 +247,18 @@ export default function Window({ instanceId, programId }: WindowProps) {
       </header>
       <div className={`${styles.windowBody} ${isActive ? styles.active : ''}`}>
         <WindowContext.Provider value={{ instanceId }}>
-          {program.component}
+          {/* 
+            Renderização do componente baseada no tipo:
+            - Se program.component é uma função comum → chama para obter JSX
+            - Se é um lazy component → React.lazy retorna um componente especial
+            
+            Suspense é necessário para lazy components:
+            - Enquanto o chunk está sendo baixado, mostra o fallback
+            - Quando carrega, renderiza o componente real
+          */}
+          <Suspense fallback={<div style={{ padding: '20px' }}>Carregando...</div>}>
+            {renderProgramComponent(program.component)}
+          </Suspense>
         </WindowContext.Provider>
       </div>
       {isResizable !== false && !instance.isMaximized && (
