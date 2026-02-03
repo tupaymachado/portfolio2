@@ -146,6 +146,11 @@ export default function ExplorerApp() {
     }
   }, [currentFolder, navigate]);
 
+  // Garante sidebar aberta no desktop
+  useEffect(() => {
+    if (!isCompact) setIsSidebarOpen(true);
+  }, [isCompact]);
+
   const toggleSidebar = () => {
     setIsSidebarOpen(prev => !prev);
   };

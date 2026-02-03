@@ -40,15 +40,15 @@ export default function ExplorerToolbar({
       <div className={styles.rowStandard}>
         {/* Menus de Texto (Arquivo, Editar...) - Estáticos por enquanto */}
         {/* Esconde menu de texto no mobile para economizar espaço */}
-        {!isMobile && (
-          <div>
-            <span>Arquivo</span>
-            <span>Exibir</span>
-            <span>Favoritos</span>
-            <span>Ferramentas</span>
-            <span>Ajuda</span>
-          </div>
-        )}
+
+        <div>
+          <span>Arquivo</span>
+          <span>Exibir</span>
+          <span>Favoritos</span>
+          <span>Ferramentas</span>
+          <span>Ajuda</span>
+        </div>
+
         <div className={styles.winLogoContainer}>
           <img src={winLogo} alt="Windows" />
         </div>
@@ -79,15 +79,17 @@ export default function ExplorerToolbar({
           <span>Pesquisar</span>
         </button>
 
-        {/* BOTÃO TOGGLE SIDEBAR (Pastas / Painel) */}
-        <button
-          className={`${styles.toolBtn} ${isSidebarOpen ? styles.active : ''}`}
-          onClick={onToggleSidebar}
-          title={isMobile ? "Mostrar/Esconder Painel Lateral" : "Pastas"}
-        >
-          <img src={isMobile ? go : folderView} alt={isMobile ? "Painel" : "Pastas"} />
-          <span>{isMobile ? (isSidebarOpen ? 'Fechar Painel' : 'Painel') : 'Pastas'}</span>
-        </button>
+        {/* BOTÃO TOGGLE SIDEBAR (Apenas Mobile) */}
+        {isMobile && (
+          <button
+            className={`${styles.toolBtn} ${isSidebarOpen ? styles.active : ''}`}
+            onClick={onToggleSidebar}
+            title="Mostrar/Esconder Painel Lateral"
+          >
+            <img src={go} alt="Painel" />
+            <span>{isSidebarOpen ? 'Fechar Painel' : 'Painel'}</span>
+          </button>
+        )}
 
         <div className={styles.separator}></div>
         <button className={styles.toolBtn}>
