@@ -9,23 +9,6 @@
   overflow: hidden;
 }
 
-/* Brilho branco no canto superior esquerdo */
-.loginScreen::before {
-  content: '';
-  position: absolute;
-  top: -10%;
-  left: -15%;
-  width: 50%;
-  height: 50%;
-  background: radial-gradient(ellipse at center,
-      rgba(255, 255, 255, 0.3) 0%,
-      rgba(255, 255, 255, 0.1) 40%,
-      transparent 70%);
-  pointer-events: none;
-  z-index: 1;
-  /* Acima do header */
-}
-
 .header {
   position: relative;
   z-index: 0;
@@ -46,7 +29,7 @@
   justify-content: center;
   gap: 80px;
   padding: 40px;
-
+  background: radial-gradient(circle at 10% 10%, #94b4efff 0, #94b4ef00 25%, #94b4ef00 100%);
 }
 
 /* Lado esquerdo - Logo Windows */
@@ -99,9 +82,10 @@
 
 .logoTextBottom {
   color: white;
-  font-size: 14px;
+  font-size: 16px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   text-align: center;
+  margin: 24px 24px 0 0;
 }
 
 /* Lado direito - Lista de usuários */
