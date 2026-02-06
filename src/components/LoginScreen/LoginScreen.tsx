@@ -192,6 +192,7 @@ export default function LoginScreen() {
                         </div>
 
                         <div className={styles.modalActions}>
+                            <p>{newName}</p>
                             <button
                                 className={`${styles.modalBtn} ${styles.modalBtnSecondary}`}
                                 onClick={() => setShowCreateModal(false)}
@@ -201,7 +202,7 @@ export default function LoginScreen() {
                             <button
                                 className={`${styles.modalBtn} ${styles.modalBtnPrimary}`}
                                 onClick={handleCreateAccount}
-                                disabled={!newName.trim()}
+                                disabled={false}
                             >
                                 Criar Conta
                             </button>
