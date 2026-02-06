@@ -1,16 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-// Avatares disponíveis (usando ícones existentes do projeto)
+// Avatares disponíveis (usando profile pictures do projeto)
 export const AVATAR_OPTIONS = [
-    '/src/assets/icons/my-computer.webp',
-    '/src/assets/icons/folder.webp',
-    '/src/assets/icons/my-pictures.webp',
-    '/src/assets/icons/my-music.webp',
-    '/src/assets/icons/my-videos.webp',
-    '/src/assets/icons/notepad.webp',
-    '/src/assets/icons/minesweeper.webp',
-    '/src/assets/icons/msn.webp',
+    '/src/assets/profile/ball.webp',
+    '/src/assets/profile/beach.webp',
+    '/src/assets/profile/chess.webp',
+    '/src/assets/profile/dog.webp',
+    '/src/assets/profile/duck.webp',
+    '/src/assets/profile/red flower.webp',
 ];
 
 export interface UserProfile {

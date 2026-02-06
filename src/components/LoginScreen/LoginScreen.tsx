@@ -2,6 +2,8 @@ import { useState } from 'react';
 import styles from './LoginScreen.module.css';
 import { useUserStore, AVATAR_OPTIONS, type UserProfile } from '../../stores/useUserStore';
 import winLogo from '../../assets/icons/win-logo.webp';
+import shutdownIcon from '../../assets/icons/power.webp';
+import logonSound from '../../assets/sounds/logon.m4a';
 
 export default function LoginScreen() {
     const profiles = useUserStore(state => state.profiles);
@@ -12,14 +14,33 @@ export default function LoginScreen() {
     const [newName, setNewName] = useState('');
     const [selectedAvatar, setSelectedAvatar] = useState(AVATAR_OPTIONS[0]);
 
+    // Estados para animação de welcome
+    const [isLoading, setIsLoading] = useState(false);
+    const [loadingProfile, setLoadingProfile] = useState<UserProfile | null>(null);
+
     const handleLogin = (profile: UserProfile) => {
-        login(profile.id);
+        // Inicia a animação de welcome
+        setLoadingProfile(profile);
+        setIsLoading(true);
+
+        // Cria o áudio no contexto da interação do usuário
+        const audio = new Audio(logonSound);
+
+        // Após 3 segundos, toca o som e faz login
+        setTimeout(() => {
+            audio.play().catch(() => {
+                // Ignora erro se autoplay for bloqueado
+            });
+
+            // Faz o login efetivo
+            login(profile.id);
+        }, 3000);
     };
 
     const handleCreateAccount = () => {
         if (newName.trim()) {
             const profile = createProfile(newName.trim(), selectedAvatar);
-            login(profile.id); // Loga automaticamente após criar
+            handleLogin(profile); // Usa o mesmo fluxo de animação
             setShowCreateModal(false);
             setNewName('');
             setSelectedAvatar(AVATAR_OPTIONS[0]);
@@ -32,60 +53,95 @@ export default function LoginScreen() {
 
     return (
         <div className={styles.loginScreen}>
-            {/* Conteúdo principal */}
+            {/* Header */}
             <header className={styles.header}></header>
-            <div className={styles.mainContent}>
-                {/* Logo Windows à esquerda */}
-                <div className={styles.leftSection}>
-                    <div className={styles.logoSection}>
-                        <div className={styles.logoContainer}>
-                            <span className={styles.logoText}>Microsoft<sup>®</sup></span>
-                            <img
-                                src={winLogo}
-                                alt="Windows XP"
-                                className={styles.windowsLogo}
-                            />
-                        </div>
-                        <p className={styles.windowsText}>
-                            Windows<sup className={styles.xp}>xp</sup>
-                        </p>
-                    </div>
-                    <p className={styles.logoTextBottom}>
-                        Para iniciar, clique no seu nome de usuário
-                    </p>
-                </div>
-                {/* Lista de usuários à direita */}
-                <div className={styles.usersSection}>
-                    {profiles.map(profile => (
-                        <button
-                            key={profile.id}
-                            className={styles.userCard}
-                            onClick={() => handleLogin(profile)}
-                        >
-                            <img
-                                src={profile.avatarUrl}
-                                alt={profile.name}
-                                className={styles.userAvatar}
-                            />
-                            <span className={styles.userName}>{profile.name}</span>
-                        </button>
-                    ))}
 
-                    {/* Botão de criar conta */}
-                    <button
-                        className={styles.createAccountBtn}
-                        onClick={() => setShowCreateModal(true)}
-                    >
-                        <div className={styles.createAccountIcon}>+</div>
-                        <span className={styles.createAccountText}>Criar nova conta</span>
-                    </button>
-                </div>
+            <div className={styles.mainContent}>
+                {isLoading && loadingProfile ? (
+                    // ===== TELA DE WELCOME =====
+                    <>
+                        {/* Lado esquerdo - "bem-vindo" */}
+                        <div className={styles.leftSection}>
+                            <p className={styles.welcomeText}>bem-vindo</p>
+                        </div>
+
+                        {/* Linha divisória vertical */}
+                        <div className={styles.dividerLine}></div>
+
+                        {/* Lado direito - Usuário carregando */}
+                        <div className={styles.welcomeUserSection}>
+                            <div className={styles.loadingUserCard}>
+                                <img
+                                    src={loadingProfile.avatarUrl}
+                                    alt={loadingProfile.name}
+                                    className={styles.loadingUserAvatar}
+                                />
+                                <div className={styles.loadingUserInfo}>
+                                    <span className={styles.loadingUserName}>{loadingProfile.name}</span>
+                                    <span className={styles.loadingUserStatus}>Carregando suas configurações pessoais...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    // ===== TELA DE SELEÇÃO DE USUÁRIO =====
+                    <>
+                        {/* Logo Windows à esquerda */}
+                        <div className={styles.leftSection}>
+                            <div className={styles.logoSection}>
+                                <div className={styles.logoContainer}>
+                                    <span className={styles.logoText}>Microsoft<sup>®</sup></span>
+                                    <img
+                                        src={winLogo}
+                                        alt="Windows XP"
+                                        className={styles.windowsLogo}
+                                    />
+                                </div>
+                                <p className={styles.windowsText}>
+                                    Windows<sup className={styles.xp}>xp</sup>
+                                </p>
+                            </div>
+                            <p className={styles.logoTextBottom}>
+                                Para iniciar, clique no seu nome de usuário
+                            </p>
+                        </div>
+
+                        {/* Lista de usuários à direita */}
+                        <div className={styles.usersSection}>
+                            {profiles.map(profile => (
+                                <button
+                                    key={profile.id}
+                                    className={styles.userCard}
+                                    onClick={() => handleLogin(profile)}
+                                >
+                                    <img
+                                        src={profile.avatarUrl}
+                                        alt={profile.name}
+                                        className={styles.userAvatar}
+                                    />
+                                    <span className={styles.userName}>{profile.name}</span>
+                                </button>
+                            ))}
+
+                            {/* Botão de criar conta */}
+                            <button
+                                className={styles.createAccountBtn}
+                                onClick={() => setShowCreateModal(true)}
+                            >
+                                <div className={styles.createAccountIcon}>+</div>
+                                <span className={styles.createAccountText}>Criar nova conta</span>
+                            </button>
+                        </div>
+                    </>
+                )}
             </div>
 
             {/* Barra inferior */}
             <div className={styles.bottomBar}>
                 <button className={styles.shutdownBtn} onClick={handleShutdown}>
-                    <div className={styles.shutdownIcon}>⏻</div>
+                    <div className={styles.shutdownIcon}>
+                        <img src={shutdownIcon} alt="Shutdown" />
+                    </div>
                     <span>Desligar computador</span>
                 </button>
 

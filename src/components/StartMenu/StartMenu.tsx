@@ -2,10 +2,10 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import styles from './StartMenu.module.css';
 import { useWindowStore } from '../../stores/useWindowStore';
 import { useSystemStore } from '../../stores/useSystemStore';
+import { useUserStore } from '../../stores/useUserStore';
 import { PROGRAMS, SYSTEM_LINKS } from '../../data/programs';
 import power from '../../assets/icons/power.webp';
 import logout from '../../assets/icons/logout.webp';
-import profile from '../../assets/profile/duck.webp';
 import arrowRight from '../../assets/icons/arrow-right.webp';
 import arrowLeft from '../../assets/icons/back.webp';
 
@@ -20,6 +20,7 @@ export default function StartMenu() {
   const openWindow = useWindowStore(state => state.openWindow);
   const openShutdownDialog = useWindowStore(state => state.openShutdownDialog);
   const isMobile = useSystemStore(state => state.isMobile);
+  const currentUser = useUserStore(state => state.getCurrentUser());
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -125,9 +126,9 @@ export default function StartMenu() {
     <div className={styles.startMenu} ref={menuRef}>
       <header className={styles.header}>
         <div className={styles.profilePic}>
-          <img src={profile} alt="Profile" />
+          <img src={currentUser?.avatarUrl || '/src/assets/profile/duck.webp'} alt="Profile" />
         </div>
-        <span className={styles.username}>Usuário</span>
+        <span className={styles.username}>{currentUser?.name || 'Usuário'}</span>
       </header>
       <main className={styles.mainContent}>
         <div className={styles.programList}>

@@ -5,7 +5,7 @@
   flex-direction: column;
   /* Gradiente azul clássico do Windows XP */
   background: #5072D2;
-  font-family: 'Tahoma', 'Trebuchet MS', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   overflow: hidden;
 }
 
@@ -27,9 +27,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 80px;
   padding: 40px;
   background: radial-gradient(circle at 10% 10%, #94b4efff 0, #94b4ef00 25%, #94b4ef00 100%);
+}
+
+.leftSection {
+  padding-right: 20px;
+  width: 300px;
+  /* Largura fixa para evitar mudança de layout */
+  flex-shrink: 0;
 }
 
 /* Lado esquerdo - Logo Windows */
@@ -66,13 +72,12 @@
 
 .windowsText {
   color: white;
-  font-size: 30px;
-  font-weight: 600;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-size: 32px;
+  font-weight: 700;
   line-height: 0.9;
   position: relative;
   top: -4px;
-  /* Move o elemento pra cima */
+  left: -1px;
 }
 
 .xp {
@@ -83,25 +88,91 @@
 .logoTextBottom {
   color: white;
   font-size: 16px;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
   text-align: center;
-  margin: 24px 24px 0 0;
+  margin: 12px 24px 0 0;
 }
 
 /* Lado direito - Lista de usuários */
 .usersSection {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 8px;
   min-width: 280px;
-  max-height: 400px;
+  height: 100%;
   overflow-y: auto;
+  padding-left: 17px;
+  border-left: 1px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(to bottom, #5a7edc 0%, #91aeee 50%, #5a7edc 100%);
+}
+
+/* ===== TELA DE WELCOME ===== */
+
+.welcomeText {
+  color: white;
+  font-size: 48px;
+  font-style: italic;
+  font-weight: 400;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  letter-spacing: 2px;
+}
+
+.dividerLine {
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, #5a7edc 0%, #91aeee 50%, #5a7edc 100%);
+}
+
+.welcomeUserSection {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 20px;
+  min-width: 300px;
+  /* Transition para centralizar o userCard */
+  transition: all 0.3s ease-out;
+}
+
+.loadingUserCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.loadingUserAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: white;
+  object-fit: cover;
+}
+
+.loadingUserInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.loadingUserName {
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.loadingUserStatus {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 12px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Card de usuário */
 .userCard {
   display: flex;
-  align-items: center;
+  align-items: start;
   gap: 12px;
   padding: 8px 16px;
   background: transparent;
@@ -179,12 +250,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 24px;
-  background: linear-gradient(180deg,
-      #2b71b8 0%,
-      #245da8 50%,
-      #1d4d8c 100%);
+  padding: 0px 12px 24px;
+  background-color: #012A8B;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
+  height: 90px;
 }
 
 .shutdownBtn {
@@ -220,7 +289,7 @@
 .helpText {
   color: rgba(255, 255, 255, 0.7);
   font-size: 11px;
-  text-align: right;
+  text-align: left;
   max-width: 280px;
 }
 
