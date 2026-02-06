@@ -6,11 +6,13 @@ import winLogo from '../../assets/icons/win-logo.webp';
 import shutdownIcon from '../../assets/icons/power.webp';
 import logonSound from '../../assets/sounds/logon.m4a';
 import closeIcon from '../../assets/icons/close.webp';
+import trashBinIcon from '../../assets/icons/trash-bin.webp';
 
 export default function LoginScreen() {
     const profiles = useUserStore(state => state.profiles);
     const login = useUserStore(state => state.login);
     const createProfile = useUserStore(state => state.createProfile);
+    const deleteProfile = useUserStore(state => state.deleteProfile);
 
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [newName, setNewName] = useState('');
@@ -92,24 +94,34 @@ export default function LoginScreen() {
                         const isHidden = isLoading && !isSelected;
 
                         return (
-                            <button
-                                key={profile.id}
-                                className={`${styles.userCard} ${isSelected && isLoading ? styles.userCardLoading : ''} ${isHidden ? styles.userCardHidden : ''}`}
-                                onClick={() => handleLogin(profile)}
-                                disabled={isLoading}
-                            >
-                                <img
-                                    src={profile.avatarUrl}
-                                    alt={profile.name}
-                                    className={styles.userAvatar}
-                                />
-                                <div className={styles.userInfo}>
-                                    <span className={styles.userName}>{profile.name}</span>
-                                    {isSelected && isLoading && (
-                                        <span className={styles.loadingUserStatus}>Carregando suas configurações pessoais...</span>
-                                    )}
-                                </div>
-                            </button>
+                            <div key={profile.id} className={styles.userCardWrapper}>
+                                <button
+                                    className={`${styles.userCard} ${isSelected && isLoading ? styles.userCardLoading : ''} ${isHidden ? styles.userCardHidden : ''}`}
+                                    onClick={() => handleLogin(profile)}
+                                    disabled={isLoading}
+                                >
+                                    <img
+                                        src={profile.avatarUrl}
+                                        alt={profile.name}
+                                        className={styles.userAvatar}
+                                    />
+                                    <div className={styles.userInfo}>
+                                        <span className={styles.userName}>{profile.name}</span>
+                                        {isSelected && isLoading && (
+                                            <span className={styles.loadingUserStatus}>Carregando suas configurações pessoais...</span>
+                                        )}
+                                    </div>
+                                </button>
+                                {!isLoading && (
+                                    <button
+                                        className={styles.deleteBtn}
+                                        onClick={() => deleteProfile(profile.id)}
+                                        title="Excluir perfil"
+                                    >
+                                        <img src={trashBinIcon} alt="Delete" />
+                                    </button>
+                                )}
+                            </div>
                         );
                     })}
 

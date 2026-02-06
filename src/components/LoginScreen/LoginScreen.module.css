@@ -193,6 +193,34 @@
   overflow: hidden;
 }
 
+.userCardWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deleteBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.userCardWrapper:hover .deleteBtn {
+  opacity: 0.7;
+}
+
+.deleteBtn:hover {
+  opacity: 1 !important;
+}
+
+.deleteBtn img {
+  width: 20px;
+  height: 20px;
+}
+
 .userCard:hover {
   background: rgba(255, 255, 255, 0.15);
 }
@@ -449,6 +477,9 @@
   border-radius: 3px;
   cursor: pointer;
   transition: all 0.15s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
 }
 
 .modalBtnPrimary {
