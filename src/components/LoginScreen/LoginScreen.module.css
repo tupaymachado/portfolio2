@@ -33,7 +33,7 @@
 
 .leftSection {
   padding-right: 20px;
-  width: 300px;
+  width: 100%;
   /* Largura fixa para evitar mudança de layout */
   flex-shrink: 0;
 }
@@ -89,17 +89,20 @@
   color: white;
   font-size: 16px;
   font-weight: bold;
-  text-align: center;
+  text-align: right;
   margin: 12px 24px 0 0;
 }
 
 /* Lado direito - Lista de usuários */
 .usersSection {
+  position: relative;
+  /* Para conter os cards absolute */
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 8px;
-  min-width: 280px;
+  width: 100%;
+  min-width: 100%;
   height: 100%;
   overflow-y: auto;
   padding-left: 17px;
@@ -113,10 +116,12 @@
 .welcomeText {
   color: white;
   font-size: 48px;
+  font-weight: 600;
   font-style: italic;
-  font-weight: 400;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
-  letter-spacing: 2px;
+  font-family: sans-serif;
+  text-shadow: 2px 3px #3451bb;
+  text-align: right;
+  letter-spacing: -0.5px;
 }
 
 .dividerLine {
@@ -179,12 +184,21 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: all 0.3s ease;
   text-align: left;
+  width: fit-content;
+  min-width: 270px;
+  max-height: 100px;
+  /* Para permitir transição de colapso */
+  overflow: hidden;
 }
 
 .userCard:hover {
   background: rgba(255, 255, 255, 0.15);
+}
+
+.usersSection:has(.userCard:hover) .userCard:not(:hover) {
+  filter: opacity(0.5);
 }
 
 .userCard:focus {
@@ -192,20 +206,52 @@
   outline-offset: 2px;
 }
 
+/* Animações de loading/welcome do userCard */
+.usersSectionLoading {
+  justify-content: center;
+}
+
+.userCardLoading {
+  transition: all 0.3s ease;
+  background: transparent !important;
+  cursor: default;
+}
+
+.userCardHidden {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height 0.3s ease, padding 0.3s ease, margin 0.3s ease, opacity 0.2s ease;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .userAvatar {
   width: 48px;
   height: 48px;
   border-radius: 4px;
-  border: 2px solid rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   background: white;
   object-fit: cover;
+}
+
+.userAvatar:hover {
+  border-color: #fe0;
+  box-shadow: 1px 0 #ffb600, -1px 0 #ffb600, 0 1px #ffb600, 0 -1px #ffb600, 2px 2px 3px #0003;
 }
 
 .userName {
   color: white;
   font-size: 16px;
   font-weight: bold;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 /* Botão de criar conta */
@@ -220,7 +266,10 @@
   cursor: pointer;
   transition: all 0.15s ease;
   margin-top: 16px;
+  width: 270px;
 }
+
+
 
 .createAccountBtn:hover {
   background: rgba(255, 255, 255, 0.1);
@@ -231,13 +280,14 @@
   width: 48px;
   height: 48px;
   display: flex;
-  align-items: center;
   justify-content: center;
   font-size: 32px;
   color: rgba(255, 255, 255, 0.7);
   border: 2px solid rgba(255, 255, 255, 0.4);
   border-radius: 4px;
 }
+
+
 
 .createAccountText {
   color: rgba(255, 255, 255, 0.9);
@@ -268,6 +318,12 @@
   cursor: pointer;
   border-radius: 4px;
   transition: background 0.15s ease;
+  font-weight: bold;
+}
+
+.createAccountIcon::before {
+  content: '+';
+  transform: translateY(-3px);
 }
 
 .shutdownBtn:hover {
@@ -287,8 +343,8 @@
 }
 
 .helpText {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 11px;
+  color: white;
+  font-size: 10px;
   text-align: left;
   max-width: 280px;
 }

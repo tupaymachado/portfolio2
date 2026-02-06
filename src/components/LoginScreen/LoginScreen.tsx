@@ -57,37 +57,12 @@ export default function LoginScreen() {
             <header className={styles.header}></header>
 
             <div className={styles.mainContent}>
-                {isLoading && loadingProfile ? (
-                    // ===== TELA DE WELCOME =====
-                    <>
-                        {/* Lado esquerdo - "bem-vindo" */}
-                        <div className={styles.leftSection}>
-                            <p className={styles.welcomeText}>bem-vindo</p>
-                        </div>
-
-                        {/* Linha divisória vertical */}
-                        <div className={styles.dividerLine}></div>
-
-                        {/* Lado direito - Usuário carregando */}
-                        <div className={styles.welcomeUserSection}>
-                            <div className={styles.loadingUserCard}>
-                                <img
-                                    src={loadingProfile.avatarUrl}
-                                    alt={loadingProfile.name}
-                                    className={styles.loadingUserAvatar}
-                                />
-                                <div className={styles.loadingUserInfo}>
-                                    <span className={styles.loadingUserName}>{loadingProfile.name}</span>
-                                    <span className={styles.loadingUserStatus}>Carregando suas configurações pessoais...</span>
-                                </div>
-                            </div>
-                        </div>
-                    </>
-                ) : (
-                    // ===== TELA DE SELEÇÃO DE USUÁRIO =====
-                    <>
-                        {/* Logo Windows à esquerda */}
-                        <div className={styles.leftSection}>
+                {/* Lado esquerdo */}
+                <div className={styles.leftSection}>
+                    {isLoading ? (
+                        <p className={styles.welcomeText}>Bem-vindo</p>
+                    ) : (
+                        <>
                             <div className={styles.logoSection}>
                                 <div className={styles.logoContainer}>
                                     <span className={styles.logoText}>Microsoft<sup>®</sup></span>
@@ -104,36 +79,52 @@ export default function LoginScreen() {
                             <p className={styles.logoTextBottom}>
                                 Para iniciar, clique no seu nome de usuário
                             </p>
-                        </div>
+                        </>
+                    )}
+                </div>
 
-                        {/* Lista de usuários à direita */}
-                        <div className={styles.usersSection}>
-                            {profiles.map(profile => (
-                                <button
-                                    key={profile.id}
-                                    className={styles.userCard}
-                                    onClick={() => handleLogin(profile)}
-                                >
-                                    <img
-                                        src={profile.avatarUrl}
-                                        alt={profile.name}
-                                        className={styles.userAvatar}
-                                    />
-                                    <span className={styles.userName}>{profile.name}</span>
-                                </button>
-                            ))}
+                {/* Linha divisória vertical */}
+                <div className={styles.dividerLine}></div>
 
-                            {/* Botão de criar conta */}
+                {/* Lista de usuários à direita */}
+                <div className={`${styles.usersSection} ${isLoading ? styles.usersSectionLoading : ''}`}>
+                    {profiles.map(profile => {
+                        const isSelected = loadingProfile?.id === profile.id;
+                        const isHidden = isLoading && !isSelected;
+
+                        return (
                             <button
-                                className={styles.createAccountBtn}
-                                onClick={() => setShowCreateModal(true)}
+                                key={profile.id}
+                                className={`${styles.userCard} ${isSelected && isLoading ? styles.userCardLoading : ''} ${isHidden ? styles.userCardHidden : ''}`}
+                                onClick={() => handleLogin(profile)}
+                                disabled={isLoading}
                             >
-                                <div className={styles.createAccountIcon}>+</div>
-                                <span className={styles.createAccountText}>Criar nova conta</span>
+                                <img
+                                    src={profile.avatarUrl}
+                                    alt={profile.name}
+                                    className={styles.userAvatar}
+                                />
+                                <div className={styles.userInfo}>
+                                    <span className={styles.userName}>{profile.name}</span>
+                                    {isSelected && isLoading && (
+                                        <span className={styles.loadingUserStatus}>Carregando suas configurações pessoais...</span>
+                                    )}
+                                </div>
                             </button>
-                        </div>
-                    </>
-                )}
+                        );
+                    })}
+
+                    {/* Botão de criar conta */}
+                    {!isLoading && (
+                        <button
+                            className={styles.createAccountBtn}
+                            onClick={() => setShowCreateModal(true)}
+                        >
+                            <div className={styles.createAccountIcon}></div>
+                            <span className={styles.createAccountText}>Criar nova conta</span>
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Barra inferior */}
