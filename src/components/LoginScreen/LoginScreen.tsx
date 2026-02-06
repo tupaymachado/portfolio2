@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import styles from './LoginScreen.module.css';
+import windowStyles from '../Window/Window.module.css';
 import { useUserStore, AVATAR_OPTIONS, type UserProfile } from '../../stores/useUserStore';
 import winLogo from '../../assets/icons/win-logo.webp';
 import shutdownIcon from '../../assets/icons/power.webp';
 import logonSound from '../../assets/sounds/logon.m4a';
+import closeIcon from '../../assets/icons/close.webp';
 
 export default function LoginScreen() {
     const profiles = useUserStore(state => state.profiles);
@@ -34,7 +36,7 @@ export default function LoginScreen() {
 
             // Faz o login efetivo
             login(profile.id);
-        }, 500000);
+        }, 3000);
     };
 
     const handleCreateAccount = () => {
@@ -143,15 +145,19 @@ export default function LoginScreen() {
             {showCreateModal && (
                 <div className={styles.modalOverlay} onClick={() => setShowCreateModal(false)}>
                     <div className={styles.modal} onClick={e => e.stopPropagation()}>
-                        <div className={styles.modalHeader}>
-                            <span className={styles.modalTitle}>Criar Nova Conta</span>
-                            <button
-                                className={styles.modalCloseBtn}
-                                onClick={() => setShowCreateModal(false)}
-                            >
-                                ✕
-                            </button>
-                        </div>
+                        <header className={`${windowStyles.titleBar} ${windowStyles.active}`}>
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <span className={windowStyles.title} style={{ color: 'white' }}>Criar Nova Conta</span>
+                            </div>
+                            <div className={windowStyles.windowControls}>
+                                <button
+                                    className={`${windowStyles.windowButton} ${windowStyles.closeButton}`}
+                                    onClick={() => setShowCreateModal(false)}
+                                >
+                                    <img src={closeIcon} alt="Close" />
+                                </button>
+                            </div>
+                        </header>
 
                         <div className={styles.modalBody}>
                             <div className={styles.formGroup}>

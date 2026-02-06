@@ -1,14 +1,22 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-// Avatares disponíveis (usando profile pictures do projeto)
+// Importa os avatares
+import ballAvatar from '../assets/profile/ball.webp';
+import beachAvatar from '../assets/profile/beach.webp';
+import chessAvatar from '../assets/profile/chess.webp';
+import dogAvatar from '../assets/profile/dog.webp';
+import duckAvatar from '../assets/profile/duck.webp';
+import redFlowerAvatar from '../assets/profile/red flower.webp';
+
+// Avatares disponíveis
 export const AVATAR_OPTIONS = [
-    '/src/assets/profile/ball.webp',
-    '/src/assets/profile/beach.webp',
-    '/src/assets/profile/chess.webp',
-    '/src/assets/profile/dog.webp',
-    '/src/assets/profile/duck.webp',
-    '/src/assets/profile/red flower.webp',
+    ballAvatar,
+    beachAvatar,
+    chessAvatar,
+    dogAvatar,
+    duckAvatar,
+    redFlowerAvatar,
 ];
 
 export interface UserProfile {
