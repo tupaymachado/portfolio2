@@ -25,17 +25,21 @@
 .mainContent {
   flex: 1;
   display: flex;
+  flex-wrap: wrap;
+  /* Permite quebra em mobile */
   align-items: center;
   justify-content: center;
   padding: 40px;
+  gap: 20px;
   background: radial-gradient(circle at 10% 10%, #94b4efff 0, #94b4ef00 25%, #94b4ef00 100%);
 }
 
 .leftSection {
   padding-right: 20px;
-  width: 100%;
-  /* Largura fixa para evitar mudança de layout */
-  flex-shrink: 0;
+  max-width: 400px;
+  /* Limita largura máxima */
+  flex: 1 1 300px;
+  /* Flex grow/shrink/basis */
 }
 
 /* Lado esquerdo - Logo Windows */
@@ -96,14 +100,14 @@
 /* Lado direito - Lista de usuários */
 .usersSection {
   position: relative;
-  /* Para conter os cards absolute */
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 8px;
-  width: 100%;
-  min-width: 100%;
-  height: 100%;
+  flex: 1 1 280px;
+  /* Flex responsivo */
+  min-width: 280px;
+  max-width: 400px;
   overflow-y: auto;
   padding-left: 17px;
   border-left: 1px solid;
@@ -122,12 +126,6 @@
   text-shadow: 2px 3px #3451bb;
   text-align: right;
   letter-spacing: -0.5px;
-}
-
-.dividerLine {
-  width: 1px;
-  height: 100%;
-  background: linear-gradient(to bottom, #5a7edc 0%, #91aeee 50%, #5a7edc 100%);
 }
 
 .welcomeUserSection {
@@ -515,15 +513,57 @@
 @media (max-width: 768px) {
   .mainContent {
     flex-direction: column;
-    gap: 40px;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .leftSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-right: 0;
+    max-width: 100%;
+    text-align: center;
+    flex: 1 1 auto;
+  }
+
+  .logoSection {
+    align-items: center;
+  }
+
+  .logoContainer {
+    justify-content: center;
+  }
+
+  .logoTextBottom {
+    text-align: center;
+    margin-right: 0;
   }
 
   .windowsLogo {
-    width: 200px;
+    width: 120px;
+    margin-right: 0;
+  }
+
+  .welcomeText {
+    margin: auto 0;
   }
 
   .usersSection {
+    flex: 1 1 auto;
     width: 100%;
     max-width: 300px;
+    border-left: none;
+    padding-left: 0;
+    align-items: center;
+    border-top: 2px solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(to bottom, #5a7edc 0%, #91aeee 50%, #5a7edc 100%);
+    gap: 0;
+  }
+
+  .bottomBar {
+    padding-top: 20px;
   }
 }

@@ -34,7 +34,7 @@ export default function LoginScreen() {
 
             // Faz o login efetivo
             login(profile.id);
-        }, 3000);
+        }, 500000);
     };
 
     const handleCreateAccount = () => {
@@ -82,9 +82,6 @@ export default function LoginScreen() {
                         </>
                     )}
                 </div>
-
-                {/* Linha divisória vertical */}
-                <div className={styles.dividerLine}></div>
 
                 {/* Lista de usuários à direita */}
                 <div className={`${styles.usersSection} ${isLoading ? styles.usersSectionLoading : ''}`}>
