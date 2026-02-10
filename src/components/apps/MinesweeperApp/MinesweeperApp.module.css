@@ -1,0 +1,166 @@
+/* ============================================================================
+   CONTAINER PRINCIPAL
+   ============================================================================ */
+.minesweeperContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: #c0c0c0;
+    padding: 6px;
+    user-select: none;
+    -webkit-user-select: none;
+    overflow: auto;
+}
+
+/* ============================================================================
+   SELETOR DE DIFICULDADE
+   ============================================================================ */
+.difficultyBar {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 4px;
+}
+
+.diffButton {
+    flex: 1;
+    padding: 3px 6px;
+    font-size: 11px;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #c0c0c0;
+    border: 2px solid;
+    border-color: #fff #808080 #808080 #fff;
+    cursor: pointer;
+    color: #000;
+}
+
+.diffButton:active {
+    border-color: #808080 #fff #fff #808080;
+}
+
+.diffButtonActive {
+    border-color: #808080 #fff #fff #808080;
+    background: #b0b0b0;
+    font-weight: 700;
+}
+
+/* ============================================================================
+   PAINEL DO JOGO (borda 3D externa)
+   ============================================================================ */
+.gamePanel {
+    border: 3px solid;
+    border-color: #fff #808080 #808080 #fff;
+    padding: 6px;
+    background: #c0c0c0;
+}
+
+/* ============================================================================
+   HEADER (LCD minas | Smiley | LCD timer)
+   ============================================================================ */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 6px;
+    margin-bottom: 6px;
+    border: 2px solid;
+    border-color: #808080 #fff #fff #808080;
+    background: #c0c0c0;
+}
+
+/* ============================================================================
+   LCD DISPLAY (estilo calculadora retro)
+   ============================================================================ */
+.lcdDisplay {
+    background: #000;
+    color: #ff0000;
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 2px 4px;
+    min-width: 46px;
+    text-align: center;
+    letter-spacing: 2px;
+    border: 1px solid;
+    border-color: #808080 #fff #fff #808080;
+    line-height: 1;
+}
+
+/* ============================================================================
+   BOTÃO SMILEY (reset)
+   ============================================================================ */
+.resetButton {
+    width: 32px;
+    height: 32px;
+    border: 2px solid;
+    border-color: #fff #808080 #808080 #fff;
+    background: #c0c0c0;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.resetButton:active {
+    border-color: #808080 #fff #fff #808080;
+}
+
+/* ============================================================================
+   GRID DO TABULEIRO
+   ============================================================================ */
+.grid {
+    display: grid;
+    border: 3px solid;
+    border-color: #808080 #fff #fff #808080;
+}
+
+/* ============================================================================
+   CÉLULAS
+   ============================================================================ */
+
+/* Célula fechada — botão 3D elevado estilo Windows XP */
+.cell {
+    width: 24px;
+    height: 24px;
+    border: 2px solid;
+    border-color: #fff #808080 #808080 #fff;
+    background: #c0c0c0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+.cell:active {
+    border-color: #808080;
+    border-width: 1px;
+    padding: 1px;
+}
+
+/* Célula aberta — plana, sem relevo */
+.cellRevealed {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #808080;
+    background: #c0c0c0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Célula que explodiu (mina clicada) */
+.cellExploded {
+    background: #ff0000 !important;
+}

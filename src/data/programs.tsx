@@ -30,7 +30,7 @@ import runIcon from '../assets/icons/run.webp';
 import NotepadApp from '../components/apps/NotepadApp/NotepadApp';
 const AboutMeContent = () => <div style={{ padding: '10px' }}><h1>Sobre Mim</h1><p>Desenvolvedor apaixonado...</p></div>;
 const MyProjectsContent = () => <div style={{ padding: '10px' }}><h1>Meus Projetos</h1><p>Cards dos projetos aqui...</p></div>;
-const MinesweeperContent = () => <div style={{ padding: '10px' }}>Campo Minado em breve!</div>;
+import MinesweeperApp from '../components/apps/MinesweeperApp/MinesweeperApp';
 const WinampContent = () => <div style={{ padding: '10px' }}>Winamp em breve!</div>;
 const MsnContent = () => <div style={{ padding: '10px' }}>MSN em breve!</div>;
 const SolitaireContent = () => <div style={{ padding: '10px' }}>Solitaire em breve!</div>;
@@ -111,9 +111,10 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'minesweeper',
     name: 'Campo Minado',
     iconUrl: minesweeperIcon,
-    component: () => <MinesweeperContent />,
-    isResizable: false,
-    defaultSize: { width: 300, height: 400 },
+    component: () => <MinesweeperApp />,
+    isResizable: true,
+    defaultSize: { width: 300, height: 420 },
+    minSize: { width: 280, height: 370 },
   },
   {
     id: 'solitaire',
