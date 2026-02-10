@@ -15,6 +15,7 @@ import { useShallow } from 'zustand/shallow';
 function App() {
   // User state
   const currentUserId = useUserStore(state => state.currentUserId);
+  const isShuttingDown = useUserStore(state => state.isShuttingDown);
 
   // useShallow: evita re-render se o array tiver mesmos itens (comparação rasa)
   const openWindows = useWindowStore(useShallow(state => state.openWindows));
@@ -27,8 +28,8 @@ function App() {
     return cleanup;
   }, [initializeMobileDetection]);
 
-  // Se não está logado, mostra a tela de login
-  if (!currentUserId) {
+  // Se não está logado ou está desligando, mostra a tela de login
+  if (!currentUserId || isShuttingDown) {
     return <LoginScreen />;
   }
 

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import styles from './ShutdownDialog.module.css';
 import { useWindowStore } from '../../stores/useWindowStore';
+import { useUserStore } from '../../stores/useUserStore';
 import standbyIcon from '../../assets/icons/stand-by.webp';
 import powerIcon from '../../assets/icons/power.webp';
 import restartIcon from '../../assets/icons/restart.webp';
@@ -9,6 +10,7 @@ import winLogo from '../../assets/icons/win-logo.webp';
 export default function ShutdownDialog() {
     const isShutdownDialogOpen = useWindowStore(state => state.isShutdownDialogOpen);
     const closeShutdownDialog = useWindowStore(state => state.closeShutdownDialog);
+    const shutdown = useUserStore(state => state.shutdown);
     const dialogRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -45,22 +47,8 @@ export default function ShutdownDialog() {
     };
 
     const handlePowerOff = () => {
-        // Simula desligamento - poderia mostrar tela de "shutting down"
-        document.body.innerHTML = `
-      <div style="
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background: linear-gradient(to bottom, #1c5da8, #0d3c79);
-        color: white;
-        font-family: 'Tahoma', sans-serif;
-        font-size: 24px;
-      ">
-        <p>O Windows está sendo desligado...</p>
-      </div>
-    `;
+        closeShutdownDialog();
+        shutdown();
     };
 
     const handleRestart = () => {

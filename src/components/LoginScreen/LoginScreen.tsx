@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './LoginScreen.module.css';
 import windowStyles from '../Window/Window.module.css';
 import { useUserStore, AVATAR_OPTIONS, type UserProfile } from '../../stores/useUserStore';
@@ -51,9 +51,46 @@ export default function LoginScreen() {
         }
     };
 
-    const handleShutdown = () => {
-        alert('Desligando...');
-    };
+    const shutdown = useUserStore(state => state.shutdown);
+    const isShuttingDown = useUserStore(state => state.isShuttingDown);
+    const clearShutdown = useUserStore(state => state.clearShutdown);
+
+    // Quando está desligando, espera 3s e volta para a tela de login
+    useEffect(() => {
+        if (!isShuttingDown) return;
+        const timer = setTimeout(() => {
+            clearShutdown();
+        }, 3000);
+        return () => clearTimeout(timer);
+    }, [isShuttingDown, clearShutdown]);
+
+    // Tela de desligamento: mostra apenas logo + mensagem
+    if (isShuttingDown) {
+        return (
+            <div className={styles.loginScreen}>
+                <header className={styles.header}></header>
+                <div className={styles.mainContent} style={{ justifyContent: 'center' }}>
+                    <div className={styles.leftSection} style={{ alignItems: 'center' }}>
+                        <div className={styles.logoSection}>
+                            <div className={styles.logoContainer}>
+                                <span className={styles.logoText}>Microsoft<sup>®</sup></span>
+                                <img
+                                    src={winLogo}
+                                    alt="Windows XP"
+                                    className={styles.windowsLogo}
+                                />
+                            </div>
+                            <p className={styles.windowsText}>
+                                Windows<sup className={styles.xp}>xp</sup>
+                            </p>
+                        </div>
+                        <p className={styles.shutdownMessage}>O Windows está desligando...</p>
+                    </div>
+                </div>
+                <div className={styles.bottomBar}></div>
+            </div>
+        );
+    }
 
     return (
         <div className={styles.loginScreen}>
@@ -140,14 +177,14 @@ export default function LoginScreen() {
 
             {/* Barra inferior */}
             <div className={styles.bottomBar}>
-                <button className={styles.shutdownBtn} onClick={handleShutdown}>
+                <button className={`${styles.shutdownBtn} ${isLoading ? styles.userCardHidden : ''}`} onClick={shutdown}>
                     <div className={styles.shutdownIcon}>
                         <img src={shutdownIcon} alt="Shutdown" />
                     </div>
                     <span>Desligar computador</span>
                 </button>
 
-                <p className={styles.helpText}>
+                <p className={`${styles.helpText} ${isLoading ? styles.userCardHidden : ''}`}>
                     Após o logon, você pode adicionar ou alterar contas.<br />
                     Acesse o Painel de Controle e clique em Contas de Usuário.
                 </p>
@@ -204,7 +241,6 @@ export default function LoginScreen() {
                         </div>
 
                         <div className={styles.modalActions}>
-                            <p>{newName}</p>
                             <button
                                 className={`${styles.modalBtn} ${styles.modalBtnSecondary}`}
                                 onClick={() => setShowCreateModal(false)}

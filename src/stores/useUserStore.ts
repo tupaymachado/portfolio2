@@ -30,12 +30,15 @@ interface UserState {
     // Estado
     profiles: UserProfile[];
     currentUserId: string | null;
+    isShuttingDown: boolean;
 
     // Actions
     createProfile: (name: string, avatarUrl: string) => UserProfile;
     deleteProfile: (id: string) => void;
     login: (id: string) => void;
     logout: () => void;
+    shutdown: () => void;
+    clearShutdown: () => void;
     getCurrentUser: () => UserProfile | null;
 }
 
@@ -44,6 +47,7 @@ export const useUserStore = create<UserState>()(
         (set, get) => ({
             profiles: [],
             currentUserId: null,
+            isShuttingDown: false,
 
             createProfile: (name, avatarUrl) => {
                 const newProfile: UserProfile = {
@@ -82,6 +86,14 @@ export const useUserStore = create<UserState>()(
 
             logout: () => {
                 set({ currentUserId: null });
+            },
+
+            shutdown: () => {
+                set({ currentUserId: null, isShuttingDown: true });
+            },
+
+            clearShutdown: () => {
+                set({ isShuttingDown: false });
             },
 
             getCurrentUser: () => {

@@ -21,6 +21,7 @@ export default function StartMenu() {
   const openShutdownDialog = useWindowStore(state => state.openShutdownDialog);
   const isMobile = useSystemStore(state => state.isMobile);
   const currentUser = useUserStore(state => state.getCurrentUser());
+  const logoutUser = useUserStore(state => state.logout);
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -208,7 +209,7 @@ export default function StartMenu() {
         )}
       </main>
       <footer className={styles.startMenuFooter}>
-        <div className={styles.powerButtons} onClick={() => openWindow('logout')}>
+        <div className={styles.powerButtons} onClick={logoutUser}>
           <img src={logout} alt="Fazer logoff" />
           <span>Fazer logoff</span>
         </div>
