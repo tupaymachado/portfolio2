@@ -30,7 +30,7 @@ interface WindowState {
     openWindows: WindowInstance[];
     activeWindowId: number | null;
     zIndexCounter: number;
-    openWindow: (programId: string, options?: { folderId?: string }) => void;
+    openWindow: (programId: string, options?: { folderId?: string; fileId?: string }) => void;
     closeWindow: (id: number) => void;
     minimizeWindow: (id: number) => void;
     toggleMaximize: (id: number) => void;
@@ -136,6 +136,7 @@ export const useWindowStore = create<WindowState>((set, get) => ({
             id: newId,
             programId,
             initialFolderId: options?.folderId,
+            initialFileId: options?.fileId,
             isMinimized: false,
             isMaximized: shouldMaximize,
             zIndex: get().zIndexCounter,

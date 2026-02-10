@@ -27,7 +27,7 @@ import runIcon from '../assets/icons/run.webp';
 // O JSX só é criado quando a janela realmente abre.
 // O código ainda está no bundle principal, mas é leve.
 
-const NotepadContent = () => <div style={{ padding: '10px' }}>Um editor de texto simples.</div>;
+import NotepadApp from '../components/apps/NotepadApp/NotepadApp';
 const AboutMeContent = () => <div style={{ padding: '10px' }}><h1>Sobre Mim</h1><p>Desenvolvedor apaixonado...</p></div>;
 const MyProjectsContent = () => <div style={{ padding: '10px' }}><h1>Meus Projetos</h1><p>Cards dos projetos aqui...</p></div>;
 const MinesweeperContent = () => <div style={{ padding: '10px' }}>Campo Minado em breve!</div>;
@@ -102,7 +102,7 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'notepad',
     name: 'Bloco de Notas',
     iconUrl: notepadIcon,
-    component: () => <NotepadContent />,
+    component: () => <NotepadApp />,
     defaultSize: { width: 600, height: 400 },
     minSize: { width: 250, height: 150 },
     isResizable: true,

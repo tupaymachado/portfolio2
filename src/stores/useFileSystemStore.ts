@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { FileSystemItem, FileSystemState } from '../types/fileSystem';
 
 // Imports de ícones
@@ -7,17 +8,12 @@ import myDocumentsIcon from '../assets/icons/my-documents.webp';
 import myPicturesIcon from '../assets/icons/my-pictures.webp';
 import myMusicIcon from '../assets/icons/my-music.webp';
 import myVideosIcon from '../assets/icons/my-videos.webp';
+import notepadIcon from '../assets/icons/notepad.webp';
 
-interface FileSystemStore extends FileSystemState {
-    // Ações
-    getItemsByParent: (parentId: string) => FileSystemItem[];
-    getItem: (id: string) => FileSystemItem | undefined;
-    getPath: (id: string) => string;
-    updateItemGridPosition: (itemId: string, newPosition: { row: number; col: number }, maxRows?: number) => void;
-}
-
-// Dados Iniciais (O "Formato" do seu HD)
-const INITIAL_ITEMS: Record<string, FileSystemItem> = {
+// ============================================================================
+// TEMPLATE DO FILE SYSTEM (clonado para cada novo perfil)
+// ============================================================================
+const createInitialItems = (): Record<string, FileSystemItem> => ({
     // --- PASTAS DO SISTEMA ---
     'root': {
         id: 'root',
@@ -29,7 +25,7 @@ const INITIAL_ITEMS: Record<string, FileSystemItem> = {
     },
     'desktop': {
         id: 'desktop',
-        parentId: 'root', // Filha de C:
+        parentId: 'root',
         name: 'Desktop',
         type: 'folder',
         createdAt: Date.now(),
@@ -67,13 +63,13 @@ const INITIAL_ITEMS: Record<string, FileSystemItem> = {
         createdAt: Date.now(),
     },
 
-    // --- ITENS DO DESKTOP (Seus atalhos atuais convertidos para "Arquivos") ---
+    // --- ATALHOS DO DESKTOP ---
     'shortcut-1': {
         id: 'shortcut-1',
-        parentId: 'desktop', // Vivem na pasta Desktop
+        parentId: 'desktop',
         name: 'Sobre Mim',
         type: 'file',
-        programId: 'about-me', // Aponta para o ID do programa em src/data/programs
+        programId: 'about-me',
         gridPosition: { row: 0, col: 0 },
         createdAt: Date.now(),
     },
@@ -92,66 +88,240 @@ const INITIAL_ITEMS: Record<string, FileSystemItem> = {
         name: 'Bloco de Notas',
         type: 'file',
         programId: 'notepad',
+        iconUrl: notepadIcon,
         gridPosition: { row: 0, col: 1 },
         createdAt: Date.now(),
     },
-};
+});
 
-export const useFileSystemStore = create<FileSystemStore>((set, get) => ({
-    items: INITIAL_ITEMS,
-    rootId: 'root',
+// ============================================================================
+// STORE
+// ============================================================================
+interface FileSystemStore extends FileSystemState {
+    // Per-profile storage
+    allUserItems: Record<string, Record<string, FileSystemItem>>;
+    activeUserId: string | null;
 
-    getItemsByParent: (parentId: string) => {
-        const { items } = get();
-        return Object.values(items).filter(item => item.parentId === parentId);
-    },
+    // Ações de usuário
+    setActiveUser: (userId: string) => void;
+    clearActiveUser: () => void;
 
-    getItem: (id: string) => {
-        const { items } = get();
-        return items[id];
-    },
+    // Getters (operam sobre o usuário ativo)
+    getItemsByParent: (parentId: string) => FileSystemItem[];
+    getItem: (id: string) => FileSystemItem | undefined;
+    getPath: (id: string) => string;
 
-    getPath: (id: string) => {
-        const { items, getPath } = get();
-        const item = items[id];
-        if (!item) return '';
-        if (!item.parentId) return item.name; // root
-        return `${getPath(item.parentId)}\\${item.name}`;
-    },
+    // CRUD
+    createFile: (parentId: string, name: string, programId: string, content?: string, extension?: string) => string;
+    updateFileContent: (fileId: string, content: string) => void;
+    renameItem: (id: string, newName: string) => void;
+    deleteItem: (id: string) => void;
 
-    updateItemGridPosition: (itemId, newPosition, maxRows = 10) => {
-        set(state => {
-            const newItems = { ...state.items };
+    // Grid (desktop)
+    updateItemGridPosition: (itemId: string, newPosition: { row: number; col: number }, maxRows?: number) => void;
+}
 
-            const moveItem = (id: string, pos: { row: number; col: number }) => {
-                const occupantId = Object.keys(newItems).find(
-                    key => key !== id &&
-                        newItems[key].parentId === 'desktop' &&
-                        newItems[key].gridPosition?.row === pos.row &&
-                        newItems[key].gridPosition?.col === pos.col
-                );
+export const useFileSystemStore = create<FileSystemStore>()(
+    persist(
+        (set, get) => ({
+            // Estado indexado por userId
+            allUserItems: {},
+            activeUserId: null,
 
-                newItems[id] = {
-                    ...newItems[id],
-                    gridPosition: pos
+            // `items` e `rootId` continuam existindo para compatibilidade
+            // Sempre refletem o file system do usuário ativo
+            items: createInitialItems(),
+            rootId: 'root',
+
+            setActiveUser: (userId: string) => {
+                const { allUserItems } = get();
+                // Se o usuário não tem file system ainda, cria um com o template
+                if (!allUserItems[userId]) {
+                    const newItems = createInitialItems();
+                    set({
+                        activeUserId: userId,
+                        allUserItems: { ...allUserItems, [userId]: newItems },
+                        items: newItems,
+                    });
+                } else {
+                    set({
+                        activeUserId: userId,
+                        items: allUserItems[userId],
+                    });
+                }
+            },
+
+            clearActiveUser: () => {
+                set({
+                    activeUserId: null,
+                    items: createInitialItems(),
+                });
+            },
+
+            getItemsByParent: (parentId: string) => {
+                const { items } = get();
+                return Object.values(items).filter(item => item.parentId === parentId);
+            },
+
+            getItem: (id: string) => {
+                const { items } = get();
+                return items[id];
+            },
+
+            getPath: (id: string) => {
+                const { items, getPath } = get();
+                const item = items[id];
+                if (!item) return '';
+                if (!item.parentId) return item.name; // root
+                return `${getPath(item.parentId)}\\${item.name}`;
+            },
+
+            createFile: (parentId, name, programId, content = '', extension) => {
+                const id = crypto.randomUUID();
+                const now = Date.now();
+                const { activeUserId, allUserItems } = get();
+
+                const newItem: FileSystemItem = {
+                    id,
+                    parentId,
+                    name,
+                    type: 'file',
+                    programId,
+                    content,
+                    extension,
+                    createdAt: now,
+                    updatedAt: now,
                 };
 
-                if (occupantId) {
-                    let nextRow = pos.row + 1;
-                    let nextCol = pos.col;
+                set(state => {
+                    const newItems = { ...state.items, [id]: newItem };
+                    const newAllUserItems = activeUserId
+                        ? { ...allUserItems, [activeUserId]: newItems }
+                        : allUserItems;
+                    return {
+                        items: newItems,
+                        allUserItems: newAllUserItems,
+                    };
+                });
 
-                    if (nextRow >= maxRows) {
-                        nextRow = 0;
-                        nextCol = pos.col + 1;
-                    }
+                return id;
+            },
 
-                    moveItem(occupantId, { row: nextRow, col: nextCol });
-                }
-            };
+            updateFileContent: (fileId, content) => {
+                const { activeUserId, allUserItems } = get();
 
-            moveItem(itemId, newPosition);
+                set(state => {
+                    const item = state.items[fileId];
+                    if (!item) return state;
 
-            return { items: newItems };
-        });
-    },
-}));
+                    const updatedItem = { ...item, content, updatedAt: Date.now() };
+                    const newItems = { ...state.items, [fileId]: updatedItem };
+                    const newAllUserItems = activeUserId
+                        ? { ...allUserItems, [activeUserId]: newItems }
+                        : allUserItems;
+
+                    return {
+                        items: newItems,
+                        allUserItems: newAllUserItems,
+                    };
+                });
+            },
+
+            renameItem: (id, newName) => {
+                const { activeUserId, allUserItems } = get();
+
+                set(state => {
+                    const item = state.items[id];
+                    if (!item) return state;
+
+                    const updatedItem = { ...item, name: newName, updatedAt: Date.now() };
+                    const newItems = { ...state.items, [id]: updatedItem };
+                    const newAllUserItems = activeUserId
+                        ? { ...allUserItems, [activeUserId]: newItems }
+                        : allUserItems;
+
+                    return {
+                        items: newItems,
+                        allUserItems: newAllUserItems,
+                    };
+                });
+            },
+
+            deleteItem: (id) => {
+                const { activeUserId, allUserItems } = get();
+
+                set(state => {
+                    const newItems = { ...state.items };
+                    // Deleta o item e todos os filhos recursivamente
+                    const deleteRecursive = (itemId: string) => {
+                        const children = Object.values(newItems).filter(i => i.parentId === itemId);
+                        children.forEach(child => deleteRecursive(child.id));
+                        delete newItems[itemId];
+                    };
+                    deleteRecursive(id);
+
+                    const newAllUserItems = activeUserId
+                        ? { ...allUserItems, [activeUserId]: newItems }
+                        : allUserItems;
+
+                    return {
+                        items: newItems,
+                        allUserItems: newAllUserItems,
+                    };
+                });
+            },
+
+            updateItemGridPosition: (itemId, newPosition, maxRows = 10) => {
+                const { activeUserId, allUserItems } = get();
+
+                set(state => {
+                    const newItems = { ...state.items };
+
+                    const moveItem = (id: string, pos: { row: number; col: number }) => {
+                        const occupantId = Object.keys(newItems).find(
+                            key => key !== id &&
+                                newItems[key].parentId === 'desktop' &&
+                                newItems[key].gridPosition?.row === pos.row &&
+                                newItems[key].gridPosition?.col === pos.col
+                        );
+
+                        newItems[id] = {
+                            ...newItems[id],
+                            gridPosition: pos
+                        };
+
+                        if (occupantId) {
+                            let nextRow = pos.row + 1;
+                            let nextCol = pos.col;
+
+                            if (nextRow >= maxRows) {
+                                nextRow = 0;
+                                nextCol = pos.col + 1;
+                            }
+
+                            moveItem(occupantId, { row: nextRow, col: nextCol });
+                        }
+                    };
+
+                    moveItem(itemId, newPosition);
+
+                    const newAllUserItems = activeUserId
+                        ? { ...allUserItems, [activeUserId]: newItems }
+                        : allUserItems;
+
+                    return {
+                        items: newItems,
+                        allUserItems: newAllUserItems,
+                    };
+                });
+            },
+        }),
+        {
+            name: 'file-system-storage',
+            // Persistir apenas allUserItems para não duplicar dados
+            partialize: (state) => ({
+                allUserItems: state.allUserItems,
+            }),
+        }
+    )
+);

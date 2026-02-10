@@ -5,21 +5,25 @@ export interface FileSystemItem {
   parentId: string;     // O ID da pasta onde este item está (para saber quem é o pai)
   name: string;         // O nome do arquivo/pasta (ex: "Meus Projetos")
   type: FileType;       // É arquivo ou pasta?
-  gridPosition?: { row: number; col: number }; 
-  
+  gridPosition?: { row: number; col: number };
+
   // --- Propriedades específicas ---
-  
+
   // Se for um arquivo, ele pode estar associado a um programa (ex: 'notepad')
-  programId?: string;   
-  
+  programId?: string;
+
   // Conteúdo do arquivo (para arquivos de texto simples, por exemplo)
-  content?: string;     
-  
+  content?: string;
+
+  // Extensão do arquivo (ex: 'txt', 'bmp')
+  extension?: string;
+
   // Ícone customizado (opcional, senão usa o padrão do tipo)
   iconUrl?: string;
 
   // --- Metadados ---
   createdAt: number;
+  updatedAt?: number;
 }
 
 // Uma estrutura auxiliar para facilitar a busca (Mapa de ID -> Item)

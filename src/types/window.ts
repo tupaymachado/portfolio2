@@ -11,6 +11,7 @@ export interface WindowInstance {
 
   // --- DADOS INICIAIS PARA O PROGRAMA ---
   initialFolderId?: string; // Para o Explorer: qual pasta abrir inicialmente?
+  initialFileId?: string;   // Para o Notepad: qual arquivo abrir inicialmente?
 
   // --- ESTADO DE VISIBILIDADE ---
   isMinimized: boolean; // A janela está escondida (na taskbar)?

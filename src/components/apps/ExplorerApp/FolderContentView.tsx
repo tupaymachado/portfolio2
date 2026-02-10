@@ -19,11 +19,12 @@ export default function FolderContentView({ folderId, onNavigate }: FolderConten
 
     const items = getItemsByParent(folderId);
 
-    const handleDoubleClick = (item: { id: string; type: string; programId?: string }) => {
+    const handleDoubleClick = (item: { id: string; type: string; programId?: string; content?: string }) => {
         if (item.type === 'folder') {
             onNavigate(item.id);
         } else if (item.programId) {
-            openWindow(item.programId);
+            // Se o arquivo tem conteúdo, passa o fileId para o programa carregar
+            openWindow(item.programId, item.content !== undefined ? { fileId: item.id } : undefined);
         }
     };
 
