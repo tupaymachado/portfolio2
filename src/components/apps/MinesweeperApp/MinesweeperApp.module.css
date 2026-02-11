@@ -123,8 +123,8 @@
 
 /* Célula fechada — botão 3D elevado estilo Windows XP */
 .cell {
-    width: 24px;
-    height: 24px;
+    width: var(--cell-size, 24px);
+    height: var(--cell-size, 24px);
     border: 2px solid;
     border-color: #fff #808080 #808080 #fff;
     background: #c0c0c0;
@@ -132,7 +132,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 14px;
+    font-size: calc(var(--cell-size, 24px) * 0.58);
     font-weight: 700;
     padding: 0;
     font-family: 'Arial', sans-serif;
@@ -146,15 +146,15 @@
 
 /* Célula aberta — plana, sem relevo */
 .cellRevealed {
-    width: 24px;
-    height: 24px;
+    width: var(--cell-size, 24px);
+    height: var(--cell-size, 24px);
     border: 1px solid #808080;
     background: #c0c0c0;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: default;
-    font-size: 14px;
+    font-size: calc(var(--cell-size, 24px) * 0.58);
     font-weight: 700;
     padding: 0;
     font-family: 'Arial', sans-serif;

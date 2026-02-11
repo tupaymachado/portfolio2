@@ -193,16 +193,14 @@ export default function MinesweeperApp() {
 
         // Desktop: usa configuração fixa (hardcoded)
         if (!mobile) {
-            setCellSize(24);
-            return baseDiff;
+            return { config: baseDiff, cellSize: 24 };
         }
 
         // Mobile: recalcula para caber na tela
-        setCellSize(32);
         const winW = window.innerWidth;
         const winH = window.innerHeight;
 
-        // Margens aproximadas: 40px laterais, 180px verticais (header, taskbar, win chrome)
+        // Margens aproximadas: 20px laterais, 180px verticais (header, taskbar, win chrome)
         const maxCols = Math.floor((winW - 20) / 32);
         const maxRows = Math.floor((winH - 180) / 32);
 
@@ -215,12 +213,12 @@ export default function MinesweeperApp() {
         let rows = baseDiff.rows;
         rows = Math.min(rows, maxRows);
 
-        // Se a tela for muito vertical, talvez valha a pena inverter se a dificuldade for "larga"
-        // Mas por simplicidade, apenas cortamos o excesso e ajustamos minas.
-
         const mines = Math.max(3, Math.floor(rows * cols * density)); // Mínimo 3 minas
 
-        return { label: baseDiff.label, rows, cols, mines };
+        return {
+            config: { label: baseDiff.label, rows, cols, mines },
+            cellSize: 32
+        };
     }, []);
 
     // Calcula tamanho da janela do programa (OS window)
@@ -236,10 +234,11 @@ export default function MinesweeperApp() {
 
     // Efeito para ajustar ao resize/mudança de dificuldade
     useEffect(() => {
-        const newConfig = calculateResponsiveConfig(diffKey, isMobile);
+        const result = calculateResponsiveConfig(diffKey, isMobile);
 
-        setConfig(newConfig);
-        setBoard(createEmptyBoard(newConfig.rows, newConfig.cols));
+        setConfig(result.config);
+        setCellSize(result.cellSize);
+        setBoard(createEmptyBoard(result.config.rows, result.config.cols));
         setGameState('idle');
         setTimer(0);
         if (timerRef.current) clearInterval(timerRef.current);
@@ -336,7 +335,10 @@ export default function MinesweeperApp() {
     };
 
     return (
-        <div className={styles.minesweeperContainer}>
+        <div
+            className={styles.minesweeperContainer}
+            style={{ '--cell-size': `${cellSize}px` } as React.CSSProperties}
+        >
             {/* Seletor de dificuldade */}
             <div className={styles.difficultyBar}>
                 {Object.entries(DIFFICULTIES).map(([key, d]) => (
