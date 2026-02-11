@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useSystemStore } from '../../../stores/useSystemStore';
 import styles from './MinesweeperApp.module.css';
 import { useWindowContext, useWindowStore } from '../../../stores/useWindowStore';
 
@@ -144,35 +145,19 @@ function LcdDisplay({ value }: { value: number }) {
 }
 
 export default function MinesweeperApp() {
+    const isMobile = useSystemStore(state => state.isMobile);
     const { instanceId } = useWindowContext();
     const updateWindowSize = useWindowStore(state => state.updateWindowSize);
 
     const [diffKey, setDiffKey] = useState<string>('beginner');
-    const diff = DIFFICULTIES[diffKey];
+    // Configuração inicial baseada no modo (mobile ou desktop)
+    const [config, setConfig] = useState<Difficulty>(DIFFICULTIES['beginner']);
+    const [cellSize, setCellSize] = useState(isMobile ? 32 : 24);
 
-    const [board, setBoard] = useState<Cell[]>(() => createEmptyBoard(diff.rows, diff.cols));
+    const [board, setBoard] = useState<Cell[]>(() => createEmptyBoard(config.rows, config.cols));
     const [gameState, setGameState] = useState<GameState>('idle');
     const [timer, setTimer] = useState(0);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-    // Calcula tamanho ideal da janela para a dificuldade
-    // Cada célula = 24px, + padding/bordas do painel + header + title bar
-    const calcWindowSize = useCallback((d: Difficulty) => ({
-        width: d.cols * 24 + 42,
-        height: d.rows * 24 + 150,
-    }), []);
-
-    // Redimensiona a janela ao montar (para o tamanho do grid inicial)
-    useEffect(() => {
-        updateWindowSize(instanceId, calcWindowSize(DIFFICULTIES['beginner']));
-    }, [instanceId, updateWindowSize, calcWindowSize]);
-
-    // Limpa timer ao desmontar
-    useEffect(() => {
-        return () => {
-            if (timerRef.current) clearInterval(timerRef.current);
-        };
-    }, []);
 
     // Inicia o timer
     const startTimer = useCallback(() => {
@@ -197,26 +182,86 @@ export default function MinesweeperApp() {
     // Reiniciar jogo
     const resetGame = useCallback(() => {
         stopTimer();
-        setBoard(createEmptyBoard(diff.rows, diff.cols));
+        setBoard(createEmptyBoard(config.rows, config.cols));
         setGameState('idle');
         setTimer(0);
-    }, [diff, stopTimer]);
+    }, [config, stopTimer]);
+
+    // Recalcula configuração baseada na dificuldade e modo (mobile/desktop)
+    const calculateResponsiveConfig = useCallback((key: string, mobile: boolean) => {
+        const baseDiff = DIFFICULTIES[key];
+
+        // Desktop: usa configuração fixa (hardcoded)
+        if (!mobile) {
+            setCellSize(24);
+            return baseDiff;
+        }
+
+        // Mobile: recalcula para caber na tela
+        setCellSize(32);
+        const winW = window.innerWidth;
+        const winH = window.innerHeight;
+
+        // Margens aproximadas: 40px laterais, 180px verticais (header, taskbar, win chrome)
+        const maxCols = Math.floor((winW - 20) / 32);
+        const maxRows = Math.floor((winH - 180) / 32);
+
+        // Clampa as colunas/linhas
+        const cols = Math.min(baseDiff.cols, maxCols);
+
+        // Mantém a densidade de minas
+        const density = baseDiff.mines / (baseDiff.rows * baseDiff.cols);
+
+        let rows = baseDiff.rows;
+        rows = Math.min(rows, maxRows);
+
+        // Se a tela for muito vertical, talvez valha a pena inverter se a dificuldade for "larga"
+        // Mas por simplicidade, apenas cortamos o excesso e ajustamos minas.
+
+        const mines = Math.max(3, Math.floor(rows * cols * density)); // Mínimo 3 minas
+
+        return { label: baseDiff.label, rows, cols, mines };
+    }, []);
+
+    // Calcula tamanho da janela do programa (OS window)
+    const calcWindowSize = useCallback((d: Difficulty, cSize: number) => ({
+        width: d.cols * cSize + 42,
+        height: d.rows * cSize + 130, // Header + borders
+    }), []);
 
     // Trocar dificuldade — redimensiona a janela!
     const changeDifficulty = useCallback((key: string) => {
-        stopTimer();
-        const d = DIFFICULTIES[key];
-        setDiffKey(key);
-        setBoard(createEmptyBoard(d.rows, d.cols));
+        setDiffKey(key); // This will trigger the useEffect below
+    }, []);
+
+    // Efeito para ajustar ao resize/mudança de dificuldade
+    useEffect(() => {
+        const newConfig = calculateResponsiveConfig(diffKey, isMobile);
+
+        setConfig(newConfig);
+        setBoard(createEmptyBoard(newConfig.rows, newConfig.cols));
         setGameState('idle');
         setTimer(0);
-        updateWindowSize(instanceId, calcWindowSize(d));
-    }, [stopTimer, instanceId, updateWindowSize, calcWindowSize]);
+        if (timerRef.current) clearInterval(timerRef.current);
+
+    }, [diffKey, isMobile, calculateResponsiveConfig]);
+
+    // Atualiza tamanho da janela sempre que config mudar
+    useEffect(() => {
+        updateWindowSize(instanceId, calcWindowSize(config, cellSize));
+    }, [config, cellSize, instanceId, updateWindowSize, calcWindowSize]);
+
+    // Limpa timer ao desmontar
+    useEffect(() => {
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+        };
+    }, []);
 
     // Clique esquerdo
     const handleCellClick = useCallback((row: number, col: number) => {
         if (gameState === 'won' || gameState === 'lost') return;
-        const index = row * diff.cols + col;
+        const index = row * config.cols + col;
 
         setBoard(prev => {
             if (prev[index].revealed || prev[index].flagged) return prev;
@@ -224,7 +269,7 @@ export default function MinesweeperApp() {
             let currentBoard = prev;
 
             if (gameState === 'idle') {
-                currentBoard = placeMines(prev, index, diff.rows, diff.cols, diff.mines);
+                currentBoard = placeMines(prev, index, config.rows, config.cols, config.mines);
                 setGameState('playing');
                 startTimer();
             }
@@ -244,27 +289,27 @@ export default function MinesweeperApp() {
             if (cell.neighborMines > 0) {
                 const newBoard = currentBoard.map(c => ({ ...c }));
                 newBoard[index].revealed = true;
-                if (checkWin(newBoard, diff.mines)) {
+                if (checkWin(newBoard, config.mines)) {
                     setGameState('won');
                     stopTimer();
                 }
                 return newBoard;
             }
 
-            const newBoard = floodFill(currentBoard, index, diff.rows, diff.cols);
-            if (checkWin(newBoard, diff.mines)) {
+            const newBoard = floodFill(currentBoard, index, config.rows, config.cols);
+            if (checkWin(newBoard, config.mines)) {
                 setGameState('won');
                 stopTimer();
             }
             return newBoard;
         });
-    }, [gameState, diff, startTimer, stopTimer]);
+    }, [gameState, config, startTimer, stopTimer]);
 
     // Clique direito — bandeira
     const handleRightClick = useCallback((e: React.MouseEvent, row: number, col: number) => {
         e.preventDefault();
         if (gameState === 'won' || gameState === 'lost' || gameState === 'idle') return;
-        const index = row * diff.cols + col;
+        const index = row * config.cols + col;
 
         setBoard(prev => {
             if (prev[index].revealed) return prev;
@@ -272,7 +317,7 @@ export default function MinesweeperApp() {
             newBoard[index].flagged = !newBoard[index].flagged;
             return newBoard;
         });
-    }, [gameState, diff.cols]);
+    }, [gameState, config.cols]);
 
     const flagCount = board.filter(c => c.flagged).length;
 
@@ -308,7 +353,7 @@ export default function MinesweeperApp() {
             <div className={styles.gamePanel}>
                 {/* Header: LCD minas | Smiley | LCD timer */}
                 <div className={styles.header}>
-                    <LcdDisplay value={diff.mines - flagCount} />
+                    <LcdDisplay value={config.mines - flagCount} />
                     <button className={styles.resetButton} onClick={resetGame}>
                         {gameState === 'lost' ? '😵' : gameState === 'won' ? '�' : '🙂'}
                     </button>
@@ -319,13 +364,13 @@ export default function MinesweeperApp() {
                 <div
                     className={styles.grid}
                     style={{
-                        gridTemplateColumns: `repeat(${diff.cols}, 24px)`,
-                        gridTemplateRows: `repeat(${diff.rows}, 24px)`,
+                        gridTemplateColumns: `repeat(${config.cols}, var(--cell-size))`,
+                        gridTemplateRows: `repeat(${config.rows}, var(--cell-size))`,
                     }}
                 >
                     {board.map((cell, index) => {
-                        const row = Math.floor(index / diff.cols);
-                        const col = index % diff.cols;
+                        const row = Math.floor(index / config.cols);
+                        const col = index % config.cols;
                         const isExploded = gameState === 'lost' && cell.mine && cell.revealed && !cell.flagged;
 
                         return (
