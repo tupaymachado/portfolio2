@@ -567,11 +567,13 @@
     max-width: 300px;
     border-left: none;
     padding-left: 0;
+    padding-top: 20px;
     align-items: center;
     border-top: 2px solid;
     border-image-slice: 1;
     border-image-source: linear-gradient(to bottom, #5a7edc 0%, #91aeee 50%, #5a7edc 100%);
     gap: 0;
+    justify-content: initial;
   }
 
   .bottomBar {

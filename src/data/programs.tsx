@@ -112,7 +112,7 @@ export const PROGRAMS: ProgramDefinition[] = [
     name: 'Campo Minado',
     iconUrl: minesweeperIcon,
     component: () => <MinesweeperApp />,
-    isResizable: true,
+    isResizable: false,
     defaultSize: { width: 300, height: 420 },
     minSize: { width: 280, height: 370 },
   },
