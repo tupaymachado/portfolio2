@@ -552,6 +552,10 @@
     margin-right: 0;
   }
 
+  .windowsText {
+    font-size: 36px;
+  }
+
   .welcomeText {
     margin: auto 0;
   }
