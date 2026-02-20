@@ -6,7 +6,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
     background: #c0c0c0;
     padding: 6px;
     user-select: none;
@@ -163,4 +162,10 @@
 /* Célula que explodiu (mina clicada) */
 .cellExploded {
     background: #ff0000 !important;
+}
+
+@media (max-width: 768px) {
+    .minesweeperContainer {
+        height: 100%;
+    }
 }

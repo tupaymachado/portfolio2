@@ -33,7 +33,7 @@ const MyProjectsContent = () => <div style={{ padding: '10px' }}><h1>Meus Projet
 import MinesweeperApp from '../components/apps/MinesweeperApp/MinesweeperApp';
 const WinampContent = () => <div style={{ padding: '10px' }}>Winamp em breve!</div>;
 const MsnContent = () => <div style={{ padding: '10px' }}>MSN em breve!</div>;
-const SolitaireContent = () => <div style={{ padding: '10px' }}>Solitaire em breve!</div>;
+const LazyKlondikeBoard = lazy(() => import('../components/apps/SolitaireApp/klondike/components/KlondikeBoard'));
 
 // ============================================================================
 // COMPONENTES PESADOS (React.lazy - Code Splitting)
@@ -120,9 +120,10 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'solitaire',
     name: 'Solitaire',
     iconUrl: solitaireIcon,
-    component: () => <SolitaireContent />,
-    isResizable: false,
-    defaultSize: { width: 300, height: 400 },
+    component: LazyKlondikeBoard,
+    isResizable: true,
+    defaultSize: { width: 800, height: 660 },
+    minSize: { width: 700, height: 560 },
   },
   {
     id: 'winamp',
