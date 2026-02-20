@@ -19,7 +19,7 @@ export function CardView({ card }: { card: Card }) {
 
     const color = getCardColor(card);
     const symbol = suitSymbols[card.suit] ?? '?';
-    const isFace = FACE_RANKS.has(card.rank);
+    const isFace = FACE_RANKS.has(String(card.rank));
 
     return (
         <div className={`${styles.card} ${styles[color]}`}>
