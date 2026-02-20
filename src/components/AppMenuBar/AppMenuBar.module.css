@@ -1,0 +1,71 @@
+.menuBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--color-background-ui);
+    border-bottom: 1px solid #D6D3D1;
+    font-size: 11px;
+    font-family: Tahoma, 'Microsoft Sans Serif', sans-serif;
+    user-select: none;
+}
+
+.items {
+    display: flex;
+    align-items: center;
+}
+
+.item {
+    padding: 2px 8px;
+    height: 22px;
+    background: none;
+    border: 1px solid transparent;
+    font-size: 11px;
+    font-family: inherit;
+    color: var(--color-text-default, #000);
+    cursor: default;
+    white-space: nowrap;
+    border-radius: 0;
+}
+
+.item:hover:not(:disabled) {
+    background-color: var(--color-title-bar-active-start, #245DDA);
+    color: white;
+    border-color: transparent;
+}
+
+.item:disabled,
+.item.disabled {
+    color: #888;
+    cursor: default;
+}
+
+.item.highlight {
+    color: #007700;
+    font-weight: bold;
+}
+
+.item.highlight:hover:not(:disabled) {
+    background-color: #007700;
+    color: white;
+}
+
+.rightSlot {
+    display: flex;
+    align-items: center;
+    padding-right: 2px;
+}
+
+/* Helper: Windows logo slot (used in Explorer and other apps) */
+.winLogoSlot {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 22px;
+}
+
+.winLogoSlot img {
+    width: 18px;
+    height: 16px;
+}

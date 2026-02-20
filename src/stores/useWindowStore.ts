@@ -13,10 +13,8 @@ export const WindowContext = createContext<WindowContextValue | null>(null);
 
 export function useWindowContext() {
     const context = useContext(WindowContext);
-    if (!context) {
-        throw new Error('useWindowContext must be used within a WindowContext.Provider');
-    }
-    return context;
+    // Return safe fallback instead of throwing — ExplorerApp will use 'root' folder as default
+    return context ?? { instanceId: -1 };
 }
 
 // --- TYPES ---

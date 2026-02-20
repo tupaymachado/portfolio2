@@ -1,4 +1,6 @@
 import styles from './ExplorerToolbar.module.css';
+import menuBarStyles from '../../AppMenuBar/AppMenuBar.module.css';
+import AppMenuBar from '../../AppMenuBar/AppMenuBar';
 import back from '../../../assets/icons/back.webp'
 import forward from '../../../assets/icons/forward.webp'
 import folderViewClassic from '../../../assets/icons/folder-view-classic.webp'
@@ -35,24 +37,23 @@ export default function ExplorerToolbar({
   isSidebarOpen = true,
   isMobile = false
 }: ExplorerToolbarProps) {
+  const menuItems = [
+    { label: 'Arquivo' },
+    { label: 'Exibir' },
+    { label: 'Favoritos' },
+    { label: 'Ferramentas' },
+    { label: 'Ajuda' },
+  ];
+
+  const winLogoSlot = (
+    <div className={menuBarStyles.winLogoSlot}>
+      <img src={winLogo} alt="Windows" />
+    </div>
+  );
+
   return (
     <div className={styles.toolbar}>
-      <div className={styles.rowStandard}>
-        {/* Menus de Texto (Arquivo, Editar...) - Estáticos por enquanto */}
-        {/* Esconde menu de texto no mobile para economizar espaço */}
-
-        <div>
-          <span>Arquivo</span>
-          <span>Exibir</span>
-          <span>Favoritos</span>
-          <span>Ferramentas</span>
-          <span>Ajuda</span>
-        </div>
-
-        <div className={styles.winLogoContainer}>
-          <img src={winLogo} alt="Windows" />
-        </div>
-      </div>
+      <AppMenuBar items={menuItems} rightSlot={winLogoSlot} />
 
       <div className={styles.rowButtons}>
         {/* Botões de Navegação - Placeholders Visuais */}

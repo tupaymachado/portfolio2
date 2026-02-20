@@ -4,6 +4,7 @@ import { KlondikeGame, type Source, type Hint } from "../logic/KlondikeGame";
 import { DraggableCard, type DragData } from "./DraggableCard";
 import { DroppableZone, type DropData } from "./DroppableZone";
 import { CardView } from "../../core/components/CardView";
+import AppMenuBar from "../../../../../components/AppMenuBar/AppMenuBar";
 import type { Card } from "../../core/logic/Card";
 import type { Suits } from "../../core/logic/Card";
 import styles from "./KlondikeBoard.module.css";
@@ -217,183 +218,174 @@ export default function KlondikeBoard() {
 
     return (
         <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-            <div className={styles.board}>
-                {/* ─── Toolbar ─── */}
-                <div className={styles.toolbar}>
-                    <button className={styles.toolbarButton} onClick={newGame}>
-                        🔄 Novo Jogo
-                    </button>
-                    <button
-                        className={styles.toolbarButton}
-                        onClick={handleUndo}
-                        disabled={!game.canUndo || autoCompleting}
-                    >
-                        ↩ Desfazer
-                    </button>
-                    <button
-                        className={styles.toolbarButton}
-                        onClick={handleHint}
-                        disabled={autoCompleting}
-                    >
-                        💡 Dica
-                    </button>
-                    <button
-                        className={`${styles.toolbarButton} ${game.canAutoComplete && !autoCompleting ? styles.autoCompleteReady : ''}`}
-                        onClick={handleAutoComplete}
-                        disabled={!game.canAutoComplete || autoCompleting}
-                    >
-                        ⚡ Auto-completar
-                    </button>
-                </div>
+            {/* gameContainer: flex column — AppMenuBar no topo, .board ocupa o resto */}
+            <div className={styles.gameContainer}>
 
+                {/* ─── Toolbar (fora do board verde, herda fundo da janela) ─── */}
+                <AppMenuBar items={[
+                    { label: 'Novo Jogo', onClick: newGame },
+                    { label: 'Desfazer', onClick: handleUndo, disabled: !game.canUndo || autoCompleting },
+                    { label: 'Dica', onClick: handleHint, disabled: autoCompleting },
+                    {
+                        label: 'Auto-completar',
+                        onClick: handleAutoComplete,
+                        disabled: !game.canAutoComplete || autoCompleting,
+                        highlight: game.canAutoComplete && !autoCompleting,
+                    },
+                ]} />
 
+                {/* ─── Board verde ─── */}
+                <div className={styles.board}>
 
-                {/* ─── Linha superior: Stock, Waste, Foundations ─── */}
-                <div className={styles.topRow}>
-                    <div className={styles.stockWaste}>
-                        <div
-                            className={`${styles.pile} ${styles.stock}`}
-                            onClick={drawFromStock}
-                        >
-                            {game.stockCount > 0
-                                ? <div className={styles.cardBack} />
-                                : <span className={styles.emptyPile}>↻</span>
-                            }
+                    {/* ─── Linha superior: Stock, Waste, Foundations ─── */}
+                    <div className={styles.topRow}>
+                        <div className={styles.stockWaste}>
+                            <div
+                                className={`${styles.pile} ${styles.stock}`}
+                                onClick={drawFromStock}
+                            >
+                                {game.stockCount > 0
+                                    ? <div className={styles.cardBack} />
+                                    : <span className={styles.emptyPile}>↻</span>
+                                }
+                            </div>
+
+                            <div className={`${styles.pile} ${isHinted({ kind: 'waste' }) ? styles.hintHighlight : ''}`}>
+                                {game.wastePile.length > 0 ? (
+                                    <DraggableCard
+                                        id="waste-top"
+                                        card={game.wastePile[game.wastePile.length - 1]!}
+                                        dragData={{
+                                            source: 'waste',
+                                            cards: [game.wastePile[game.wastePile.length - 1]!],
+                                        }}
+                                        onDoubleClick={() => moveToFoundation({ kind: 'waste' })}
+                                    />
+                                ) : (
+                                    <span className={styles.emptyPile} />
+                                )}
+                            </div>
                         </div>
 
-                        <div className={`${styles.pile} ${isHinted({ kind: 'waste' }) ? styles.hintHighlight : ''}`}>
-                            {game.wastePile.length > 0 ? (
-                                <DraggableCard
-                                    id="waste-top"
-                                    card={game.wastePile[game.wastePile.length - 1]!}
-                                    dragData={{
-                                        source: 'waste',
-                                        cards: [game.wastePile[game.wastePile.length - 1]!],
-                                    }}
-                                    onDoubleClick={() => moveToFoundation({ kind: 'waste' })}
-                                />
-                            ) : (
-                                <span className={styles.emptyPile} />
-                            )}
+                        <div className={styles.foundations}>
+                            {game.foundationPiles.map((foundation, i) => (
+                                <DroppableZone
+                                    key={`foundation-${i}`}
+                                    id={`foundation-${i}`}
+                                    dropData={{ target: 'foundation', foundationIndex: i }}
+                                    className={styles.pile}
+                                >
+                                    {foundation.topCard ? (
+                                        <DraggableCard
+                                            id={`foundation-card-${i}`}
+                                            card={foundation.topCard}
+                                            dragData={{
+                                                source: 'foundation',
+                                                foundationIndex: i,
+                                                cards: [foundation.topCard],
+                                            }}
+                                        />
+                                    ) : (
+                                        <span className={`${styles.emptyPile} ${styles.foundationEmpty}`}>
+                                            {suitSymbols[foundation.suitName]}
+                                        </span>
+                                    )}
+                                </DroppableZone>
+                            ))}
                         </div>
                     </div>
 
-                    <div className={styles.foundations}>
-                        {game.foundationPiles.map((foundation, i) => (
+                    {/* ─── Tableau: 7 colunas ─── */}
+                    <div className={styles.tableau}>
+                        {game.tableau.map((column, colIndex) => (
                             <DroppableZone
-                                key={`foundation-${i}`}
-                                id={`foundation-${i}`}
-                                dropData={{ target: 'foundation', foundationIndex: i }}
-                                className={styles.pile}
+                                key={`column-${colIndex}`}
+                                id={`column-${colIndex}`}
+                                dropData={{ target: 'column', colIndex }}
+                                className={`${styles.column} ${isHinted({ kind: 'column', index: colIndex }) ? styles.hintHighlight : ''}`}
+                                style={{ minHeight: `${columnHeight(column.columnCards)}px` }}
                             >
-                                {foundation.topCard ? (
-                                    <DraggableCard
-                                        id={`foundation-card-${i}`}
-                                        card={foundation.topCard}
-                                        dragData={{
-                                            source: 'foundation',
-                                            foundationIndex: i,
-                                            cards: [foundation.topCard],
-                                        }}
-                                    />
+                                {column.columnCards.length === 0 ? (
+                                    <div className={`${styles.pile} ${styles.emptyColumn}`} />
                                 ) : (
-                                    <span className={`${styles.emptyPile} ${styles.foundationEmpty}`}>
-                                        {suitSymbols[foundation.suitName]}
-                                    </span>
+                                    column.columnCards.map((card: Card, cardIndex: number) => {
+                                        let top = 0;
+                                        for (let k = 0; k < cardIndex; k++) {
+                                            top += column.columnCards[k]!.faceUp ? 30 : 12;
+                                        }
+                                        return (
+                                            <div
+                                                key={cardIndex}
+                                                className={styles.columnCard}
+                                                style={{ top: `${top}px` }}
+                                            >
+                                                <DraggableCard
+                                                    id={`col-${colIndex}-card-${cardIndex}`}
+                                                    card={card}
+                                                    dragData={{
+                                                        source: 'column',
+                                                        colIndex,
+                                                        cardIndex,
+                                                        cards: column.columnCards.slice(cardIndex) as Card[],
+                                                    }}
+                                                    onDoubleClick={cardIndex === column.columnCards.length - 1
+                                                        ? () => moveToFoundation({ kind: 'column', index: colIndex, stackFrom: cardIndex })
+                                                        : undefined
+                                                    }
+                                                />
+                                            </div>
+                                        );
+                                    })
                                 )}
                             </DroppableZone>
                         ))}
                     </div>
-                </div>
 
-                {/* ─── Tableau: 7 colunas ─── */}
-                <div className={styles.tableau}>
-                    {game.tableau.map((column, colIndex) => (
-                        <DroppableZone
-                            key={`column-${colIndex}`}
-                            id={`column-${colIndex}`}
-                            dropData={{ target: 'column', colIndex }}
-                            className={`${styles.column} ${isHinted({ kind: 'column', index: colIndex }) ? styles.hintHighlight : ''}`}
-                            style={{ minHeight: `${columnHeight(column.columnCards)}px` }}
-                        >
-                            {column.columnCards.length === 0 ? (
-                                <div className={`${styles.pile} ${styles.emptyColumn}`} />
-                            ) : (
-                                column.columnCards.map((card: Card, cardIndex: number) => {
-                                    let top = 0;
-                                    for (let k = 0; k < cardIndex; k++) {
-                                        top += column.columnCards[k]!.faceUp ? 30 : 12;
-                                    }
-                                    return (
-                                        <div
-                                            key={cardIndex}
-                                            className={styles.columnCard}
-                                            style={{ top: `${top}px` }}
-                                        >
-                                            <DraggableCard
-                                                id={`col-${colIndex}-card-${cardIndex}`}
-                                                card={card}
-                                                dragData={{
-                                                    source: 'column',
-                                                    colIndex,
-                                                    cardIndex,
-                                                    cards: column.columnCards.slice(cardIndex) as Card[],
-                                                }}
-                                                onDoubleClick={cardIndex === column.columnCards.length - 1
-                                                    ? () => moveToFoundation({ kind: 'column', index: colIndex, stackFrom: cardIndex })
-                                                    : undefined
-                                                }
-                                            />
-                                        </div>
-                                    );
-                                })
-                            )}
-                        </DroppableZone>
-                    ))}
-                </div>
+                    {/* ─── Vitória ─── */}
+                    {game.isWon && (
+                        <div className={styles.winMessage}>
+                            🎉 Você ganhou!
+                            <button onClick={newGame}>
+                                Novo Jogo
+                            </button>
+                        </div>
+                    )}
 
-                {/* ─── Vitória ─── */}
-                {game.isWon && (
-                    <div className={styles.winMessage}>
-                        🎉 Você ganhou!
-                        <button onClick={newGame}>
-                            Novo Jogo
-                        </button>
+                    {/* ─── Hint toast (position:absolute relativo ao board) ─── */}
+                    {activeHint && (
+                        <div className={styles.hintToast}>
+                            💡 {activeHint.description}
+                        </div>
+                    )}
+
+                </div>{/* fim .board */}
+
+                {/* ─── Flying card (auto-complete animation, position:fixed) ─── */}
+                {flyingCard && (
+                    <div
+                        className={styles.flyingCard}
+                        style={{
+                            left: flyingCard.phase === 'flying' ? flyingCard.targetX : flyingCard.x,
+                            top: flyingCard.phase === 'flying' ? flyingCard.targetY : flyingCard.y,
+                        }}
+                    >
+                        <CardView card={flyingCard.card} />
                     </div>
                 )}
-            </div>
 
-            {/* ─── Hint toast (posição fixa, não desloca o layout) ─── */}
-            {activeHint && (
-                <div className={styles.hintToast}>
-                    💡 {activeHint.description}
-                </div>
-            )}
+                <DragOverlay dropAnimation={null}>
+                    {activeDrag && (
+                        <div className={styles.dragStack}>
+                            {activeDrag.cards.map((card, i) => (
+                                <div key={i} style={{ marginTop: i === 0 ? 0 : -90 }}>
+                                    <CardView card={card} />
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </DragOverlay>
 
-            {/* ─── Flying card (auto-complete animation) ─── */}
-            {flyingCard && (
-                <div
-                    className={styles.flyingCard}
-                    style={{
-                        left: flyingCard.phase === 'flying' ? flyingCard.targetX : flyingCard.x,
-                        top: flyingCard.phase === 'flying' ? flyingCard.targetY : flyingCard.y,
-                    }}
-                >
-                    <CardView card={flyingCard.card} />
-                </div>
-            )}
-
-            <DragOverlay dropAnimation={null}>
-                {activeDrag && (
-                    <div className={styles.dragStack}>
-                        {activeDrag.cards.map((card, i) => (
-                            <div key={i} style={{ marginTop: i === 0 ? 0 : -90 }}>
-                                <CardView card={card} />
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </DragOverlay>
+            </div>{/* fim .gameContainer */}
         </DndContext>
     );
 }
