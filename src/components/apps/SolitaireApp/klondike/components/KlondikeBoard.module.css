@@ -5,6 +5,7 @@
     gap: 24px;
     padding: 24px;
     min-height: 100%;
+    position: relative;
     background: linear-gradient(145deg, #0d5e2b, #0a4a22, #073d1b);
     font-family: 'Georgia', serif;
 }
@@ -193,7 +194,7 @@
 }
 
 .hintToast {
-    position: fixed;
+    position: absolute;
     bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
@@ -206,6 +207,7 @@
     z-index: 50;
     animation: toastIn 0.3s ease;
     pointer-events: none;
+    white-space: nowrap;
 }
 
 @keyframes hintPulse {
@@ -251,5 +253,36 @@
 
     to {
         opacity: 1;
+    }
+}
+
+/* ─── Mobile layout ───────────────────────────── */
+@media (max-width: 680px) {
+    .board {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    /* Stock+Waste em cima, Foundations embaixo (row dedicado) */
+    .topRow {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .stockWaste {
+        justify-content: center;
+    }
+
+    .foundations {
+        justify-content: center;
+    }
+
+    /* Tableau: grid 4 colunas, 3 últimas quebram para 2ª linha */
+    .tableau {
+        display: grid;
+        grid-template-columns: repeat(4, 80px);
+        gap: 8px;
+        justify-content: center;
     }
 }

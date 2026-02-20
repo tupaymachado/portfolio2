@@ -123,7 +123,7 @@ export const PROGRAMS: ProgramDefinition[] = [
     component: LazyKlondikeBoard,
     isResizable: true,
     defaultSize: { width: 800, height: 660 },
-    minSize: { width: 700, height: 560 },
+    minSize: { width: 360, height: 500 },
   },
   {
     id: 'winamp',
