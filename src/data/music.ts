@@ -14,7 +14,7 @@ export interface Track {
 export const INITIAL_PLAYLIST: Track[] = [
     {
         metaData: { artist: 'DJ Mike Llama', title: "Llama Whippin' Intro" },
-        url: 'https://cdn.webamp.org/llama-2.91.mp3',
+        url: `${BASE_URL}/music/Winamp.mp3`,
         duration: 5.322286,
     },
     {
