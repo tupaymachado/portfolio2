@@ -30,4 +30,5 @@ export interface ProgramDefinition {
   defaultSize?: { width: number; height: number };
   minSize?: { width: number; height: number };
   isResizable: boolean; // Padrão 'true'
+  chromeless?: boolean; // Se true, renderiza sem o chrome do Window (title bar, bordas, resize handles)
 }

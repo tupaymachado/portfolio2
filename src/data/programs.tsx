@@ -31,9 +31,9 @@ import NotepadApp from '../components/apps/NotepadApp/NotepadApp';
 const AboutMeContent = () => <div style={{ padding: '10px' }}><h1>Sobre Mim</h1><p>Desenvolvedor apaixonado...</p></div>;
 const MyProjectsContent = () => <div style={{ padding: '10px' }}><h1>Meus Projetos</h1><p>Cards dos projetos aqui...</p></div>;
 import MinesweeperApp from '../components/apps/MinesweeperApp/MinesweeperApp';
-const WinampContent = () => <div style={{ padding: '10px' }}>Winamp em breve!</div>;
 const MsnContent = () => <div style={{ padding: '10px' }}>MSN em breve!</div>;
 const LazyKlondikeBoard = lazy(() => import('../components/apps/SolitaireApp/klondike/components/KlondikeBoard'));
+const LazyWebampApp = lazy(() => import('../components/apps/WebampApp/WebampApp'));
 
 // ============================================================================
 // COMPONENTES PESADOS (React.lazy - Code Splitting)
@@ -129,9 +129,9 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'winamp',
     name: 'Winamp',
     iconUrl: winampIcon,
-    component: () => <WinampContent />,
+    component: LazyWebampApp,
     isResizable: false,
-    defaultSize: { width: 300, height: 400 },
+    chromeless: true,
   }
 ];
 
