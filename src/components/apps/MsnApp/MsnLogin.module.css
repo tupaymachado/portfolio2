@@ -1,0 +1,85 @@
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: linear-gradient(180deg, #d6e7f9 0%, #fff 100%);
+}
+
+.header {
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.headerGradient {
+  height: 100%;
+  background: linear-gradient(90deg, #1a3c6e 0%, #3a7bd5 50%, #5ba3e6 100%);
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  gap: 8px;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+}
+
+.title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #1a3c6e;
+}
+
+.subtitle {
+  margin: 0 0 16px;
+  color: #555;
+  font-size: 11px;
+}
+
+.signInButton {
+  padding: 8px 24px;
+  background: linear-gradient(180deg, #fff 0%, #e8e8e8 100%);
+  border: 1px solid #003c74;
+  border-radius: 3px;
+  color: #003c74;
+  font-size: 11px;
+  font-family: 'Tahoma', sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  min-width: 160px;
+}
+
+.signInButton:hover {
+  background: linear-gradient(180deg, #e8f0fc 0%, #d0e0f8 100%);
+}
+
+.signInButton:active {
+  background: linear-gradient(180deg, #c0d0e8 0%, #b0c4de 100%);
+}
+
+.signInButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #c00;
+  font-size: 10px;
+  margin: 8px 0 0;
+}
+
+.footer {
+  padding: 8px;
+  text-align: center;
+  color: #888;
+  font-size: 9px;
+  border-top: 1px solid #ccd9ea;
+}

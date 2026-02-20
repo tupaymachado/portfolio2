@@ -31,9 +31,9 @@ import NotepadApp from '../components/apps/NotepadApp/NotepadApp';
 const AboutMeContent = () => <div style={{ padding: '10px' }}><h1>Sobre Mim</h1><p>Desenvolvedor apaixonado...</p></div>;
 const MyProjectsContent = () => <div style={{ padding: '10px' }}><h1>Meus Projetos</h1><p>Cards dos projetos aqui...</p></div>;
 import MinesweeperApp from '../components/apps/MinesweeperApp/MinesweeperApp';
-const MsnContent = () => <div style={{ padding: '10px' }}>MSN em breve!</div>;
 const LazyKlondikeBoard = lazy(() => import('../components/apps/SolitaireApp/klondike/components/KlondikeBoard'));
 const LazyWebampApp = lazy(() => import('../components/apps/WebampApp/WebampApp'));
+const LazyMsnApp = lazy(() => import('../components/apps/MsnApp/MsnApp'));
 
 // ============================================================================
 // COMPONENTES PESADOS (React.lazy - Code Splitting)
@@ -63,10 +63,9 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'msn',
     name: 'MSN Messenger',
     iconUrl: msnIcon,
-    // Factory function: JSX só é criado quando a janela abre
-    component: () => <MsnContent />,
-    defaultSize: { width: 800, height: 600 },
-    minSize: { width: 400, height: 300 },
+    component: LazyMsnApp,
+    defaultSize: { width: 340, height: 500 },
+    minSize: { width: 300, height: 400 },
     isResizable: true,
   },
   {
