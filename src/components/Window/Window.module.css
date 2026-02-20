@@ -8,6 +8,12 @@
   max-height: max-content;
 }
 
+.window.chromeless {
+  background-color: transparent;
+  box-shadow: none;
+  border: none;
+}
+
 .resizing {
   transition: all 0.2s ease-in-out;
 }
@@ -38,6 +44,10 @@
   background: linear-gradient(to right,
       var(--color-title-bar-active-start),
       var(--color-title-bar-active-end));
+}
+
+.window.chromeless .titleBar {
+  display: none;
 }
 
 .window.active {
@@ -98,6 +108,17 @@
   /* border-bottom: 2px solid var(--color-title-bar-inactive-start); */
   border-right: 2px solid var(--color-title-bar-inactive-end);
   border-left: 2px solid var(--color-title-bar-inactive-start);
+}
+
+.window.chromeless .windowBody {
+  height: 100%;
+  border: none;
+  padding: 0;
+  overflow: visible;
+}
+
+.window.chromeless .windowBody::after {
+  display: none;
 }
 
 .windowBody::after {

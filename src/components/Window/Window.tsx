@@ -209,7 +209,7 @@ export default function Window({ instanceId, programId }: WindowProps) {
 
   return (
     <div
-      className={`${styles.window} ${isActive ? styles.active : ''} ${instance.isMaximized ? styles.maximized : ''}`}
+      className={`${styles.window} ${isActive ? styles.active : ''} ${instance.isMaximized ? styles.maximized : ''} ${program.chromeless ? styles.chromeless : ''}`}
       style={{
         top: instance.position.y,
         left: instance.position.x,
