@@ -6,13 +6,33 @@
 }
 
 .header {
-  height: 60px;
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: linear-gradient(180deg, #d2dbee 0%, #fff 100%);
 }
 
-.headerGradient {
-  height: 100%;
-  background: linear-gradient(90deg, #1a3c6e 0%, #3a7bd5 50%, #5ba3e6 100%);
+.headerText {
+  font-weight: bold;
+  color: #1a3c6e;
+}
+
+.logoContainer {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #003c74;
+  border-radius: 4px;
+  padding: 4px;
+  background-color: #dae2f1;
+}
+
+.logoTitle {
+  width: 36px;
+  object-fit: contain;
 }
 
 .body {
@@ -23,6 +43,7 @@
   justify-content: center;
   padding: 20px;
   gap: 8px;
+  background: linear-gradient(180deg, #fff 0%, #d0d5df 10%, #CED9F1 50%, #d0d5df 60%, #fff 100%);
 }
 
 .logo {
