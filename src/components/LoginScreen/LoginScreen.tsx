@@ -22,6 +22,17 @@ export default function LoginScreen() {
     const [isLoading, setIsLoading] = useState(false);
     const [loadingProfile, setLoadingProfile] = useState<UserProfile | null>(null);
 
+    // Em dev, pula a tela de login automaticamente
+    useEffect(() => {
+        if (!import.meta.env.DEV) return;
+
+        let profile = profiles[0];
+        if (!profile) {
+            profile = createProfile('Dev', AVATAR_OPTIONS[0]);
+        }
+        login(profile.id);
+    }, []);
+
     const handleLogin = (profile: UserProfile) => {
         // Inicia a animação de welcome
         setLoadingProfile(profile);

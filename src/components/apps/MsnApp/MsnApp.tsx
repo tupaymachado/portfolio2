@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { onAuthStateChanged, type User } from 'firebase/auth';
+import { onAuthStateChanged, signInAnonymously, type User } from 'firebase/auth';
 import { auth } from '../../../config/firebase';
 import MsnLogin from './MsnLogin';
 import MsnContactList from './MsnContactList';
@@ -21,6 +21,12 @@ export default function MsnApp() {
       setScreen(user ? 'contacts' : 'login');
       setIsLoading(false);
     });
+
+    // Em dev, faz login anônimo automático para pular a tela de login
+    if (import.meta.env.DEV && !auth.currentUser) {
+      signInAnonymously(auth);
+    }
+
     return unsubscribe;
   }, []);
 

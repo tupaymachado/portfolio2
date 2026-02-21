@@ -14,6 +14,7 @@ export default function Taskbar() {
   const openWindows = useWindowStore(useShallow(state => state.openWindows));
   const activeWindowId = useWindowStore(state => state.activeWindowId);
   const handleTaskbarClick = useWindowStore(state => state.handleTaskbarClick);
+  const closeWindow = useWindowStore(state => state.closeWindow);
   const deselectAllWindows = useWindowStore(state => state.deselectAllWindows);
 
   const handleTaskbarContextMenu = (e: React.MouseEvent) => {
@@ -58,6 +59,13 @@ export default function Taskbar() {
               title={program.name}
               iconUrl={program.iconUrl}
               onClick={() => handleTaskbarClick(win.id)}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                openContextMenu(e.clientX, e.clientY, [
+                  { label: 'Fechar', onClick: () => closeWindow(win.id) },
+                ]);
+              }}
               isActive={win.id === activeWindowId && !win.isMinimized}
             />
           );

@@ -51,7 +51,7 @@ export const useUserStore = create<UserState>()(
 
             createProfile: (name, avatarUrl) => {
                 const newProfile: UserProfile = {
-                    id: crypto.randomUUID(),
+                    id: crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
                     name,
                     avatarUrl,
                     createdAt: Date.now(),

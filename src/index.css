@@ -85,6 +85,14 @@ button {
 
 html, body, #root {
   height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+html {
+  /* Impede o scroll que aciona hide/show da address bar no mobile */
+  position: fixed;
+  width: 100%;
 }
 
 body {
