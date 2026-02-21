@@ -81,7 +81,7 @@ export default function MsnChatWindow({ user, roomId, onBack }: MsnChatWindowPro
 
   // Auto-scroll para a última mensagem
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
   }, [messages]);
 
   const sendMessage = () => {
