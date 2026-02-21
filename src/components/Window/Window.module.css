@@ -105,9 +105,12 @@
   height: calc(100% - 25px);
   padding-bottom: 2px;
   overflow-y: auto;
-  /* border-bottom: 2px solid var(--color-title-bar-inactive-start); */
   border-right: 2px solid var(--color-title-bar-inactive-end);
   border-left: 2px solid var(--color-title-bar-inactive-start);
+  border-bottom: 2px solid;
+  border-image: linear-gradient(to right,
+      var(--color-title-bar-active-start),
+      var(--color-title-bar-active-end)) 1;
 }
 
 .window.chromeless .windowBody {
@@ -121,22 +124,9 @@
   display: none;
 }
 
-.windowBody::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
 
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(to right,
-      var(--color-title-bar-active-start),
-      var(--color-title-bar-active-end));
-
-}
 
 .windowBody.active {
-  /*   border-bottom: 2px solid var(--color-title-bar-active-start);*/
   border-right: 2px solid var(--color-title-bar-active-end);
   border-left: 2px solid var(--color-title-bar-active-start);
 }

@@ -117,7 +117,7 @@ export const PROGRAMS: ProgramDefinition[] = [
   },
   {
     id: 'solitaire',
-    name: 'Solitaire',
+    name: 'Paciência',
     iconUrl: solitaireIcon,
     component: LazyKlondikeBoard,
     isResizable: true,

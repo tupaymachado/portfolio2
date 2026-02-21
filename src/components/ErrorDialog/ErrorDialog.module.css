@@ -1,0 +1,101 @@
+@import '../../components/Window/Window.module.css';
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Fundo sutil para bloquear interações, comum em modais */
+    background-color: transparent;
+    pointer-events: auto;
+}
+
+.dialogWindow {
+    /* Herda as propriedades cruciais da Window (.window) para garantir a borda e sombras */
+    position: relative;
+    width: 400px;
+    min-height: 150px;
+    max-width: 90vw;
+    background-color: var(--color-background-ui);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+    /* A titleBar de window tem bordas aplicadas na .window */
+    border-right: 2px solid var(--color-title-bar-active-end);
+    border-left: 2px solid var(--color-title-bar-active-start);
+    border-bottom: 2px solid var(--color-title-bar-active-end);
+    border-top: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.dialogBody {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 24px;
+    flex: 1;
+}
+
+.contentRow {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 1;
+}
+
+.icon {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    image-rendering: auto;
+    /* Mantendo os ícones suaves ou pixelados dependendo do que vamos usar */
+}
+
+.message {
+    font-family: Tahoma, 'Trebuchet MS', sans-serif;
+    font-size: 11px;
+    color: var(--color-text-default);
+    margin-top: 8px;
+    /* Alinhar com o centro ótico do ícone dependendo da quantidade de texto */
+    line-height: 1.4;
+    white-space: pre-wrap;
+    /* Preserva as quebras de linha caso passemos textos formatados */
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.okButton {
+    min-width: 75px;
+    height: 23px;
+    font-family: Tahoma, 'Trebuchet MS', sans-serif;
+    font-size: 11px;
+    color: var(--color-text-default);
+    background-color: var(--color-background-ui);
+
+    /* Efeito de botão clássico do Windows */
+    border: 1px solid var(--color-button-shadow-very-dark);
+    box-shadow:
+        inset 1px 1px 0px #fff,
+        inset -1px -1px 0px var(--color-button-shadow-dark);
+
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.okButton:active {
+    box-shadow:
+        inset 1px 1px 0px var(--color-button-shadow-dark),
+        inset -1px -1px 0px #fff;
+    padding-top: 1px;
+    padding-left: 1px;
+}
