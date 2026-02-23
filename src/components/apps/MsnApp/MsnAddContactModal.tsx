@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { msnUserService } from '../../../services/msnUserService';
 import styles from './MsnAddContactModal.module.css';
-import userIcon from '../../../assets/icons/msn-user.webp';
+import userIcon from '../../../assets/icons/msn.webp';
 
 interface MsnAddContactModalProps {
     isOpen: boolean;

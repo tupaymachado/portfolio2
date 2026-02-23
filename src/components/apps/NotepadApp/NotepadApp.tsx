@@ -4,6 +4,9 @@ import NotepadMenuBar from './NotepadMenuBar';
 import { useWindowContext } from '../../../stores/useWindowStore';
 import { useWindowStore } from '../../../stores/useWindowStore';
 import { useFileSystemStore } from '../../../stores/useFileSystemStore';
+import ErrorDialog from '../../ErrorDialog/ErrorDialog';
+// Informational icon for saving
+import infoIcon from '../../../assets/icons/app.webp';
 
 export default function NotepadApp() {
     const { instanceId } = useWindowContext();
@@ -18,6 +21,7 @@ export default function NotepadApp() {
     const getItem = useFileSystemStore(state => state.getItem);
     const createFile = useFileSystemStore(state => state.createFile);
     const updateFileContent = useFileSystemStore(state => state.updateFileContent);
+    const getPath = useFileSystemStore(state => state.getPath);
 
     // Estado local
     const [content, setContent] = useState('');
@@ -25,6 +29,8 @@ export default function NotepadApp() {
     const [fileId, setFileId] = useState<string | null>(null);
     const [wordWrap, setWordWrap] = useState(true);
     const [cursorPos, setCursorPos] = useState({ line: 1, col: 1 });
+    const [showSaveDialog, setShowSaveDialog] = useState(false);
+    const [saveDialogMessage, setSaveDialogMessage] = useState('');
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     // Carrega arquivo inicial se existir
@@ -64,14 +70,20 @@ export default function NotepadApp() {
         if (fileId) {
             // Atualiza arquivo existente
             updateFileContent(fileId, content);
+            const path = getPath(fileId);
+            setSaveDialogMessage(`Arquivo salvo em:\n${path}`);
+            setShowSaveDialog(true);
         } else {
             // Cria novo arquivo em "Meus Documentos"
             const name = fileName === 'Sem título' ? 'Sem título.txt' : fileName;
             const newId = createFile('my-documents', name, 'notepad', content, 'txt');
             setFileId(newId);
             setFileName(name);
+            const path = getPath(newId);
+            setSaveDialogMessage(`Arquivo salvo em:\n${path}`);
+            setShowSaveDialog(true);
         }
-    }, [fileId, content, fileName, createFile, updateFileContent]);
+    }, [fileId, content, fileName, createFile, updateFileContent, getPath]);
 
     // Salvar como (sempre cria novo)
     const handleSaveAs = useCallback(() => {
@@ -80,7 +92,10 @@ export default function NotepadApp() {
         const newId = createFile('my-documents', finalName, 'notepad', content, 'txt');
         setFileId(newId);
         setFileName(finalName);
-    }, [fileName, content, createFile]);
+        const path = getPath(newId);
+        setSaveDialogMessage(`Arquivo salvo em:\n${path}`);
+        setShowSaveDialog(true);
+    }, [fileName, content, createFile, getPath]);
 
     // Novo arquivo
     const handleNew = useCallback(() => {
@@ -146,6 +161,14 @@ export default function NotepadApp() {
                     Ln {cursorPos.line}, Col {cursorPos.col}
                 </span>
             </div>
+
+            <ErrorDialog
+                isOpen={showSaveDialog}
+                title="Notepad"
+                message={saveDialogMessage}
+                onClose={() => setShowSaveDialog(false)}
+                iconUrl={infoIcon}
+            />
         </div>
     );
 }
