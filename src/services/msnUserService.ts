@@ -1,5 +1,6 @@
-import { ref, get, set, update, serverTimestamp } from 'firebase/database';
-import { db } from '../config/firebase';
+import { ref as rtdbRef, update as rtdbUpdate, serverTimestamp as rtdbServerTimestamp } from 'firebase/database';
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp as firestoreServerTimestamp, collection, getDocs, query, where } from 'firebase/firestore';
+import { db, firestoreDB } from '../config/firebase';
 
 export interface MsnUser {
     uid: string;
@@ -8,7 +9,7 @@ export interface MsnUser {
     photoURL: string;
     personalMessage: string;
     status: 'online' | 'offline' | 'busy' | 'away' | 'brb';
-    lastSeen: number | object;
+    lastSeen: any;
 }
 
 export const msnUserService = {
@@ -20,61 +21,91 @@ export const msnUserService = {
         photoURL: string,
         initialStatus: string = 'online'
     ) {
-        const userRef = ref(db, `users/${uid}`);
-        const snapshot = await get(userRef);
+        // 1. SYNC FIRESTORE PROFILE
+        const userDocRef = doc(firestoreDB, `users/${uid}`);
+        const snapshot = await getDoc(userDocRef);
 
         if (!snapshot.exists()) {
-            // Create new user profile
-            await set(userRef, {
+            await setDoc(userDocRef, {
                 email,
                 displayName,
                 photoURL,
                 personalMessage: '',
                 status: initialStatus,
-                lastSeen: serverTimestamp()
+                lastSeen: firestoreServerTimestamp()
             });
+
+            // Automatically add Tupay as a contact for new users
+            if (email !== 'tupay.machado@gmail.com') {
+                try {
+                    await msnUserService.addContact(uid, 'tupay.machado@gmail.com');
+                } catch (e) {
+                    console.warn("Não foi possível adicionar Tupay automaticamente:", e);
+                }
+            }
         } else {
-            // Update status and last seen
-            await update(userRef, {
+            await updateDoc(userDocRef, {
                 status: initialStatus,
-                lastSeen: serverTimestamp()
+                lastSeen: firestoreServerTimestamp()
             });
         }
+
+        // 2. SYNC RTDB PRESENCE (for backward compatibility if needed, though MsnChatWindow handles it. Let's do it here too just in case)
+        const presenceRef = rtdbRef(db, `presence/${uid}`);
+        await rtdbUpdate(presenceRef, {
+            name: displayName,
+            photoURL,
+            status: initialStatus,
+            lastSeen: rtdbServerTimestamp()
+        });
     },
 
     async updateUserProfile(uid: string, updates: Partial<MsnUser>) {
-        const userRef = ref(db, `users/${uid}`);
-        await update(userRef, updates);
+        const userDocRef = doc(firestoreDB, `users/${uid}`);
+        await updateDoc(userDocRef, updates);
+
+        // Also update RTDB if name or photoURL changed, to keep presence in sync
+        if (updates.displayName || updates.photoURL) {
+            const presenceRef = rtdbRef(db, `presence/${uid}`);
+            const rtdbUpdates: any = {};
+            if (updates.displayName) rtdbUpdates.name = updates.displayName;
+            if (updates.photoURL) rtdbUpdates.photoURL = updates.photoURL;
+            await rtdbUpdate(presenceRef, rtdbUpdates);
+        }
     },
 
     // Update status (online, offline, etc)
     async updateStatus(uid: string, status: string) {
-        const userRef = ref(db, `users/${uid}`);
-        await update(userRef, {
+        // Update Firestore
+        const userDocRef = doc(firestoreDB, `users/${uid}`);
+        await updateDoc(userDocRef, {
             status,
-            lastSeen: serverTimestamp()
+            lastSeen: firestoreServerTimestamp()
+        });
+
+        // Update RTDB Presence
+        const presenceRef = rtdbRef(db, `presence/${uid}`);
+        await rtdbUpdate(presenceRef, {
+            status,
+            lastSeen: rtdbServerTimestamp()
         });
     },
 
     // Add contact to user's contact list
     async addContact(userUid: string, contactEmail: string) {
-        // 1. Find user by email
-        const usersRef = ref(db, 'users');
-        const snapshot = await get(usersRef);
+        // 1. Find user by email in Firestore
+        const usersRef = collection(firestoreDB, 'users');
+        const q = query(usersRef, where('email', '==', contactEmail));
+        const querySnapshot = await getDocs(q);
 
-        if (!snapshot.exists()) {
-            throw new Error('Nenhum usuário encontrado na base de dados.');
+        if (querySnapshot.empty) {
+            throw new Error('Usuário não encontrado com esse email.');
         }
 
-        const users = snapshot.val();
         let contactUid: string | null = null;
-
-        for (const [uid, data] of Object.entries(users)) {
-            if ((data as MsnUser).email === contactEmail) {
-                contactUid = uid;
-                break;
-            }
-        }
+        querySnapshot.forEach((doc) => {
+            contactUid = doc.id;
+        });
 
         if (!contactUid) {
             throw new Error('Usuário não encontrado com esse email.');
@@ -84,18 +115,18 @@ export const msnUserService = {
             throw new Error('Você não pode adicionar a si mesmo.');
         }
 
-        // 2. Add to user's contacts node
-        const contactRef = ref(db, `contacts/${userUid}/${contactUid}`);
-        await set(contactRef, {
-            group: 'Outros Contatos', // Default group
-            addedAt: serverTimestamp()
+        // 2. Add to user's contacts subcollection
+        const contactDocRef = doc(firestoreDB, `users/${userUid}/contacts/${contactUid}`);
+        await setDoc(contactDocRef, {
+            group: 'Outros Contatos',
+            addedAt: firestoreServerTimestamp()
         });
 
         // Auto-accept by adding the user to the contact's list too
-        const reverseContactRef = ref(db, `contacts/${contactUid}/${userUid}`);
-        await set(reverseContactRef, {
+        const reverseContactDocRef = doc(firestoreDB, `users/${contactUid}/contacts/${userUid}`);
+        await setDoc(reverseContactDocRef, {
             group: 'Outros Contatos',
-            addedAt: serverTimestamp()
+            addedAt: firestoreServerTimestamp()
         });
 
         return contactUid;

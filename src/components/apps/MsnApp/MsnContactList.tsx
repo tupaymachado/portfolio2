@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import type { User } from 'firebase/auth';
 import { ref, onValue } from 'firebase/database';
-import { db } from '../../../config/firebase';
+import { doc, onSnapshot, collection } from 'firebase/firestore';
+import { db, firestoreDB } from '../../../config/firebase';
 import { useWebampStore } from '../../../stores/useWebampStore';
 import { msnUserService } from '../../../services/msnUserService';
 import MsnProfileModal from './MsnProfileModal';
 import MsnAddContactModal from './MsnAddContactModal';
 import styles from './MsnContactList.module.css';
 import msnLogoTitle from '../../../assets/icons/msn-logo-title.webp'
+import msnFigureOnline from '../../../assets/icons/msn-online.webp'
+import msnFigureOffline from '../../../assets/icons/msn-offline.webp'
 
 interface MsnContactListProps {
   user: User;
@@ -37,11 +40,11 @@ interface ContactData {
 
 const ROOMS = [
   { id: 'global', name: 'Sala Global', emoji: '\uD83C\uDF0D' },
-  { id: 'tupay', name: 'Falar com o Tupay', emoji: '\uD83D\uDCBC' },
 ];
 
 export default function MsnContactList({ user, initialStatus, onOpenChat, onLogout }: MsnContactListProps) {
   const [onlineCount, setOnlineCount] = useState(0);
+  const [presenceMap, setPresenceMap] = useState<PresenceData>({});
   const [currentStatus, setCurrentStatus] = useState(initialStatus);
   const [personalMessage, setPersonalMessage] = useState('');
   const [displayName, setDisplayName] = useState(user.displayName || '');
@@ -49,6 +52,7 @@ export default function MsnContactList({ user, initialStatus, onOpenChat, onLogo
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isAddContactOpen, setIsAddContactOpen] = useState(false);
   const [contacts, setContacts] = useState<ContactData[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Obter música atual do Webamp
   const currentTrack = useWebampStore(state => state.currentTrack);
@@ -61,14 +65,16 @@ export default function MsnContactList({ user, initialStatus, onOpenChat, onLogo
       if (data) {
         const count = Object.values(data).filter(p => p.status === 'online').length;
         setOnlineCount(count);
+        setPresenceMap(data);
       } else {
         setOnlineCount(0);
+        setPresenceMap({});
       }
     });
 
-    const userRef = ref(db, `users/${user.uid}`);
-    const unsubscribeUser = onValue(userRef, (snapshot) => {
-      const data = snapshot.val();
+    const userDocRef = doc(firestoreDB, `users/${user.uid}`);
+    const unsubscribeUser = onSnapshot(userDocRef, (docSnap) => {
+      const data = docSnap.data();
       if (data) {
         setDisplayName(data.displayName || user.displayName || '');
         setPhotoURL(data.photoURL || user.photoURL || '');
@@ -77,26 +83,28 @@ export default function MsnContactList({ user, initialStatus, onOpenChat, onLogo
     });
 
     // Listen to contacts
-    const contactsRef = ref(db, `contacts/${user.uid}`);
-    const unsubscribeContacts = onValue(contactsRef, async (snapshot) => {
-      const contactsData = snapshot.val();
-      if (!contactsData) {
+    const contactsRef = collection(firestoreDB, `users/${user.uid}/contacts`);
+    const unsubscribeContacts = onSnapshot(contactsRef, async (snapshot) => {
+      if (snapshot.empty) {
         setContacts([]);
         return;
       }
 
       // We need to fetch each contact's profile info from users/
       const loadedContacts: ContactData[] = [];
-      const { get } = await import('firebase/database'); // Lazy load get just for this or move it up
+      const { getDoc, doc } = await import('firebase/firestore');
 
-      for (const [contactUid, contactMeta] of Object.entries(contactsData)) {
-        const uRef = ref(db, `users/${contactUid}`);
-        const uSnap = await get(uRef);
+      for (const contactDoc of snapshot.docs) {
+        const contactUid = contactDoc.id;
+        const contactMeta = contactDoc.data();
+
+        const uRef = doc(firestoreDB, `users/${contactUid}`);
+        const uSnap = await getDoc(uRef);
         if (uSnap.exists()) {
-          const uData = uSnap.val();
+          const uData = uSnap.data();
           loadedContacts.push({
             uid: contactUid,
-            group: (contactMeta as any)?.group || 'Outros Contatos',
+            group: contactMeta.group || 'Outros Contatos',
             email: uData.email,
             displayName: uData.displayName,
             photoURL: uData.photoURL,
@@ -137,6 +145,43 @@ export default function MsnContactList({ user, initialStatus, onOpenChat, onLogo
       });
     }
   };
+
+  const devMockContacts: ContactData[] = import.meta.env.DEV ? [
+    ...Array.from({ length: 10 }).map((_, i) => ({
+      uid: `mock-online-${i}`,
+      group: 'Outros Contatos',
+      email: `online${i}@dev.local`,
+      displayName: `Amigo Online ${i} (Mock)`,
+      photoURL: `https://avatars.githubusercontent.com/u/${i + 1000}?v=4`,
+      personalMessage: `Testando MSN msg ${i}...`,
+      status: 'online',
+    })),
+    ...Array.from({ length: 10 }).map((_, i) => ({
+      uid: `mock-offline-${i}`,
+      group: 'Outros Contatos',
+      email: `offline${i}@dev.local`,
+      displayName: `Amigo Offline ${i} (Mock)`,
+      photoURL: `https://avatars.githubusercontent.com/u/${i + 2000}?v=4`,
+      personalMessage: '',
+      status: 'offline',
+    }))
+  ] : [];
+
+  const computedContacts = contacts.map(c => ({
+    ...c,
+    status: presenceMap[c.uid]?.status || 'offline'
+  }));
+
+  const allContacts = [...computedContacts, ...devMockContacts];
+
+  const filteredContacts = allContacts.filter(c => {
+    if (!searchTerm) return true;
+    const lowerSearch = searchTerm.toLowerCase();
+    return c.displayName.toLowerCase().includes(lowerSearch) || c.email.toLowerCase().includes(lowerSearch);
+  });
+
+  const onlineContacts = filteredContacts.filter(c => c.status !== 'offline');
+  const offlineContacts = filteredContacts.filter(c => c.status === 'offline');
 
   return (
     <div className={styles.contactList}>
@@ -227,28 +272,12 @@ export default function MsnContactList({ user, initialStatus, onOpenChat, onLogo
         className={styles.addContactArea}
         onClick={() => setIsAddContactOpen(true)}
       >
-        <span className={styles.addContactIcon}>👤+</span>
+        <span className={styles.addContactIcon}><img src={msnFigureOnline} />+</span>
         <span>Adicionar um Contato</span>
       </div>
 
       {/* Lista de salas */}
       <div className={styles.roomList}>
-        <div className={styles.groupHeader}>
-          Contatos ({contacts.filter(c => c.status !== 'offline').length}/{contacts.length})
-        </div>
-
-        {contacts.map(contact => (
-          <div key={contact.uid} className={styles.contactItem} title={contact.email}>
-            <div className={`${styles.contactStatus} ${styles[contact.status]}`}></div>
-            <div className={styles.contactInfo}>
-              <span className={styles.contactName}>{contact.displayName}</span>
-              {contact.personalMessage && (
-                <span className={styles.contactMessage}> - {contact.personalMessage}</span>
-              )}
-            </div>
-          </div>
-        ))}
-
         <div className={styles.groupHeader} style={{ marginTop: 8 }}>
           Salas de Bate-Papo ({onlineCount} online)
         </div>
@@ -266,10 +295,64 @@ export default function MsnContactList({ user, initialStatus, onOpenChat, onLogo
             )}
           </button>
         ))}
+
+        <div className={styles.groupHeader}>
+          Online ({onlineContacts.length})
+        </div>
+
+        {onlineContacts.map(contact => (
+          <div key={contact.uid} className={styles.contactItem} title={contact.email}>
+            <img
+              src={contact.photoURL || msnFigureOnline}
+              className={styles.contactStatusIcon}
+              alt={contact.status}
+              referrerPolicy="no-referrer"
+            />
+            <div className={styles.contactInfo}>
+              <span className={styles.contactName}>
+                {contact.displayName} <span className={styles.contactStatusText}>({contact.status})</span>
+              </span>
+              {contact.personalMessage && (
+                <span className={styles.contactMessage}> - {contact.personalMessage}</span>
+              )}
+            </div>
+          </div>
+        ))}
+
+        <div className={styles.groupHeader}>
+          Offline ({offlineContacts.length})
+        </div>
+
+        {offlineContacts.map(contact => (
+          <div key={contact.uid} className={styles.contactItem} title={contact.email}>
+            <img
+              src={msnFigureOffline}
+              className={styles.contactStatusIcon}
+              alt={contact.status}
+            />
+            <div className={styles.contactInfo}>
+              <span className={styles.contactName}>
+                {contact.displayName} <span className={styles.contactStatusText}>({contact.status})</span>
+              </span>
+              {contact.personalMessage && (
+                <span className={styles.contactMessage}> - {contact.personalMessage}</span>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Footer */}
       <div className={styles.footer}>
+        <div className={styles.searchContainer}>
+          <input
+            type="text"
+            className={styles.searchInput}
+            placeholder="Procurar contatos..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
         <button className={styles.logoutButton} onClick={onLogout}>
           Sair
         </button>
