@@ -4,6 +4,7 @@ import { auth } from '../../../config/firebase';
 import MsnLogin from './MsnLogin';
 import MsnContactList from './MsnContactList';
 import MsnChatWindow from './MsnChatWindow';
+import { msnUserService } from '../../../services/msnUserService';
 import styles from './MsnApp.module.css';
 
 export type MsnScreen = 'login' | 'contacts' | 'chat';
@@ -13,12 +14,44 @@ export default function MsnApp() {
   const [screen, setScreen] = useState<MsnScreen>('login');
   const [activeRoom, setActiveRoom] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [userStatus, setUserStatus] = useState<string>('online');
 
   // Escutar mudanças de auth do Firebase
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setFirebaseUser(user);
-      setScreen(user ? 'contacts' : 'login');
+      // Interceptar os usuários do DEV ou Anônimos para injetar dados fakes
+      if (user && import.meta.env.DEV && (user.isAnonymous || !user.displayName)) {
+        const mockedUser = Object.create(user);
+        mockedUser.displayName = 'Tupay (Dev)';
+        mockedUser.email = 'tupay@dev.local';
+        // Avatar padrão pro MSN se mockado
+        mockedUser.photoURL = 'https://github.com/tupaymachado.png';
+
+        msnUserService.syncUserOnLogin(
+          mockedUser.uid,
+          mockedUser.email,
+          mockedUser.displayName,
+          mockedUser.photoURL,
+          userStatus
+        );
+
+        setFirebaseUser(mockedUser);
+        setScreen('contacts');
+      } else if (user) {
+        msnUserService.syncUserOnLogin(
+          user.uid,
+          user.email || '',
+          user.displayName || 'Novo Usuário',
+          user.photoURL || '',
+          userStatus
+        );
+
+        setFirebaseUser(user);
+        setScreen('contacts');
+      } else {
+        setFirebaseUser(null);
+        setScreen('login');
+      }
       setIsLoading(false);
     });
 
@@ -41,6 +74,9 @@ export default function MsnApp() {
   };
 
   const handleLogout = () => {
+    if (firebaseUser) {
+      msnUserService.updateStatus(firebaseUser.uid, 'offline');
+    }
     auth.signOut();
     setScreen('login');
   };
@@ -52,11 +88,15 @@ export default function MsnApp() {
   return (
     <div className={styles.container}>
       {screen === 'login' && (
-        <MsnLogin />
+        <MsnLogin
+          status={userStatus}
+          onStatusChange={setUserStatus}
+        />
       )}
       {screen === 'contacts' && firebaseUser && (
         <MsnContactList
           user={firebaseUser}
+          initialStatus={userStatus}
           onOpenChat={handleOpenChat}
           onLogout={handleLogout}
         />

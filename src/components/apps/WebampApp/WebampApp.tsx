@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Webamp from 'webamp';
 import { useWindowContext, useWindowStore } from '../../../stores/useWindowStore';
+import { useWebampStore } from '../../../stores/useWebampStore';
 import { useShallow } from 'zustand/shallow';
 import { INITIAL_PLAYLIST } from '../../../data/music';
 
@@ -51,9 +52,29 @@ export default function WebampApp() {
       minimizeWindow(instanceId);
     });
 
+    const unsubTrackChange = webamp.onTrackDidChange((track) => {
+      // Usar setTimeout para evitar que a atualização de estado síncrona do React 
+      // interfira no ciclo interno do Webamp (ex: AudioContext ou event bubbling)
+      setTimeout(() => {
+        try {
+          if (track && track.metaData) {
+            const { artist, title } = track.metaData;
+            const displayName = artist && title ? `${artist} - ${title}` : (title || 'Desconhecido');
+            useWebampStore.getState().setCurrentTrack(displayName);
+          } else {
+            useWebampStore.getState().setCurrentTrack(null);
+          }
+        } catch (err) {
+          console.error("[WebampApp] Error in onTrackDidChange:", err);
+        }
+      }, 0);
+    });
+
     return () => {
       unsubClose();
       unsubMinimize();
+      unsubTrackChange();
+      useWebampStore.getState().setCurrentTrack(null);
       webampRef.current = null;
       setWebampEl(null);
       webamp.dispose();

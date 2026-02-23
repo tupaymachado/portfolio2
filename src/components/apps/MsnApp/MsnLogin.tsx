@@ -6,10 +6,15 @@ import msnLogo from '../../../assets/icons/msn-messenger.webp';
 import msnLogoTitle from '../../../assets/icons/msn-logo-title.webp'
 import AppMenuBar from '../../AppMenuBar/AppMenuBar'
 
-export default function MsnLogin() {
+// Interface for props
+interface MsnLoginProps {
+  status: string;
+  onStatusChange: (status: string) => void;
+}
+
+export default function MsnLogin({ status, onStatusChange }: MsnLoginProps) {
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [error, setError] = useState('');
-  const [status, setStatus] = useState('online');
 
   const handleGoogleLogin = async () => {
     setIsSigningIn(true);
@@ -61,7 +66,7 @@ export default function MsnLogin() {
             id="status-select"
             className={styles.statusSelect}
             value={status}
-            onChange={(e) => setStatus(e.target.value)}
+            onChange={(e) => onStatusChange(e.target.value)}
           >
             <option value="online">Online</option>
             <option value="busy">Ocupado</option>

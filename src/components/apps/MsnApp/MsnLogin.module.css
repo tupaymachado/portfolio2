@@ -18,6 +18,11 @@
   color: #1a3c6e;
 }
 
+.logoTitle {
+  width: 36px;
+  object-fit: contain;
+}
+
 .logoContainer {
   width: 72px;
   height: 72px;
@@ -28,11 +33,6 @@
   border-radius: 4px;
   padding: 4px;
   background-color: #dae2f1;
-}
-
-.logoTitle {
-  width: 36px;
-  object-fit: contain;
 }
 
 .body {
