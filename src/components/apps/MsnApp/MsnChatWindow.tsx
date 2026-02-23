@@ -1,14 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import type { User } from 'firebase/auth';
-import { ref, push, onChildAdded, query, limitToLast, serverTimestamp, set, onDisconnect } from 'firebase/database';
-import { db } from '../../../config/firebase';
+import { ref, push, onChildAdded, query, limitToLast, serverTimestamp } from 'firebase/database';
+import { db, firestoreDB } from '../../../config/firebase';
 import styles from './MsnChatWindow.module.css';
+import msnFigureOnline from '../../../assets/icons/msn-online.webp'
 
-interface MsnChatWindowProps {
-  user: User;
-  roomId: string;
-  onBack: () => void;
-}
+import { useWindowContext, useWindowStore } from '../../../stores/useWindowStore';
+import { auth } from '../../../config/firebase';
 
 interface ChatMessage {
   id: string;
@@ -17,46 +14,52 @@ interface ChatMessage {
   photoURL: string;
   text: string;
   timestamp: number | null;
+  type?: 'text' | 'nudge';
 }
 
 const ROOM_NAMES: Record<string, string> = {
   global: 'Sala Global',
-  tupay: 'Falar com o Tupay',
 };
 
-export default function MsnChatWindow({ user, roomId, onBack }: MsnChatWindowProps) {
+export default function MsnChatWindow() {
+  const { instanceId } = useWindowContext();
+  const windowState = useWindowStore(state => state.openWindows.find(w => w.id === instanceId));
+  const roomId = windowState?.initialFileId || 'global';
+  const user = auth.currentUser;
+
+  if (!user) return null;
+
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const roomName = ROOM_NAMES[roomId] || roomId;
 
-  // Registrar presença online
+  const [contactInfo, setContactInfo] = useState<{ displayName: string; email: string; photoURL: string } | null>(null);
+  const [isShaking, setIsShaking] = useState(false);
+  const [canNudge, setCanNudge] = useState(true);
+
+  // Buscar informações do contato (se não for global)
   useEffect(() => {
-    const presenceRef = ref(db, `presence/${user.uid}`);
-    set(presenceRef, {
-      name: user.displayName || 'Anônimo',
-      photoURL: user.photoURL || '',
-      status: 'online',
-      lastSeen: serverTimestamp(),
+    if (roomId === 'global') return;
+    import('firebase/firestore').then(async ({ doc, getDoc }) => {
+      const uRef = doc(firestoreDB, `users/${roomId}`);
+      const uSnap = await getDoc(uRef);
+      if (uSnap.exists()) {
+        const data = uSnap.data();
+        setContactInfo({ displayName: data.displayName, email: data.email, photoURL: data.photoURL });
+      }
     });
+  }, [roomId]);
 
-    // Marcar offline ao desconectar
-    onDisconnect(presenceRef).set({
-      name: user.displayName || 'Anônimo',
-      photoURL: user.photoURL || '',
-      status: 'offline',
-      lastSeen: serverTimestamp(),
-    });
-
-    return () => {
-      set(presenceRef, {
-        name: user.displayName || 'Anônimo',
-        photoURL: user.photoURL || '',
-        status: 'offline',
-        lastSeen: serverTimestamp(),
-      });
-    };
-  }, [user]);
+  // Atualizar título da janela OS
+  useEffect(() => {
+    if (roomId === 'global') {
+      useWindowStore.getState().updateWindowMeta(instanceId, { title: 'Sala Global - Bate-papo do MSN' });
+    } else if (contactInfo) {
+      const titleName = contactInfo.displayName || contactInfo.email;
+      useWindowStore.getState().updateWindowMeta(instanceId, { title: `${titleName} - Conversa` });
+    }
+  }, [contactInfo, roomId, instanceId]);
 
   // Escutar novas mensagens
   useEffect(() => {
@@ -72,12 +75,34 @@ export default function MsnChatWindow({ user, roomId, onBack }: MsnChatWindowPro
         photoURL: data.photoURL,
         text: data.text,
         timestamp: data.timestamp,
+        type: data.type || 'text',
       };
       setMessages(prev => [...prev, msg]);
+
+      // Handle nudge arriving (only if it's recent, not from history dump)
+      if (msg.type === 'nudge' && msg.timestamp) {
+        const isRecent = (Date.now() - msg.timestamp) < 5000;
+        if (isRecent) {
+          triggerNudgeEffect();
+        }
+      }
     });
 
     return () => unsubscribe();
   }, [roomId]);
+
+  const triggerNudgeEffect = () => {
+    // Tocar Som
+    const audio = new Audio('https://www.myinstants.com/media/sounds/nudge.mp3');
+    audio.play().catch(console.error);
+
+    // Tremer Janela
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 600);
+
+    // Trazer pro topo
+    useWindowStore.getState().bringToFront(instanceId);
+  };
 
   // Auto-scroll para a última mensagem
   useEffect(() => {
@@ -86,7 +111,7 @@ export default function MsnChatWindow({ user, roomId, onBack }: MsnChatWindowPro
 
   const sendMessage = () => {
     const text = inputText.trim();
-    if (!text) return;
+    if (!text || !user) return;
 
     const messagesRef = ref(db, `messages/${roomId}`);
     push(messagesRef, {
@@ -94,10 +119,29 @@ export default function MsnChatWindow({ user, roomId, onBack }: MsnChatWindowPro
       name: user.displayName || 'Anônimo',
       photoURL: user.photoURL || '',
       text,
+      type: 'text',
       timestamp: serverTimestamp(),
     });
 
     setInputText('');
+  };
+
+  const sendNudge = () => {
+    if (!user || !canNudge) return;
+
+    // Rate limit the nudge
+    setCanNudge(false);
+    setTimeout(() => setCanNudge(true), 10000); // 10s cooldown
+
+    const messagesRef = ref(db, `messages/${roomId}`);
+    push(messagesRef, {
+      uid: user.uid,
+      name: user.displayName || 'Anônimo',
+      photoURL: user.photoURL || '',
+      text: '',
+      type: 'nudge',
+      timestamp: serverTimestamp(),
+    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -107,69 +151,111 @@ export default function MsnChatWindow({ user, roomId, onBack }: MsnChatWindowPro
     }
   };
 
-  const formatTime = (timestamp: number | null) => {
-    if (!timestamp) return '';
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-  };
-
   return (
-    <div className={styles.chatWindow}>
-      {/* Toolbar */}
-      <div className={styles.toolbar}>
-        <button className={styles.backButton} onClick={onBack}>
-          &larr; Voltar
-        </button>
-        <span className={styles.roomTitle}>{roomName}</span>
+    <div className={`${styles.chatWindow} ${isShaking ? styles.shake : ''}`}>
+      {/* Menu Fictício Estilo MSN Clássico */}
+      <div className={styles.classicMenuBar}>
+        <span>Ficheiro</span>
+        <span>Editar</span>
+        <span>Acções</span>
+        <span>Ferramentas</span>
+        <span>Ajuda</span>
       </div>
 
-      {/* Área de mensagens */}
-      <div className={styles.messagesArea}>
-        {messages.length === 0 && (
-          <div className={styles.emptyState}>
-            Nenhuma mensagem ainda. Diga oi!
+      <div className={styles.mainLayout}>
+
+        {/* Lado Esquerdo: Bate-papo principal */}
+        <div className={styles.leftColumn}>
+
+          <div className={styles.chatHeader}>
+            <span className={styles.toLabel}>Para: </span>
+            <span className={styles.toValue}>
+              {roomId === 'global' ? roomName : contactInfo?.email || 'Carregando...'}
+            </span>
           </div>
-        )}
-        {messages.map(msg => (
-          <div
-            key={msg.id}
-            className={`${styles.message} ${msg.uid === user.uid ? styles.own : ''}`}
-          >
-            <img
-              src={msg.photoURL}
-              alt=""
-              className={styles.msgAvatar}
-              referrerPolicy="no-referrer"
-            />
-            <div className={styles.msgContent}>
-              <div className={styles.msgHeader}>
-                <span className={styles.msgName}>{msg.name}</span>
-                <span className={styles.msgTime}>{formatTime(msg.timestamp)}</span>
-              </div>
-              <p className={styles.msgText}>{msg.text}</p>
+
+          <div className={styles.messagesBox}>
+            <div className={styles.messagesArea}>
+              {messages.length === 0 && (
+                <div className={styles.emptyState}>Nenhuma mensagem ainda. Diga oi!</div>
+              )}
+              {messages.map(msg => (
+                <div key={msg.id} className={styles.messageItem}>
+                  <div className={styles.msgHeader}>
+                    <span className={styles.msgName}>{msg.name} diz:</span>
+                  </div>
+                  <div className={styles.msgBody}>
+                    {msg.type === 'nudge' ? (
+                      <p className={styles.nudgeText}>
+                        {msg.uid === user?.uid
+                          ? 'Você acaba de enviar uma chamadela!'
+                          : `${msg.name} acaba de enviar uma chamadela!`}
+                      </p>
+                    ) : (
+                      <p className={styles.msgText}>{msg.text}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
             </div>
           </div>
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
 
-      {/* Input */}
-      <div className={styles.inputArea}>
-        <textarea
-          className={styles.textInput}
-          value={inputText}
-          onChange={e => setInputText(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Digite uma mensagem..."
-          rows={2}
-        />
-        <button
-          className={styles.sendButton}
-          onClick={sendMessage}
-          disabled={!inputText.trim()}
-        >
-          Enviar
-        </button>
+          <div className={styles.inputSection}>
+            <div className={styles.formatToolbar}>
+              <button className={styles.formatBtn}><strong>A</strong></button>
+              <button className={styles.formatBtn}>😊</button>
+              <button className={styles.formatBtn}>🎙️ Clip de Voz</button>
+              <div className={styles.toolbarDivider}></div>
+              <button
+                className={styles.formatBtn}
+                onClick={sendNudge}
+                disabled={!canNudge}
+                title="Chamar a Atenção"
+              >
+                📳 Chamar Atenção
+              </button>
+            </div>
+
+            <div className={styles.inputInner}>
+              <textarea
+                className={styles.textInput}
+                value={inputText}
+                onChange={e => setInputText(e.target.value)}
+                onKeyDown={handleKeyDown}
+                rows={2}
+              />
+              <button
+                className={styles.sendButton}
+                onClick={sendMessage}
+                disabled={!inputText.trim()}
+              >
+                Enviar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Lado Direito: Avatares Grandes */}
+        <div className={styles.rightColumn}>
+          <div className={styles.avatarBox}>
+            <img
+              src={roomId === 'global' ? msnFigureOnline : (contactInfo?.photoURL || msnFigureOnline)}
+              className={styles.avatarImage}
+              alt="Contato"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+          <div className={styles.avatarBox}>
+            <img
+              src={user.photoURL || msnFigureOnline}
+              className={styles.avatarImage}
+              alt="Meu Avatar"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+        </div>
+
       </div>
     </div>
   );

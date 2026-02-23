@@ -19,6 +19,7 @@ import myNetworkIcon from '../assets/icons/my-network-places.webp';
 import controlPanelIcon from '../assets/icons/control-panel.webp';
 import searchIcon from '../assets/icons/search.webp';
 import runIcon from '../assets/icons/run.webp';
+import msnFigure from '../assets/icons/msn-online.webp'
 
 // ============================================================================
 // COMPONENTES LEVES (Factory Functions)
@@ -34,6 +35,7 @@ import MinesweeperApp from '../components/apps/MinesweeperApp/MinesweeperApp';
 const LazyKlondikeBoard = lazy(() => import('../components/apps/SolitaireApp/klondike/components/KlondikeBoard'));
 const LazyWebampApp = lazy(() => import('../components/apps/WebampApp/WebampApp'));
 const LazyMsnApp = lazy(() => import('../components/apps/MsnApp/MsnApp'));
+const LazyMsnChatWindow = lazy(() => import('../components/apps/MsnApp/MsnChatWindow'));
 
 // ============================================================================
 // COMPONENTES PESADOS (React.lazy - Code Splitting)
@@ -67,6 +69,16 @@ export const PROGRAMS: ProgramDefinition[] = [
     defaultSize: { width: 340, height: 500 },
     minSize: { width: 300, height: 400 },
     isResizable: true,
+  },
+  {
+    id: 'msn-chat',
+    name: 'Bate-papo do MSN',
+    iconUrl: msnFigure,
+    component: LazyMsnChatWindow,
+    defaultSize: { width: 500, height: 450 },
+    minSize: { width: 400, height: 350 },
+    isResizable: true,
+    hideFromStartMenu: true,
   },
   {
     id: 'explorer',

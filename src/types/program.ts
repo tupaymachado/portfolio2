@@ -31,4 +31,5 @@ export interface ProgramDefinition {
   minSize?: { width: number; height: number };
   isResizable: boolean; // Padrão 'true'
   chromeless?: boolean; // Se true, renderiza sem o chrome do Window (title bar, bordas, resize handles)
+  hideFromStartMenu?: boolean; // Se true, o app não aparece na lista de programas do menu Iniciar
 }

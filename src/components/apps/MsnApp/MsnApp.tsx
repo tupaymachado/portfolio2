@@ -3,7 +3,6 @@ import { onAuthStateChanged, signInAnonymously, type User } from 'firebase/auth'
 import { auth } from '../../../config/firebase';
 import MsnLogin from './MsnLogin';
 import MsnContactList from './MsnContactList';
-import MsnChatWindow from './MsnChatWindow';
 import { msnUserService } from '../../../services/msnUserService';
 import styles from './MsnApp.module.css';
 
@@ -12,7 +11,6 @@ export type MsnScreen = 'login' | 'contacts' | 'chat';
 export default function MsnApp() {
   const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
   const [screen, setScreen] = useState<MsnScreen>('login');
-  const [activeRoom, setActiveRoom] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [userStatus, setUserStatus] = useState<string>('online');
 
@@ -63,16 +61,6 @@ export default function MsnApp() {
     return unsubscribe;
   }, []);
 
-  const handleOpenChat = (roomId: string) => {
-    setActiveRoom(roomId);
-    setScreen('chat');
-  };
-
-  const handleBackToContacts = () => {
-    setActiveRoom(null);
-    setScreen('contacts');
-  };
-
   const handleLogout = () => {
     if (firebaseUser) {
       msnUserService.updateStatus(firebaseUser.uid, 'offline');
@@ -97,15 +85,7 @@ export default function MsnApp() {
         <MsnContactList
           user={firebaseUser}
           initialStatus={userStatus}
-          onOpenChat={handleOpenChat}
           onLogout={handleLogout}
-        />
-      )}
-      {screen === 'chat' && firebaseUser && activeRoom && (
-        <MsnChatWindow
-          user={firebaseUser}
-          roomId={activeRoom}
-          onBack={handleBackToContacts}
         />
       )}
     </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { User } from 'firebase/auth';
-import { ref, onValue } from 'firebase/database';
+import { ref, onValue, set, onDisconnect, serverTimestamp } from 'firebase/database';
 import { doc, onSnapshot, collection } from 'firebase/firestore';
 import { db, firestoreDB } from '../../../config/firebase';
 import { useWebampStore } from '../../../stores/useWebampStore';
@@ -11,11 +11,11 @@ import styles from './MsnContactList.module.css';
 import msnLogoTitle from '../../../assets/icons/msn-logo-title.webp'
 import msnFigureOnline from '../../../assets/icons/msn-online.webp'
 import msnFigureOffline from '../../../assets/icons/msn-offline.webp'
+import { useWindowStore } from '../../../stores/useWindowStore';
 
 interface MsnContactListProps {
   user: User;
   initialStatus: string;
-  onOpenChat: (roomId: string) => void;
   onLogout: () => void;
 }
 
@@ -42,7 +42,8 @@ const ROOMS = [
   { id: 'global', name: 'Sala Global', emoji: '\uD83C\uDF0D' },
 ];
 
-export default function MsnContactList({ user, initialStatus, onOpenChat, onLogout }: MsnContactListProps) {
+export default function MsnContactList({ user, initialStatus, onLogout }: MsnContactListProps) {
+  const openWindow = useWindowStore(state => state.openWindow);
   const [onlineCount, setOnlineCount] = useState(0);
   const [presenceMap, setPresenceMap] = useState<PresenceData>({});
   const [currentStatus, setCurrentStatus] = useState(initialStatus);
@@ -57,8 +58,24 @@ export default function MsnContactList({ user, initialStatus, onOpenChat, onLogo
   // Obter música atual do Webamp
   const currentTrack = useWebampStore(state => state.currentTrack);
 
-  // Escutar presença
+  // Escutar presença e Registrar própria presença
   useEffect(() => {
+    // Define a própria presença enquanto a janela principal estiver aberta
+    const myPresenceRef = ref(db, `presence/${user.uid}`);
+    const myDisconnectRef = onDisconnect(myPresenceRef);
+
+    myDisconnectRef.update({
+      status: 'offline',
+      lastSeen: serverTimestamp(),
+    });
+
+    set(myPresenceRef, {
+      name: user.displayName || 'Anônimo',
+      photoURL: user.photoURL || '',
+      status: initialStatus || 'online',
+      lastSeen: serverTimestamp(),
+    });
+
     const presenceRef = ref(db, 'presence');
     const unsubscribe = onValue(presenceRef, (snapshot) => {
       const data = snapshot.val() as PresenceData | null;
@@ -117,6 +134,13 @@ export default function MsnContactList({ user, initialStatus, onOpenChat, onLogo
     });
 
     return () => {
+      myDisconnectRef.cancel();
+      set(myPresenceRef, {
+        name: user.displayName || 'Anônimo',
+        photoURL: user.photoURL || '',
+        status: 'offline',
+        lastSeen: serverTimestamp(),
+      });
       unsubscribe();
       unsubscribeUser();
       unsubscribeContacts();
@@ -286,7 +310,7 @@ export default function MsnContactList({ user, initialStatus, onOpenChat, onLogo
           <button
             key={room.id}
             className={styles.roomItem}
-            onClick={() => onOpenChat(room.id)}
+            onClick={() => openWindow('msn-chat', { fileId: room.id })}
           >
             <span className={styles.roomEmoji}>{room.emoji}</span>
             <span className={styles.roomName}>{room.name}</span>
@@ -301,7 +325,12 @@ export default function MsnContactList({ user, initialStatus, onOpenChat, onLogo
         </div>
 
         {onlineContacts.map(contact => (
-          <div key={contact.uid} className={styles.contactItem} title={contact.email}>
+          <div
+            key={contact.uid}
+            className={styles.contactItem}
+            title={contact.email}
+            onDoubleClick={() => openWindow('msn-chat', { fileId: contact.uid })}
+          >
             <img
               src={contact.photoURL || msnFigureOnline}
               className={styles.contactStatusIcon}
@@ -324,7 +353,12 @@ export default function MsnContactList({ user, initialStatus, onOpenChat, onLogo
         </div>
 
         {offlineContacts.map(contact => (
-          <div key={contact.uid} className={styles.contactItem} title={contact.email}>
+          <div
+            key={contact.uid}
+            className={styles.contactItem}
+            title={contact.email}
+            onDoubleClick={() => openWindow('msn-chat', { fileId: contact.uid })}
+          >
             <img
               src={msnFigureOffline}
               className={styles.contactStatusIcon}

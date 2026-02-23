@@ -56,8 +56,8 @@ export default function Taskbar() {
           return (
             <TaskbarButton
               key={win.id}
-              title={program.name}
-              iconUrl={program.iconUrl}
+              title={win.title || program.name}
+              iconUrl={win.iconUrl || program.iconUrl}
               onClick={() => handleTaskbarClick(win.id)}
               onContextMenu={(e) => {
                 e.preventDefault();

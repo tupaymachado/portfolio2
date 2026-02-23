@@ -133,7 +133,7 @@ export default function StartMenu() {
       </header>
       <main className={styles.mainContent}>
         <div className={styles.programList}>
-          {PROGRAMS.map(program => (
+          {PROGRAMS.filter(p => !p.hideFromStartMenu).map(program => (
             <button
               key={program.id}
               className={styles.menuItem}
@@ -194,7 +194,7 @@ export default function StartMenu() {
               </>
             )}
             <div className={styles.submenuList}>
-              {sortedPrograms.map(program => (
+              {sortedPrograms.filter(p => !p.hideFromStartMenu).map(program => (
                 <button
                   key={program.id}
                   className={styles.submenuItem}

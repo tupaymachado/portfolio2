@@ -111,9 +111,12 @@ export const useWindowStore = create<WindowState>((set, get) => ({
         get().closeStartMenu();
         const { openWindows, bringToFront } = get();
 
-        // Se não tiver folderId, tenta reusar janela existente
+        // Se não tiver folderId, tenta reusar janela existente baseada no fileId
         if (!options?.folderId) {
-            const alreadyOpen = openWindows.find(win => win.programId === programId);
+            const targetFileId = options?.fileId;
+            const alreadyOpen = openWindows.find(win =>
+                win.programId === programId && win.initialFileId === targetFileId
+            );
             if (alreadyOpen) {
                 set(state => ({
                     openWindows: state.openWindows.map(w =>
