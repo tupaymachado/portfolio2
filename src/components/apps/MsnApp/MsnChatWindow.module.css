@@ -262,3 +262,85 @@
   width: 100%;
   padding: 8px 0;
 }
+
+/* ── Mobile ─────────────────────────────────────────────────────────────── */
+@media (max-width: 540px) {
+  /* Esconde avatares — espaço demais pra tela pequena */
+  .rightColumn {
+    display: none;
+  }
+
+  .mainLayout {
+    padding: 6px;
+    gap: 6px;
+  }
+
+  /* Header "Para:" mais compacto */
+  .chatHeader {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  /* Mensagens com padding reduzido */
+  .messagesArea {
+    padding: 8px;
+  }
+
+  .msgText {
+    font-size: 13px;
+  }
+
+  .msgName {
+    font-size: 11px;
+  }
+
+  /* Toolbar: permite quebrar linha e tem botões maiores para toque */
+  .formatToolbar {
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .formatBtn {
+    font-size: 12px;
+    padding: 6px 10px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .toolbarDivider {
+    display: none;
+  }
+
+  /* Área de input mais alta para digitação */
+  .inputInner {
+    padding: 6px;
+    gap: 6px;
+    align-items: flex-end;
+  }
+
+  .textInput {
+    font-size: 14px;
+    padding: 6px;
+    min-height: 44px;
+  }
+
+  /* Botão Enviar com alvo de toque confortável */
+  .sendButton {
+    padding: 8px 18px;
+    font-size: 12px;
+    min-height: 44px;
+    flex-shrink: 0;
+  }
+
+  /* Menu clássico mais compacto */
+  .classicMenuBar {
+    gap: 10px;
+    padding: 5px 8px;
+    font-size: 11px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
