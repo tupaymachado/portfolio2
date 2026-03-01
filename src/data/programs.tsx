@@ -37,19 +37,14 @@ const LazyWebampApp = lazy(() => import('../components/apps/WebampApp/WebampApp'
 const LazyMsnApp = lazy(() => import('../components/apps/MsnApp/MsnApp'));
 const LazyMsnChatWindow = lazy(() => import('../components/apps/MsnApp/MsnChatWindow'));
 
-// ============================================================================
-// COMPONENTES PESADOS (React.lazy - Code Splitting)
-// ============================================================================
-// Estes componentes são carregados sob demanda usando React.lazy.
-// O Vite cria chunks separados para eles no build.
-// O código só é baixado quando a janela é aberta pela primeira vez.
-//
-// COMO FUNCIONA:
-// 1. lazy() recebe uma função que retorna import()
-// 2. import() é um "dynamic import" - retorna Promise do módulo
-// 3. O Vite/Webpack vê import() e extrai o código para um chunk separado
-// 4. Quando o componente precisa renderizar, React carrega o chunk
-// 5. Enquanto carrega, Suspense mostra um fallback
+// Preload functions. Call these early to warm up the chunk download.
+export const preloadAll = () => {
+  import('../components/apps/SolitaireApp/klondike/components/KlondikeBoard');
+  import('../components/apps/WebampApp/WebampApp');
+  import('../components/apps/MsnApp/MsnApp');
+  import('../components/apps/MsnApp/MsnChatWindow');
+  import('../components/apps/ExplorerApp/ExplorerApp');
+};
 
 const LazyExplorerApp = lazy(() => import('../components/apps/ExplorerApp/ExplorerApp'));
 

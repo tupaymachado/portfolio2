@@ -88,15 +88,20 @@ const ROOM_NAMES: Record<string, string> = {
 export default function MsnChatWindow() {
   const { instanceId } = useWindowContext();
   const windowState = useWindowStore(state => state.openWindows.find(w => w.id === instanceId));
-  const roomId = windowState?.initialFileId || 'global';
+  const contactId = windowState?.initialFileId || 'global';
   const user = auth.currentUser;
 
   if (!user) return null;
 
+  // Normalize roomId so X→Y and Y→X always share the same Firebase path
+  const roomId = contactId === 'global'
+    ? 'global'
+    : [user.uid, contactId].sort().join('_');
+
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const roomName = ROOM_NAMES[roomId] || roomId;
+  const roomName = ROOM_NAMES[contactId] || contactId;
 
   const [contactInfo, setContactInfo] = useState<{ displayName: string; email: string; photoURL: string } | null>(null);
   const [isShaking, setIsShaking] = useState(false);
@@ -126,26 +131,26 @@ export default function MsnChatWindow() {
 
   // Buscar informações do contato (se não for global)
   useEffect(() => {
-    if (roomId === 'global') return;
+    if (contactId === 'global') return;
     import('firebase/firestore').then(async ({ doc, getDoc }) => {
-      const uRef = doc(firestoreDB, `users/${roomId}`);
+      const uRef = doc(firestoreDB, `users/${contactId}`);
       const uSnap = await getDoc(uRef);
       if (uSnap.exists()) {
         const data = uSnap.data();
         setContactInfo({ displayName: data.displayName, email: data.email, photoURL: data.photoURL });
       }
     });
-  }, [roomId]);
+  }, [contactId]);
 
   // Atualizar título da janela OS
   useEffect(() => {
-    if (roomId === 'global') {
+    if (contactId === 'global') {
       useWindowStore.getState().updateWindowMeta(instanceId, { title: 'Sala Global - Bate-papo do MSN' });
     } else if (contactInfo) {
       const titleName = contactInfo.displayName || contactInfo.email;
       useWindowStore.getState().updateWindowMeta(instanceId, { title: `${titleName} - Conversa` });
     }
-  }, [contactInfo, roomId, instanceId]);
+  }, [contactInfo, contactId, instanceId]);
 
   // Escutar novas mensagens
   useEffect(() => {
@@ -266,7 +271,7 @@ export default function MsnChatWindow() {
           <div className={styles.chatHeader}>
             <span className={styles.toLabel}>Para: </span>
             <span className={styles.toValue}>
-              {roomId === 'global' ? roomName : contactInfo?.email || 'Carregando...'}
+              {contactId === 'global' ? roomName : contactInfo?.email || 'Carregando...'}
             </span>
             {roomId === 'global' && (
               <button
@@ -368,7 +373,7 @@ export default function MsnChatWindow() {
         </div>
 
         {/* Lado Direito: Avatares Grandes (Privado) OU Lista de Participantes (Global) */}
-        {roomId === 'global' ? (
+        {contactId === 'global' ? (
           <div className={`${styles.rightColumn} ${styles.globalColumn} ${isParticipantsOpen ? styles.mobileOpen : ''}`}>
             {/* O cabeçalho no mobile ajuda a fechar */}
             <div className={styles.participantsHeaderMobile}>
