@@ -60,20 +60,24 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
 
   // Escutar presença e Registrar própria presença
   useEffect(() => {
-    // Define a própria presença enquanto a janela principal estiver aberta
+    const connectedRef = ref(db, '.info/connected');
     const myPresenceRef = ref(db, `presence/${user.uid}`);
-    const myDisconnectRef = onDisconnect(myPresenceRef);
 
-    myDisconnectRef.update({
-      status: 'offline',
-      lastSeen: serverTimestamp(),
-    });
-
-    set(myPresenceRef, {
-      name: user.displayName || 'Anônimo',
-      photoURL: user.photoURL || '',
-      status: initialStatus || 'online',
-      lastSeen: serverTimestamp(),
+    const unsubscribeConnected = onValue(connectedRef, (snap) => {
+      if (snap.val() === true) {
+        const myDisconnectRef = onDisconnect(myPresenceRef);
+        myDisconnectRef.update({
+          status: 'offline',
+          lastSeen: serverTimestamp(),
+        }).then(() => {
+          set(myPresenceRef, {
+            name: user.displayName || 'Anônimo',
+            photoURL: user.photoURL || '',
+            status: initialStatus || 'online',
+            lastSeen: serverTimestamp(),
+          });
+        });
+      }
     });
 
     const presenceRef = ref(db, 'presence');
@@ -134,7 +138,7 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
     });
 
     return () => {
-      myDisconnectRef.cancel();
+      unsubscribeConnected();
       set(myPresenceRef, {
         name: user.displayName || 'Anônimo',
         photoURL: user.photoURL || '',

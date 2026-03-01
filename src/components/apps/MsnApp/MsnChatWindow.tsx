@@ -7,6 +7,70 @@ import msnFigureOnline from '../../../assets/icons/msn-online.webp'
 import { useWindowContext, useWindowStore } from '../../../stores/useWindowStore';
 import { auth } from '../../../config/firebase';
 
+import angrySvg from '../../../assets/emojis/angry.svg';
+import blushSvg from '../../../assets/emojis/blush.svg';
+import confusedSvg from '../../../assets/emojis/confused.svg';
+import crySvg from '../../../assets/emojis/cry.svg';
+import disappointedSvg from '../../../assets/emojis/disappointed.svg';
+import eyebrowRaiseSvg from '../../../assets/emojis/eyebrow-raise.svg';
+import grinSvg from '../../../assets/emojis/grin.svg';
+import hotSvg from '../../../assets/emojis/hot.svg';
+import sadSvg from '../../../assets/emojis/sad.svg';
+import smileSvg from '../../../assets/emojis/smile.svg';
+import surpriseSvg from '../../../assets/emojis/surprise.svg';
+import tongueSvg from '../../../assets/emojis/tongue.svg';
+import winkSvg from '../../../assets/emojis/wink.svg';
+import MsnParticipantList from './MsnParticipantList';
+
+const EMOTICON_MAP: Record<string, string> = {
+  ':)': smileSvg, ':-)': smileSvg, '😊': smileSvg, '🙂': smileSvg,
+  ':D': grinSvg, ':-D': grinSvg, '😃': grinSvg, '😁': grinSvg,
+  ':(': sadSvg, ':-(': sadSvg, '☹️': sadSvg, '🙁': sadSvg,
+  ':O': surpriseSvg, ':-O': surpriseSvg, ':o': surpriseSvg, ':-o': surpriseSvg, '😮': surpriseSvg, '😲': surpriseSvg,
+  ':P': tongueSvg, ':-P': tongueSvg, ':p': tongueSvg, ':-p': tongueSvg, '😛': tongueSvg, '😜': tongueSvg,
+  ';)': winkSvg, ';-)': winkSvg, '😉': winkSvg,
+  ':@': angrySvg, ':-@': angrySvg, '😡': angrySvg, '😠': angrySvg,
+  ':$': blushSvg, ':-$': blushSvg, '😳': blushSvg,
+  ':S': confusedSvg, ':-S': confusedSvg, ':s': confusedSvg, ':-s': confusedSvg, '😕': confusedSvg, '😖': confusedSvg,
+  ":'(": crySvg, ":'-(": crySvg, '😢': crySvg, '😭': crySvg,
+  ':|': disappointedSvg, ':-|': disappointedSvg, '😐': disappointedSvg, '😑': disappointedSvg,
+  '(H)': hotSvg, '(h)': hotSvg, '😎': hotSvg,
+  '🤨': eyebrowRaiseSvg, 'o.O': eyebrowRaiseSvg, 'O.o': eyebrowRaiseSvg,
+};
+
+const UNIQUE_EMOTICONS = [
+  { shortcut: ':)', src: smileSvg },
+  { shortcut: ':D', src: grinSvg },
+  { shortcut: ':(', src: sadSvg },
+  { shortcut: ':O', src: surpriseSvg },
+  { shortcut: ':P', src: tongueSvg },
+  { shortcut: ';)', src: winkSvg },
+  { shortcut: ':@', src: angrySvg },
+  { shortcut: ':$', src: blushSvg },
+  { shortcut: ':S', src: confusedSvg },
+  { shortcut: ':\'(', src: crySvg },
+  { shortcut: ':|', src: disappointedSvg },
+  { shortcut: '(H)', src: hotSvg },
+  { shortcut: '🤨', src: eyebrowRaiseSvg },
+];
+
+const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const EMOTICON_REGEX = new RegExp(
+  `(${Object.keys(EMOTICON_MAP).sort((a, b) => b.length - a.length).map(escapeRegExp).join('|')})`,
+  'g'
+);
+
+const parseEmoticons = (text: string) => {
+  if (!text) return null;
+  const parts = text.split(EMOTICON_REGEX);
+  return parts.map((part, index) => {
+    if (EMOTICON_MAP[part]) {
+      return <img key={index} src={EMOTICON_MAP[part]} alt={part} className={styles.emoticon} />;
+    }
+    return <span key={index}>{part}</span>;
+  });
+};
+
 interface ChatMessage {
   id: string;
   uid: string;
@@ -37,6 +101,28 @@ export default function MsnChatWindow() {
   const [contactInfo, setContactInfo] = useState<{ displayName: string; email: string; photoURL: string } | null>(null);
   const [isShaking, setIsShaking] = useState(false);
   const [canNudge, setCanNudge] = useState(true);
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [isParticipantsOpen, setIsParticipantsOpen] = useState(false); // Mobile Drawer state
+
+  // Fechar o picker se clicar fora
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent | TouchEvent) {
+      if (isEmojiPickerOpen && emojiPickerRef.current && !emojiPickerRef.current.contains(event.target as Node)) {
+        setIsEmojiPickerOpen(false);
+      }
+    }
+
+    // Use capture phase to ensure we catch clicks before Windows/Desktop stops propagation
+    document.addEventListener("mousedown", handleClickOutside, { capture: true });
+    document.addEventListener("touchstart", handleClickOutside, { capture: true });
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside, { capture: true });
+      document.removeEventListener("touchstart", handleClickOutside, { capture: true });
+    };
+  }, [isEmojiPickerOpen]);
 
   // Buscar informações do contato (se não for global)
   useEffect(() => {
@@ -126,6 +212,16 @@ export default function MsnChatWindow() {
     setInputText('');
   };
 
+  const addEmojiToInput = (shortcut: string) => {
+    setInputText(prev => prev + (prev.endsWith(' ') || prev.length === 0 ? '' : ' ') + shortcut + ' ');
+    setIsEmojiPickerOpen(false);
+
+    // Devolve o foco para o input após escolher o emoji
+    setTimeout(() => {
+      textareaRef.current?.focus();
+    }, 0);
+  };
+
   const sendNudge = () => {
     if (!user || !canNudge) return;
 
@@ -172,6 +268,14 @@ export default function MsnChatWindow() {
             <span className={styles.toValue}>
               {roomId === 'global' ? roomName : contactInfo?.email || 'Carregando...'}
             </span>
+            {roomId === 'global' && (
+              <button
+                className={styles.mobileParticipantsBtn}
+                onClick={() => setIsParticipantsOpen(!isParticipantsOpen)}
+              >
+                👥 Participantes
+              </button>
+            )}
           </div>
 
           <div className={styles.messagesBox}>
@@ -192,7 +296,7 @@ export default function MsnChatWindow() {
                           : `${msg.name} acaba de enviar uma chamadela!`}
                       </p>
                     ) : (
-                      <p className={styles.msgText}>{msg.text}</p>
+                      <p className={styles.msgText}>{parseEmoticons(msg.text)}</p>
                     )}
                   </div>
                 </div>
@@ -204,7 +308,33 @@ export default function MsnChatWindow() {
           <div className={styles.inputSection}>
             <div className={styles.formatToolbar}>
               <button className={styles.formatBtn}><strong>A</strong></button>
-              <button className={styles.formatBtn}>😊</button>
+
+              <div className={styles.emojiPickerContainer} ref={emojiPickerRef}>
+                <button
+                  className={styles.formatBtn}
+                  onClick={() => setIsEmojiPickerOpen(!isEmojiPickerOpen)}
+                >
+                  😊
+                </button>
+
+                {isEmojiPickerOpen && (
+                  <div className={styles.emojiPicker}>
+                    <div className={styles.emojiGrid}>
+                      {UNIQUE_EMOTICONS.map((emoticon) => (
+                        <button
+                          key={emoticon.shortcut}
+                          className={styles.emojiOption}
+                          onClick={() => addEmojiToInput(emoticon.shortcut)}
+                          title={emoticon.shortcut}
+                        >
+                          <img src={emoticon.src} alt={emoticon.shortcut} />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <button className={styles.formatBtn}>🎙️ Clip de Voz</button>
               <div className={styles.toolbarDivider}></div>
               <button
@@ -219,6 +349,7 @@ export default function MsnChatWindow() {
 
             <div className={styles.inputInner}>
               <textarea
+                ref={textareaRef}
                 className={styles.textInput}
                 value={inputText}
                 onChange={e => setInputText(e.target.value)}
@@ -236,26 +367,39 @@ export default function MsnChatWindow() {
           </div>
         </div>
 
-        {/* Lado Direito: Avatares Grandes */}
-        <div className={styles.rightColumn}>
-          <div className={styles.avatarBox}>
-            <img
-              src={roomId === 'global' ? msnFigureOnline : (contactInfo?.photoURL || msnFigureOnline)}
-              className={styles.avatarImage}
-              alt="Contato"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-          <div className={styles.avatarBox}>
-            <img
-              src={user.photoURL || msnFigureOnline}
-              className={styles.avatarImage}
-              alt="Meu Avatar"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-        </div>
+        {/* Lado Direito: Avatares Grandes (Privado) OU Lista de Participantes (Global) */}
+        {roomId === 'global' ? (
+          <div className={`${styles.rightColumn} ${styles.globalColumn} ${isParticipantsOpen ? styles.mobileOpen : ''}`}>
+            {/* O cabeçalho no mobile ajuda a fechar */}
+            <div className={styles.participantsHeaderMobile}>
+              <span>Participantes da Sala</span>
+              <button onClick={() => setIsParticipantsOpen(false)}>✕</button>
+            </div>
 
+            <div className={styles.participantListContainer}>
+              <MsnParticipantList />
+            </div>
+          </div>
+        ) : (
+          <div className={styles.rightColumn}>
+            <div className={styles.avatarBox}>
+              <img
+                src={contactInfo?.photoURL || msnFigureOnline}
+                className={styles.avatarImage}
+                alt="Contato"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <div className={styles.avatarBox}>
+              <img
+                src={user.photoURL || msnFigureOnline}
+                className={styles.avatarImage}
+                alt="Meu Avatar"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

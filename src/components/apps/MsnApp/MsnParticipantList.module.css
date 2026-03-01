@@ -1,0 +1,77 @@
+.participantList {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.loading {
+    padding: 12px;
+    text-align: center;
+    font-size: 11px;
+    color: #666;
+    font-style: italic;
+}
+
+.participantItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.participantItem:hover {
+    background-color: #f1f5fa;
+}
+
+.statusIcon {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.avatarIcon {
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+    object-fit: contain;
+    border: 1px solid #d4d0c8;
+    background: white;
+    flex-shrink: 0;
+}
+
+.participantInfo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    /* allows text truncation */
+}
+
+.participantName {
+    font-family: 'Tahoma', sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: #1b3d63;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.participantStatus {
+    font-family: 'Tahoma', sans-serif;
+    font-size: 10px;
+    color: #8c9cb6;
+}
+
+/* Estado visual para offline */
+.offlineWrapper .participantName,
+.offlineWrapper .participantStatus {
+    color: #999;
+}
+
+.offlineAvatar {
+    filter: grayscale(100%);
+    opacity: 0.6;
+}

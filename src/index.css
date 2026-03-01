@@ -5,42 +5,61 @@
      ========================================================================== */
 
   /* --- Barras de Título da Janela --- */
-  --color-title-bar-active-start: #0054E3;     /* Gradiente (Início): Barra de Título ATIVA */
-  --color-title-bar-active-end: #3D95FF;       /* Gradiente (Fim): Barra de Título ATIVA */
-  --color-title-bar-active-text: #FFFFFF;      /* Texto: Barra de Título ATIVA */
-  
-  --color-title-bar-inactive-start: #7A96DF;   /* Gradiente (Início): Barra de Título INATIVA */
-  --color-title-bar-inactive-end: #9DB9EB;     /* Gradiente (Fim): Barra de Título INATIVA */
-  --color-title-bar-inactive-text: #D8E4F8;    /* Texto: Barra de Título INATIVA */
-  
-  /* --- Fundos Gerais --- */
-  --color-background-ui: #ECE9D8;              /* Fundo: Padrão para painéis e barras de ferramentas (ex: body) */
-  --color-background-window-content: #FFFFFF;  /* Fundo: Área de conteúdo principal da janela (ex: Bloco de Notas) */
-  --color-background-desktop: #004E98;         /* Fundo: Cor sólida do Desktop, por trás do wallpaper */
-  --color-background-menu: #FFFFFF;            /* Fundo: Cor dos menus dropdown */
-  --color-background-tooltip: #FFFFE1;         /* Fundo: Cor das caixas de dica (tooltips) */
-  
-  /* --- Botões e Efeitos 3D --- */
-  --color-button-shadow-light: #F1EFE2;        /* Efeito 3D: Borda superior/esquerda "iluminada" de um botão */
-  --color-button-shadow-dark: #ACA899;         /* Efeito 3D: Borda inferior/direita "sombreada" de um botão */
-  --color-button-shadow-very-dark: #716F64;    /* Efeito 3D: Sombra mais escura para detalhes */
-  
-  /* --- Texto --- */
-  --color-text-default: #000000;               /* Texto: Cor padrão para a maioria dos conteúdos */
-  --color-text-on-highlight: #FFFFFF;          /* Texto: Cor do texto em um item selecionado (geralmente branco) */
-  --color-text-disabled: #ACA899;              /* Texto: Cor para itens desabilitados ou texto secundário */
-  
-  /* --- Seleção, Destaque e Interação (Highlight) --- */
-  --color-highlight-background: #316AC5;       /* Fundo: Cor azul de fundo de um item selecionado (ícone, menu) */
-  
-  /* --- Bordas --- */
-  --color-border-window: #D4D0C8;              /* Borda: Contorno principal da maioria das janelas e controles */
+  --color-title-bar-active-start: #0054E3;
+  /* Gradiente (Início): Barra de Título ATIVA */
+  --color-title-bar-active-end: #3D95FF;
+  /* Gradiente (Fim): Barra de Título ATIVA */
+  --color-title-bar-active-text: #FFFFFF;
+  /* Texto: Barra de Título ATIVA */
 
-  
+  --color-title-bar-inactive-start: #7A96DF;
+  /* Gradiente (Início): Barra de Título INATIVA */
+  --color-title-bar-inactive-end: #9DB9EB;
+  /* Gradiente (Fim): Barra de Título INATIVA */
+  --color-title-bar-inactive-text: #D8E4F8;
+  /* Texto: Barra de Título INATIVA */
+
+  /* --- Fundos Gerais --- */
+  --color-background-ui: #ECE9D8;
+  /* Fundo: Padrão para painéis e barras de ferramentas (ex: body) */
+  --color-background-window-content: #FFFFFF;
+  /* Fundo: Área de conteúdo principal da janela (ex: Bloco de Notas) */
+  --color-background-desktop: #004E98;
+  /* Fundo: Cor sólida do Desktop, por trás do wallpaper */
+  --color-background-menu: #FFFFFF;
+  /* Fundo: Cor dos menus dropdown */
+  --color-background-tooltip: #FFFFE1;
+  /* Fundo: Cor das caixas de dica (tooltips) */
+
+  /* --- Botões e Efeitos 3D --- */
+  --color-button-shadow-light: #F1EFE2;
+  /* Efeito 3D: Borda superior/esquerda "iluminada" de um botão */
+  --color-button-shadow-dark: #ACA899;
+  /* Efeito 3D: Borda inferior/direita "sombreada" de um botão */
+  --color-button-shadow-very-dark: #716F64;
+  /* Efeito 3D: Sombra mais escura para detalhes */
+
+  /* --- Texto --- */
+  --color-text-default: #000000;
+  /* Texto: Cor padrão para a maioria dos conteúdos */
+  --color-text-on-highlight: #FFFFFF;
+  /* Texto: Cor do texto em um item selecionado (geralmente branco) */
+  --color-text-disabled: #ACA899;
+  /* Texto: Cor para itens desabilitados ou texto secundário */
+
+  /* --- Seleção, Destaque e Interação (Highlight) --- */
+  --color-highlight-background: #316AC5;
+  /* Fundo: Cor azul de fundo de um item selecionado (ícone, menu) */
+
+  /* --- Bordas --- */
+  --color-border-window: #D4D0C8;
+  /* Borda: Contorno principal da maioria das janelas e controles */
+
+
   /* ==========================================================================
      CORES ESPECÍFICAS DE COMPONENTES (Ainda úteis para manter a separação)
      ========================================================================== */
-  
+
   /* --- Taskbar --- */
   /* A Taskbar usa o mesmo gradiente da barra de título ativa */
   --xp-blue-taskbar-start: var(--color-title-bar-active-start);
@@ -64,7 +83,16 @@
   box-sizing: border-box;
 }
 
-body, h1, h2, h3, h4, p, figure, blockquote, dl, dd {
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
   margin: 0;
 }
 
@@ -79,11 +107,13 @@ button {
   cursor: pointer;
   text-align: inherit;
   outline: none;
-  user-select: text;
-  -webkit-user-select: text;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
@@ -110,6 +140,9 @@ img {
   display: block;
 }
 
-button, input, textarea, select {
+button,
+input,
+textarea,
+select {
   font: inherit;
 }
