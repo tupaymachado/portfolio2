@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { ref, onValue } from 'firebase/database';
-import { firestoreDB, db } from '../../../config/firebase';
+import { firestoreDB, db, auth } from '../../../config/firebase';
+import { useWindowStore } from '../../../stores/useWindowStore';
 import styles from './MsnParticipantList.module.css';
 import msnFigureOnline from '../../../assets/icons/msn-online.webp';
 import msnFigureOffline from '../../../assets/icons/msn-offline.webp';
@@ -17,6 +18,9 @@ export default function MsnParticipantList() {
     const [participants, setParticipants] = useState<UserParticipant[]>([]);
     const [onlineUids, setOnlineUids] = useState<Set<string>>(new Set());
     const [isLoading, setIsLoading] = useState(true);
+    const openWindow = useWindowStore(state => state.openWindow);
+    const openContextMenu = useWindowStore(state => state.openContextMenu);
+    const currentUser = auth.currentUser;
 
     // Fetch all users from Firestore
     useEffect(() => {
@@ -27,12 +31,15 @@ export default function MsnParticipantList() {
                 const usersList: UserParticipant[] = [];
                 querySnapshot.forEach((doc) => {
                     const data = doc.data();
-                    usersList.push({
-                        uid: doc.id,
-                        email: data.email,
-                        displayName: data.displayName || data.email,
-                        photoURL: data.photoURL || msnFigureOffline,
-                    });
+                    // Don't show ourselves in the list
+                    if (doc.id !== currentUser?.uid) {
+                        usersList.push({
+                            uid: doc.id,
+                            email: data.email,
+                            displayName: data.displayName || data.email,
+                            photoURL: data.photoURL || msnFigureOffline,
+                        });
+                    }
                 });
                 setParticipants(usersList);
             } catch (error) {
@@ -52,7 +59,6 @@ export default function MsnParticipantList() {
             const onlineSet = new Set<string>();
 
             Object.entries(presences).forEach(([uid, connection]: [string, any]) => {
-                // Ignore disconnected / offline statuses
                 if (connection.status !== 'offline') {
                     onlineSet.add(uid);
                 }
@@ -63,48 +69,83 @@ export default function MsnParticipantList() {
         return () => unsubscribe();
     }, []);
 
+    const handleParticipantClick = (e: React.MouseEvent, participant: UserParticipant) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        openContextMenu(e.clientX, e.clientY, [
+            {
+                label: `Enviar Mensagem para ${participant.displayName}`,
+                onClick: () => {
+                    openWindow('msn-chat', { fileId: participant.uid });
+                },
+            },
+            {
+                label: `Adicionar aos Contatos`,
+                onClick: async () => {
+                    if (!currentUser) return;
+                    try {
+                        import('firebase/firestore').then(({ doc, setDoc }) => {
+                            setDoc(
+                                doc(firestoreDB, `users/${currentUser.uid}/contacts/${participant.uid}`),
+                                { group: 'Outros Contatos', addedAt: Date.now() }
+                            );
+                        });
+                    } catch (err) {
+                        console.error('Error adding contact:', err);
+                    }
+                },
+                disabled: !currentUser,
+            }
+        ]);
+    };
+
     if (isLoading) {
         return <div className={styles.loading}>Carregando participantes...</div>;
     }
 
-    // Sort participants so online users are grouped first
     const sortedParticipants = [...participants].sort((a, b) => {
         const aOnline = onlineUids.has(a.uid);
         const bOnline = onlineUids.has(b.uid);
-        // Sort online users first
         if (aOnline && !bOnline) return -1;
         if (!aOnline && bOnline) return 1;
-        // Alphabetical within the group
         return a.displayName.localeCompare(b.displayName);
     });
 
     return (
-        <div className={styles.participantList}>
-            {sortedParticipants.map((user) => {
-                const isOnline = onlineUids.has(user.uid);
+        <>
+            <div className={styles.participantList}>
+                {sortedParticipants.map((participant) => {
+                    const isOnline = onlineUids.has(participant.uid);
 
-                return (
-                    <div key={user.uid} className={`${styles.participantItem} ${!isOnline ? styles.offlineWrapper : ''}`}>
-                        <img
-                            src={isOnline ? msnFigureOnline : msnFigureOffline}
-                            className={styles.statusIcon}
-                            alt={isOnline ? "Online" : "Offline"}
-                        />
-                        <img
-                            src={user.photoURL}
-                            className={`${styles.avatarIcon} ${!isOnline ? styles.offlineAvatar : ''}`}
-                            alt={user.displayName}
-                            referrerPolicy="no-referrer"
-                        />
-                        <div className={styles.participantInfo}>
-                            <span className={styles.participantName}>{user.displayName}</span>
-                            <span className={styles.participantStatus}>
-                                {isOnline ? '(Online)' : '(Offline)'}
-                            </span>
+                    return (
+                        <div
+                            key={participant.uid}
+                            className={`${styles.participantItem} ${!isOnline ? styles.offlineWrapper : ''}`}
+                            onClick={(e) => handleParticipantClick(e, participant)}
+                            title="Clique para ver opções"
+                        >
+                            <img
+                                src={isOnline ? msnFigureOnline : msnFigureOffline}
+                                className={styles.statusIcon}
+                                alt={isOnline ? "Online" : "Offline"}
+                            />
+                            <img
+                                src={participant.photoURL}
+                                className={`${styles.avatarIcon} ${!isOnline ? styles.offlineAvatar : ''}`}
+                                alt={participant.displayName}
+                                referrerPolicy="no-referrer"
+                            />
+                            <div className={styles.participantInfo}>
+                                <span className={styles.participantName}>{participant.displayName}</span>
+                                <span className={styles.participantStatus}>
+                                    {isOnline ? '(Online)' : '(Offline)'}
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                );
-            })}
-        </div>
+                    );
+                })}
+            </div>
+        </>
     );
 }

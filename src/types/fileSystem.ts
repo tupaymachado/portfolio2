@@ -8,6 +8,7 @@ export interface FileSystemItem {
   gridPosition?: { row: number; col: number };
 
   // --- Propriedades específicas ---
+  originalParentId?: string; // Usado para a Lixeira (Recycle Bin)
 
   // Se for um arquivo, ele pode estar associado a um programa (ex: 'notepad')
   programId?: string;

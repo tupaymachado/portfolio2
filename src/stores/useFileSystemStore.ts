@@ -9,6 +9,7 @@ import myPicturesIcon from '../assets/icons/my-pictures.webp';
 import myMusicIcon from '../assets/icons/my-music.webp';
 import myVideosIcon from '../assets/icons/my-videos.webp';
 import notepadIcon from '../assets/icons/notepad.webp';
+import trashBinIcon from '../assets/icons/trash-bin.webp';
 
 // ============================================================================
 // TEMPLATE DO FILE SYSTEM (clonado para cada novo perfil)
@@ -21,6 +22,14 @@ const createInitialItems = (): Record<string, FileSystemItem> => ({
         name: 'C:',
         type: 'folder',
         iconUrl: myComputerIcon,
+        createdAt: Date.now(),
+    },
+    'recycle-bin': {
+        id: 'recycle-bin',
+        parentId: 'root',
+        name: 'Lixeira',
+        type: 'folder',
+        iconUrl: trashBinIcon,
         createdAt: Date.now(),
     },
     'desktop': {
@@ -116,6 +125,8 @@ interface FileSystemStore extends FileSystemState {
     updateFileContent: (fileId: string, content: string) => void;
     renameItem: (id: string, newName: string) => void;
     deleteItem: (id: string) => void;
+    restoreItem: (id: string) => void;
+    emptyRecycleBin: () => void;
 
     // Grid (desktop)
     updateItemGridPosition: (itemId: string, newPosition: { row: number; col: number }, maxRows?: number) => void;
@@ -252,13 +263,83 @@ export const useFileSystemStore = create<FileSystemStore>()(
 
                 set(state => {
                     const newItems = { ...state.items };
-                    // Deleta o item e todos os filhos recursivamente
+                    const itemToDelete = newItems[id];
+                    if (!itemToDelete) return state;
+
+                    if (itemToDelete.parentId !== 'recycle-bin' && id !== 'recycle-bin') {
+                        newItems[id] = {
+                            ...itemToDelete,
+                            originalParentId: itemToDelete.parentId,
+                            parentId: 'recycle-bin',
+                            updatedAt: Date.now(),
+                        };
+                    } else {
+                        const deleteRecursive = (itemId: string) => {
+                            const children = Object.values(newItems).filter(i => i.parentId === itemId);
+                            children.forEach(child => deleteRecursive(child.id));
+                            delete newItems[itemId];
+                        };
+                        deleteRecursive(id);
+                    }
+
+                    const newAllUserItems = activeUserId
+                        ? { ...allUserItems, [activeUserId]: newItems }
+                        : allUserItems;
+
+                    return {
+                        items: newItems,
+                        allUserItems: newAllUserItems,
+                    };
+                });
+            },
+
+            restoreItem: (id) => {
+                const { activeUserId, allUserItems } = get();
+
+                set(state => {
+                    const newItems = { ...state.items };
+                    const itemToRestore = newItems[id];
+
+                    if (!itemToRestore || itemToRestore.parentId !== 'recycle-bin') return state;
+
+                    newItems[id] = {
+                        ...itemToRestore,
+                        parentId: itemToRestore.originalParentId || 'desktop',
+                        originalParentId: undefined,
+                        updatedAt: Date.now(),
+                    };
+
+                    const newAllUserItems = activeUserId
+                        ? { ...allUserItems, [activeUserId]: newItems }
+                        : allUserItems;
+
+                    return {
+                        items: newItems,
+                        allUserItems: newAllUserItems,
+                    };
+                });
+            },
+
+            emptyRecycleBin: () => {
+                const { activeUserId, allUserItems } = get();
+
+                set(state => {
+                    const newItems = { ...state.items };
+                    const idsToDelete = new Set<string>();
+
+                    Object.values(newItems).forEach(item => {
+                        if (item.parentId === 'recycle-bin') {
+                            idsToDelete.add(item.id);
+                        }
+                    });
+
                     const deleteRecursive = (itemId: string) => {
                         const children = Object.values(newItems).filter(i => i.parentId === itemId);
                         children.forEach(child => deleteRecursive(child.id));
                         delete newItems[itemId];
                     };
-                    deleteRecursive(id);
+
+                    idsToDelete.forEach(id => deleteRecursive(id));
 
                     const newAllUserItems = activeUserId
                         ? { ...allUserItems, [activeUserId]: newItems }

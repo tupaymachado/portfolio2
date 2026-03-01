@@ -11,6 +11,7 @@ import { useShallow } from 'zustand/shallow';
 
 // Import de ícone fallback
 import unknownFileIcon from '../../assets/icons/app.webp';
+import folderIcon from '../../assets/icons/folder.webp';
 
 const GRID_CELL_WIDTH = 90;
 const GRID_CELL_HEIGHT = 100;
@@ -29,6 +30,7 @@ export default function Desktop() {
   // useShallow: evita re-render quando itens individuais mudam (comparação rasa)
   const allItems = useFileSystemStore(useShallow(state => state.items));
   const updateItemGridPosition = useFileSystemStore(state => state.updateItemGridPosition);
+  const emptyRecycleBin = useFileSystemStore(state => state.emptyRecycleBin);
 
   const desktopItems = useMemo(() => {
     return Object.values(allItems).filter(item => item.parentId === 'desktop');
@@ -168,7 +170,11 @@ export default function Desktop() {
         let onClick = () => closeContextMenu();
         let onDoubleClick = () => { };
 
-        if (item.type === 'file' && item.programId) {
+        if (item.type === 'folder') {
+          iconUrl = item.iconUrl || folderIcon;
+          // Se for uma pasta, duplo clique abre o Explorer
+          onDoubleClick = () => openWindow('explorer', { fileId: item.id });
+        } else if (item.type === 'file' && item.programId) {
           const program = PROGRAMS_MAP.get(item.programId);
 
           if (program) {
@@ -208,6 +214,26 @@ export default function Desktop() {
             style={style}
             onMouseDown={(e) => handleMouseDown(e, item.id, currentLeft, currentTop)}
             onTouchStart={(e) => handleTouchStart(e, item.id, currentLeft, currentTop)}
+            onContextMenu={(e) => {
+              if (item.id === 'recycle-bin') {
+                e.preventDefault();
+                e.stopPropagation();
+                openContextMenu(e.clientX, e.clientY, [
+                  {
+                    label: 'Abrir',
+                    onClick: () => openWindow('explorer', { fileId: item.id })
+                  },
+                  {
+                    label: 'Esvaziar Lixeira',
+                    onClick: () => {
+                      if (window.confirm('Tem certeza que deseja apagar todos os itens da lixeira permanentemente?')) {
+                        emptyRecycleBin();
+                      }
+                    }
+                  }
+                ]);
+              }
+            }}
           >
             <DesktopIcon
               label={item.name}

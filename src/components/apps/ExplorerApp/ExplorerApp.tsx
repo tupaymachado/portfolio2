@@ -18,6 +18,7 @@ import newFolder from '../../../assets/icons/new-folder.webp'
 import publishToInternet from '../../../assets/icons/publish-to-web.webp'
 import shareFolder from '../../../assets/icons/shared-folder.webp'
 import folderIcon from '../../../assets/icons/folder.webp'
+import trashBinIcon from '../../../assets/icons/trash-bin.webp'
 
 const card1: cardContent[] = [
   {
@@ -146,6 +147,10 @@ export default function ExplorerApp() {
     }
   }, [currentFolder, navigate]);
 
+  const emptyRecycleBin = useFileSystemStore(state => state.emptyRecycleBin);
+  const restoreItem = useFileSystemStore(state => state.restoreItem);
+  const getItemsByParent = useFileSystemStore(state => state.getItemsByParent);
+
   // Garante sidebar aberta no desktop
   useEffect(() => {
     if (!isCompact) setIsSidebarOpen(true);
@@ -175,7 +180,32 @@ export default function ExplorerApp() {
         {/* Sidebar Esquerda (Tarefas) - Controlada pelo botão Pastas */}
         {isSidebarOpen && (
           <div className={styles.sidebar}>
-            <ShortcutCard title="Tarefas " content={card1} />
+            {currentFolderId === 'recycle-bin' ? (
+              <ShortcutCard
+                title="Tarefas da Lixeira"
+                content={[
+                  {
+                    icon: trashBinIcon,
+                    description: 'Esvaziar a Lixeira',
+                    action: () => {
+                      if (window.confirm('Tem certeza que deseja apagar todos os itens da lixeira permanentemente?')) {
+                        emptyRecycleBin();
+                      }
+                    }
+                  },
+                  {
+                    icon: folderIcon,
+                    description: 'Restaurar todos os itens',
+                    action: () => {
+                      const items = getItemsByParent('recycle-bin');
+                      items.forEach(item => restoreItem(item.id));
+                    }
+                  }
+                ]}
+              />
+            ) : (
+              <ShortcutCard title="Tarefas" content={card1} />
+            )}
             <ShortcutCard title="Arquivos" content={card2} />
             <ShortcutCard title="Ações" content={card3} />
           </div>

@@ -155,27 +155,23 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
   useEffect(() => {
     if (contacts.length === 0) return;
 
-    // Track which rooms we've already 'seen' — prevents opening on mount
-    const initializedRooms = new Set<string>();
     const unsubs: (() => void)[] = [];
 
     for (const contact of contacts) {
       const roomId = [user.uid, contact.uid].sort().join('_');
-      const msgRef = query(ref(db, `messages/${roomId}`), limitToLast(1));
+      // Capture mount time — any msg with timestamp <= this is already "old"
+      const listenStart = Date.now();
 
-      let isFirstLoad = true;
+      const msgRef = query(ref(db, `messages/${roomId}`), limitToLast(10));
 
       const unsub = onChildAdded(msgRef, (snapshot) => {
-        // Skip brand-new listener's initial load of existing messages
-        if (isFirstLoad) {
-          isFirstLoad = false;
-          initializedRooms.add(roomId);
-          return;
-        }
-
         const msg = snapshot.val();
-        // Only react to messages from the OTHER person
         if (!msg || msg.uid === user.uid) return;
+
+        // Firebase timestamps can be a number or null (serverTimestamp pending)
+        const msgTime = typeof msg.timestamp === 'number' ? msg.timestamp : 0;
+        // Ignore messages that existed before we started listening
+        if (msgTime <= listenStart) return;
 
         // Check if window is already open for this contact
         const alreadyOpen = useWindowStore.getState().openWindows.find(

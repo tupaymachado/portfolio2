@@ -15,7 +15,11 @@ interface FolderContentViewProps {
 
 export default function FolderContentView({ folderId, onNavigate }: FolderContentViewProps) {
     const getItemsByParent = useFileSystemStore(state => state.getItemsByParent);
+    const deleteItem = useFileSystemStore(state => state.deleteItem);
+    const restoreItem = useFileSystemStore(state => state.restoreItem);
     const openWindow = useWindowStore(state => state.openWindow);
+    const openContextMenu = useWindowStore(state => state.openContextMenu);
+    const closeContextMenu = useWindowStore(state => state.closeContextMenu);
 
     const items = getItemsByParent(folderId);
 
@@ -49,10 +53,39 @@ export default function FolderContentView({ folderId, onNavigate }: FolderConten
         return appIcon;
     };
 
+    const handleContextMenu = (e: React.MouseEvent, item: { id: string; name: string }) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const menuItems = [];
+
+        if (folderId === 'recycle-bin') {
+            menuItems.push({
+                label: 'Restaurar',
+                onClick: () => restoreItem(item.id)
+            });
+            menuItems.push({
+                label: 'Excluir permanentemente',
+                onClick: () => {
+                    if (window.confirm(`Tem certeza que deseja excluir '${item.name}' permanentemente?`)) {
+                        deleteItem(item.id);
+                    }
+                }
+            });
+        } else {
+            menuItems.push({
+                label: 'Excluir',
+                onClick: () => deleteItem(item.id)
+            });
+        }
+
+        openContextMenu(e.clientX, e.clientY, menuItems);
+    };
+
     return (
-        <div className={styles.contentView}>
+        <div className={styles.contentView} onClick={closeContextMenu}>
             {items.map(item => (
-                <div key={item.id} className={styles.iconWrapper}>
+                <div key={item.id} className={styles.iconWrapper} onContextMenu={(e) => handleContextMenu(e, item)}>
                     <DesktopIcon
                         label={item.name}
                         iconUrl={getIconUrl(item)}

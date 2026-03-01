@@ -4,6 +4,7 @@ import styles from './ShortcutCard.module.css'
 export interface cardContent {
     icon: string;
     description: string;
+    action?: () => void;
 }
 
 interface ShortcutCardProps {
@@ -31,7 +32,12 @@ export default function ShortcutCard({ title, content }: ShortcutCardProps) {
             </div>
             <div className={`${styles.contentContainer} ${show ? styles.show : styles.hidden}`}>
                 {content.map((item: cardContent, index: number) => (
-                    <div key={index} className={styles.contentLine}>
+                    <div
+                        key={index}
+                        className={styles.contentLine}
+                        onClick={item.action}
+                        style={{ cursor: item.action ? 'pointer' : 'default' }}
+                    >
                         <img src={item.icon} alt={item.description} />
                         <div className={styles.description}>{item.description}</div>
                     </div>
