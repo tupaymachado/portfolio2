@@ -11,6 +11,7 @@ import { useSystemStore } from './stores/useSystemStore';
 import { useUserStore } from './stores/useUserStore';
 import { useFileSystemStore } from './stores/useFileSystemStore';
 import { PROGRAMS_MAP } from './data/programs';
+import { preloadAll } from './data/programs';
 import { useShallow } from 'zustand/shallow';
 import type { ProgramComponent } from './types/program';
 
@@ -31,6 +32,8 @@ function App() {
   // Initialize mobile detection on mount
   useEffect(() => {
     const cleanup = initializeMobileDetection();
+    // Silently preload all lazy chunks so they're ready when user opens a window
+    preloadAll();
     return cleanup;
   }, [initializeMobileDetection]);
 

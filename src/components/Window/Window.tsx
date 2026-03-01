@@ -1,5 +1,6 @@
 import styles from './Window.module.css';
 import { useEffect, useRef, useState, Suspense } from 'react';
+import hourglassGif from '../../assets/icons/hourglass.gif';
 import minimize from '../../assets/icons/minimize.webp';
 import maximize from '../../assets/icons/maximize.webp';
 import restore from '../../assets/icons/restore.webp';
@@ -256,7 +257,7 @@ export default function Window({ instanceId, programId }: WindowProps) {
             - Enquanto o chunk está sendo baixado, mostra o fallback
             - Quando carrega, renderiza o componente real
           */}
-          <Suspense fallback={<div style={{ padding: '20px' }}>Carregando...</div>}>
+          <Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}><img src={hourglassGif} alt="Carregando..." /></div>}>
             {renderProgramComponent(program.component)}
           </Suspense>
         </WindowContext.Provider>

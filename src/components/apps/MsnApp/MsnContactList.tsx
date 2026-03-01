@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { User } from 'firebase/auth';
-import { ref, onValue, set, onDisconnect, serverTimestamp } from 'firebase/database';
+import { ref, onValue, set, onDisconnect, serverTimestamp, onChildAdded, query, limitToLast } from 'firebase/database';
 import { doc, onSnapshot, collection } from 'firebase/firestore';
 import { db, firestoreDB } from '../../../config/firebase';
 import { useWebampStore } from '../../../stores/useWebampStore';
@@ -150,6 +150,49 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
       unsubscribeContacts();
     };
   }, [user.uid, user.displayName, user.photoURL]);
+
+  // Auto-open chat when an incoming message arrives from a contact
+  useEffect(() => {
+    if (contacts.length === 0) return;
+
+    // Track which rooms we've already 'seen' — prevents opening on mount
+    const initializedRooms = new Set<string>();
+    const unsubs: (() => void)[] = [];
+
+    for (const contact of contacts) {
+      const roomId = [user.uid, contact.uid].sort().join('_');
+      const msgRef = query(ref(db, `messages/${roomId}`), limitToLast(1));
+
+      let isFirstLoad = true;
+
+      const unsub = onChildAdded(msgRef, (snapshot) => {
+        // Skip brand-new listener's initial load of existing messages
+        if (isFirstLoad) {
+          isFirstLoad = false;
+          initializedRooms.add(roomId);
+          return;
+        }
+
+        const msg = snapshot.val();
+        // Only react to messages from the OTHER person
+        if (!msg || msg.uid === user.uid) return;
+
+        // Check if window is already open for this contact
+        const alreadyOpen = useWindowStore.getState().openWindows.find(
+          w => w.programId === 'msn-chat' && w.initialFileId === contact.uid
+        );
+        if (!alreadyOpen) {
+          openWindow('msn-chat', { fileId: contact.uid });
+        }
+      });
+
+      unsubs.push(unsub);
+    }
+
+    return () => {
+      unsubs.forEach(u => u());
+    };
+  }, [contacts, user.uid, openWindow]);
 
   const handleUpdateProfile = async (newName: string, newPhoto: string, newMessage: string) => {
     await msnUserService.updateUserProfile(user.uid, {

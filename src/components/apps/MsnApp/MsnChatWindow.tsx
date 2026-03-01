@@ -21,6 +21,8 @@ import surpriseSvg from '../../../assets/emojis/surprise.svg';
 import tongueSvg from '../../../assets/emojis/tongue.svg';
 import winkSvg from '../../../assets/emojis/wink.svg';
 import MsnParticipantList from './MsnParticipantList';
+import MsnProfileModal from './MsnProfileModal';
+import { msnUserService } from '../../../services/msnUserService';
 
 const EMOTICON_MAP: Record<string, string> = {
   ':)': smileSvg, ':-)': smileSvg, '😊': smileSvg, '🙂': smileSvg,
@@ -91,12 +93,10 @@ export default function MsnChatWindow() {
   const contactId = windowState?.initialFileId || 'global';
   const user = auth.currentUser;
 
-  if (!user) return null;
-
   // Normalize roomId so X→Y and Y→X always share the same Firebase path
   const roomId = contactId === 'global'
     ? 'global'
-    : [user.uid, contactId].sort().join('_');
+    : [user?.uid ?? '', contactId].sort().join('_');
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState('');
@@ -110,6 +110,11 @@ export default function MsnChatWindow() {
   const emojiPickerRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [isParticipantsOpen, setIsParticipantsOpen] = useState(false); // Mobile Drawer state
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [myPhotoURL, setMyPhotoURL] = useState(user?.photoURL || '');
+
+  // All hooks declared ABOVE this guard — React Rules of Hooks
+  if (!user) return null;
 
   // Fechar o picker se clicar fora
   useEffect(() => {
@@ -401,10 +406,27 @@ export default function MsnChatWindow() {
                 className={styles.avatarImage}
                 alt="Meu Avatar"
                 referrerPolicy="no-referrer"
+                onClick={() => setIsProfileModalOpen(true)}
+                style={{ cursor: 'pointer' }}
+                title="Editar perfil"
               />
             </div>
           </div>
         )}
+
+        {/* Profile Modal */}
+        <MsnProfileModal
+          isOpen={isProfileModalOpen}
+          onClose={() => setIsProfileModalOpen(false)}
+          uid={user.uid}
+          currentName={user.displayName || ''}
+          currentPhoto={myPhotoURL}
+          currentMessage={''}
+          onSave={async (name, photo) => {
+            setMyPhotoURL(photo);
+            await msnUserService.updateUserProfile(user.uid, { displayName: name, photoURL: photo });
+          }}
+        />
       </div>
     </div>
   );
