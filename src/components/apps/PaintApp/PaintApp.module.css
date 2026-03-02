@@ -1,0 +1,211 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #d4d0c8;
+  font-family: Tahoma, sans-serif;
+  font-size: 11px;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ── WORK AREA ── */
+.workArea {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── TOOLBAR ── */
+.toolbar {
+  width: 56px;
+  flex-shrink: 0;
+  background: #d4d0c8;
+  border-right: 1px solid #808080;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3px 2px;
+  gap: 6px;
+  overflow: hidden;
+}
+
+.toolGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+}
+
+.toolBtn {
+  width: 24px;
+  height: 24px;
+  background: #d4d0c8;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  padding: 0;
+  outline: none;
+  color: #000;
+}
+
+.toolBtn:hover {
+  border-color: #fff #808080 #808080 #fff;
+}
+
+.toolActive {
+  border-color: #808080 #fff #fff #808080 !important;
+  background: #bfbcb4 !important;
+}
+
+/* ── COLOR SWATCH ── */
+.colorSwatch {
+  position: relative;
+  width: 44px;
+  height: 34px;
+  flex-shrink: 0;
+}
+
+.swatchBg {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #808080;
+  bottom: 0;
+  right: 0;
+  box-shadow: inset 1px 1px #fff, inset -1px -1px #404040;
+}
+
+.swatchFg {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #808080;
+  top: 0;
+  left: 0;
+  box-shadow: inset 1px 1px #fff, inset -1px -1px #404040;
+}
+
+/* ── BRUSH SIZES ── */
+.brushSizes {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 100%;
+  border: 1px solid #808080;
+  padding: 2px 0;
+  background: #fff;
+}
+
+.sizeBtn {
+  width: 100%;
+  height: 18px;
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.sizeBtn:hover {
+  border-color: #316ac5;
+}
+
+.sizeBtnActive {
+  background: #b8d4f8 !important;
+  border-color: #316ac5 !important;
+}
+
+/* ── CANVAS AREA ── */
+.canvasScroll {
+  flex: 1;
+  overflow: auto;
+  background: #808080;
+  padding: 8px;
+}
+
+.canvasShadow {
+  display: inline-block;
+  box-shadow: 2px 2px 0 #404040;
+}
+
+.canvas {
+  display: block;
+  background: #ffffff;
+}
+
+/* ── COLOR PALETTE ── */
+.palette {
+  display: flex;
+  align-items: center;
+  background: #d4d0c8;
+  border-top: 2px solid #808080;
+  padding: 4px 6px;
+  gap: 8px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.paletteIndicator {
+  position: relative;
+  width: 38px;
+  height: 34px;
+  flex-shrink: 0;
+}
+
+.paletteBg {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #808080;
+  bottom: 0;
+  right: 0;
+  box-shadow: inset 1px 1px #fff, inset -1px -1px #404040;
+}
+
+.paletteFg {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #808080;
+  top: 0;
+  left: 0;
+  box-shadow: inset 1px 1px #fff, inset -1px -1px #404040;
+}
+
+.paletteGrid {
+  display: grid;
+  grid-template-columns: repeat(14, 16px);
+  grid-template-rows: repeat(2, 16px);
+  gap: 1px;
+}
+
+.paletteColor {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #808080;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: inset 1px 1px #fff, inset -1px -1px #404040;
+}
+
+.paletteColor:hover {
+  outline: 1px solid #000;
+  outline-offset: 1px;
+}
+
+/* ── STATUS BAR ── */
+.statusBar {
+  background: #d4d0c8;
+  border-top: 1px solid #808080;
+  padding: 2px 8px;
+  font-size: 11px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}

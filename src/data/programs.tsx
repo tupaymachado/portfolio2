@@ -21,6 +21,7 @@ import searchIcon from '../assets/icons/search.webp';
 import runIcon from '../assets/icons/run.webp';
 import msnFigure from '../assets/icons/msn-online.webp';
 import errorIcon from '../assets/icons/app.webp';
+import paintIcon from '../assets/icons/paint.webp';
 
 // ============================================================================
 // COMPONENTES LEVES (Factory Functions)
@@ -32,6 +33,7 @@ import errorIcon from '../assets/icons/app.webp';
 import NotepadApp from '../components/apps/NotepadApp/NotepadApp';
 import MinesweeperApp from '../components/apps/MinesweeperApp/MinesweeperApp';
 const LazyAboutMeApp = lazy(() => import('../components/apps/AboutMeApp/AboutMeApp'));
+const LazyPaintApp = lazy(() => import('../components/apps/PaintApp/PaintApp'));
 const LazyKlondikeBoard = lazy(() => import('../components/apps/SolitaireApp/klondike/components/KlondikeBoard'));
 const LazyWebampApp = lazy(() => import('../components/apps/WebampApp/WebampApp'));
 const LazyMsnApp = lazy(() => import('../components/apps/MsnApp/MsnApp'));
@@ -91,8 +93,17 @@ export const PROGRAMS: ProgramDefinition[] = [
     name: 'Sobre Mim',
     iconUrl: myComputerIcon,
     component: LazyAboutMeApp,
-    defaultSize: { width: 450, height: 550 },
+    defaultSize: { width: 450, height: 400 },
     minSize: { width: 380, height: 400 },
+    isResizable: true,
+  },
+  {
+    id: 'paint',
+    name: 'Paint',
+    iconUrl: paintIcon,
+    component: LazyPaintApp,
+    defaultSize: { width: 820, height: 640 },
+    minSize: { width: 500, height: 400 },
     isResizable: true,
   },
   {
