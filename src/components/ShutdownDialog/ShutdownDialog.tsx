@@ -10,6 +10,7 @@ import winLogo from '../../assets/icons/win-logo.webp';
 export default function ShutdownDialog() {
     const isShutdownDialogOpen = useWindowStore(state => state.isShutdownDialogOpen);
     const closeShutdownDialog = useWindowStore(state => state.closeShutdownDialog);
+    const openWindow = useWindowStore(state => state.openWindow);
     const shutdown = useUserStore(state => state.shutdown);
     const dialogRef = useRef<HTMLDivElement>(null);
 
@@ -41,8 +42,8 @@ export default function ShutdownDialog() {
     }
 
     const handleStandby = () => {
-        // Simula stand-by - poderia escurecer a tela
-        alert('Colocando o computador em espera...');
+        // Simula stand-by
+        openWindow('error', { context: { title: 'Em Espera', message: 'O modo Em Espera não está disponível no navegador.' } });
         closeShutdownDialog();
     };
 

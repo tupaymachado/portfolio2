@@ -15,6 +15,7 @@ export default function Taskbar() {
   const activeWindowId = useWindowStore(state => state.activeWindowId);
   const handleTaskbarClick = useWindowStore(state => state.handleTaskbarClick);
   const closeWindow = useWindowStore(state => state.closeWindow);
+  const openWindow = useWindowStore(state => state.openWindow);
   const deselectAllWindows = useWindowStore(state => state.deselectAllWindows);
 
   const handleTaskbarContextMenu = (e: React.MouseEvent) => {
@@ -29,11 +30,11 @@ export default function Taskbar() {
       },
       {
         label: 'Bloquear a barra de tarefas',
-        onClick: () => alert('Toggle Lock Taskbar') // Lógica futura
+        onClick: () => openWindow('error', { context: { title: 'Barra de Tarefas', message: 'O bloqueio da barra de tarefas não é suportado nesta versão.' } })
       },
       {
         label: 'Propriedades',
-        onClick: () => alert('Propriedades da Barra de Tarefas')
+        onClick: () => openWindow('error', { context: { title: 'Propriedades', message: 'Configurações de propriedades da barra de tarefas ainda não estão disponíveis.' } })
       }
     ];
 

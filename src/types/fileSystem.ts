@@ -13,6 +13,9 @@ export interface FileSystemItem {
   // Se for um arquivo, ele pode estar associado a um programa (ex: 'notepad')
   programId?: string;
 
+  // Se for um atalho de pasta, esse ID aponta para a pasta destino
+  targetId?: string;
+
   // Conteúdo do arquivo (para arquivos de texto simples, por exemplo)
   content?: string;
 

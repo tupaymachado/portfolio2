@@ -19,7 +19,8 @@ import myNetworkIcon from '../assets/icons/my-network-places.webp';
 import controlPanelIcon from '../assets/icons/control-panel.webp';
 import searchIcon from '../assets/icons/search.webp';
 import runIcon from '../assets/icons/run.webp';
-import msnFigure from '../assets/icons/msn-online.webp'
+import msnFigure from '../assets/icons/msn-online.webp';
+import errorIcon from '../assets/icons/app.webp';
 
 // ============================================================================
 // COMPONENTES LEVES (Factory Functions)
@@ -29,13 +30,13 @@ import msnFigure from '../assets/icons/msn-online.webp'
 // O código ainda está no bundle principal, mas é leve.
 
 import NotepadApp from '../components/apps/NotepadApp/NotepadApp';
-const AboutMeContent = () => <div style={{ padding: '10px' }}><h1>Sobre Mim</h1><p>Desenvolvedor apaixonado...</p></div>;
-const MyProjectsContent = () => <div style={{ padding: '10px' }}><h1>Meus Projetos</h1><p>Cards dos projetos aqui...</p></div>;
 import MinesweeperApp from '../components/apps/MinesweeperApp/MinesweeperApp';
+const LazyAboutMeApp = lazy(() => import('../components/apps/AboutMeApp/AboutMeApp'));
 const LazyKlondikeBoard = lazy(() => import('../components/apps/SolitaireApp/klondike/components/KlondikeBoard'));
 const LazyWebampApp = lazy(() => import('../components/apps/WebampApp/WebampApp'));
 const LazyMsnApp = lazy(() => import('../components/apps/MsnApp/MsnApp'));
 const LazyMsnChatWindow = lazy(() => import('../components/apps/MsnApp/MsnChatWindow'));
+import ErrorApp from '../components/apps/ErrorApp/ErrorApp';
 
 // Preload functions. Call these early to warm up the chunk download.
 export const preloadAll = () => {
@@ -80,7 +81,6 @@ export const PROGRAMS: ProgramDefinition[] = [
     name: 'Windows Explorer',
     iconUrl: explorerIcon,
     // React.lazy: código é baixado sob demanda (code-splitting)
-    // Este é o componente mais pesado do projeto
     component: LazyExplorerApp,
     defaultSize: { width: 800, height: 600 },
     minSize: { width: 400, height: 300 },
@@ -90,18 +90,9 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'about-me',
     name: 'Sobre Mim',
     iconUrl: myComputerIcon,
-    component: () => <AboutMeContent />,
-    defaultSize: { width: 550, height: 450 },
-    minSize: { width: 400, height: 300 },
-    isResizable: true,
-  },
-  {
-    id: 'my-projects',
-    name: 'Meus Projetos',
-    iconUrl: myComputerIcon,
-    component: () => <MyProjectsContent />,
-    defaultSize: { width: 700, height: 500 },
-    minSize: { width: 500, height: 400 },
+    component: LazyAboutMeApp,
+    defaultSize: { width: 450, height: 550 },
+    minSize: { width: 380, height: 400 },
     isResizable: true,
   },
   {
@@ -138,6 +129,17 @@ export const PROGRAMS: ProgramDefinition[] = [
     component: LazyWebampApp,
     isResizable: false,
     chromeless: true,
+  },
+  {
+    id: 'error',
+    name: 'Erro Restrito',
+    iconUrl: errorIcon,
+    component: () => <ErrorApp />,
+    isResizable: false,
+    chromeless: true,
+    hideFromStartMenu: true,
+    defaultSize: { width: 1, height: 1 },
+    minSize: { width: 1, height: 1 },
   }
 ];
 
@@ -159,10 +161,8 @@ export const SYSTEM_LINKS: SystemLink[] = [
   { id: 'sl-my-pictures', name: 'Minhas Imagens', iconUrl: myPicturesIcon, type: 'folder', targetId: 'my-pictures' },
   { id: 'sl-my-music', name: 'Minha Música', iconUrl: myMusicIcon, type: 'folder', targetId: 'my-music' },
   { id: 'sl-my-computer', name: 'Meu Computador', iconUrl: myComputerIconLg, type: 'folder', targetId: 'root' },
-  // Separador visual (via CSS)
-  { id: 'sl-my-network', name: 'Meus Locais de Rede', iconUrl: myNetworkIcon, type: 'folder', targetId: 'root' },
-  { id: 'sl-control-panel', name: 'Painel de Controle', iconUrl: controlPanelIcon, type: 'program', targetId: 'control-panel' },
-  // Separador visual (via CSS)
-  { id: 'sl-search', name: 'Pesquisar', iconUrl: searchIcon, type: 'program', targetId: 'search' },
-  { id: 'sl-run', name: 'Executar...', iconUrl: runIcon, type: 'program', targetId: 'run' },
+  { id: 'sl-my-network', name: 'Meus Locais de Rede', iconUrl: myNetworkIcon, type: 'program', targetId: 'error' },
+  { id: 'sl-control-panel', name: 'Painel de Controle', iconUrl: controlPanelIcon, type: 'program', targetId: 'error' },
+  { id: 'sl-search', name: 'Pesquisar', iconUrl: searchIcon, type: 'program', targetId: 'error' },
+  { id: 'sl-run', name: 'Executar...', iconUrl: runIcon, type: 'program', targetId: 'error' },
 ];

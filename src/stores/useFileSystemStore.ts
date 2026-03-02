@@ -10,6 +10,8 @@ import myMusicIcon from '../assets/icons/my-music.webp';
 import myVideosIcon from '../assets/icons/my-videos.webp';
 import notepadIcon from '../assets/icons/notepad.webp';
 import trashBinIcon from '../assets/icons/trash-bin.webp';
+import myProjectsIcon from '../assets/icons/my-documents.webp';
+import ie6Icon from '../assets/icons/ie6.webp';
 
 // ============================================================================
 // TEMPLATE DO FILE SYSTEM (clonado para cada novo perfil)
@@ -72,6 +74,48 @@ const createInitialItems = (): Record<string, FileSystemItem> => ({
         createdAt: Date.now(),
     },
 
+    // --- PASTAS DE CONTEÚDO ---
+    'my-projects': {
+        id: 'my-projects',
+        parentId: 'root',
+        name: 'Meus Projetos',
+        type: 'folder',
+        iconUrl: myProjectsIcon,
+        createdAt: Date.now(),
+    },
+
+    // --- ATALHOS DE URL DENTRO DE MY-PROJECTS ---
+    'url-portfolio': {
+        id: 'url-portfolio',
+        parentId: 'my-projects',
+        name: 'Portfólio XP',
+        type: 'file',
+        extension: 'url',
+        content: 'https://github.com/tupaymachado/portfolio2',
+        iconUrl: ie6Icon,
+        createdAt: Date.now(),
+    },
+    'url-projeto-2': {
+        id: 'url-projeto-2',
+        parentId: 'my-projects',
+        name: 'Projeto 2',
+        type: 'file',
+        extension: 'url',
+        content: 'https://github.com/tupaymachado',
+        iconUrl: ie6Icon,
+        createdAt: Date.now(),
+    },
+    'url-projeto-3': {
+        id: 'url-projeto-3',
+        parentId: 'my-projects',
+        name: 'Projeto 3',
+        type: 'file',
+        extension: 'url',
+        content: 'https://github.com/tupaymachado',
+        iconUrl: ie6Icon,
+        createdAt: Date.now(),
+    },
+
     // --- ATALHOS DO DESKTOP ---
     'shortcut-1': {
         id: 'shortcut-1',
@@ -86,8 +130,9 @@ const createInitialItems = (): Record<string, FileSystemItem> => ({
         id: 'shortcut-2',
         parentId: 'desktop',
         name: 'Meus Projetos',
-        type: 'file',
-        programId: 'my-projects',
+        type: 'folder',
+        targetId: 'my-projects',
+        iconUrl: myProjectsIcon,
         gridPosition: { row: 1, col: 0 },
         createdAt: Date.now(),
     },
@@ -99,6 +144,16 @@ const createInitialItems = (): Record<string, FileSystemItem> => ({
         programId: 'notepad',
         iconUrl: notepadIcon,
         gridPosition: { row: 0, col: 1 },
+        createdAt: Date.now(),
+    },
+    'shortcut-4': {
+        id: 'shortcut-4',
+        parentId: 'desktop',
+        name: 'Lixeira',
+        type: 'folder',
+        targetId: 'recycle-bin',
+        iconUrl: trashBinIcon,
+        gridPosition: { row: 5, col: 3 },
         createdAt: Date.now(),
     },
 });
@@ -146,18 +201,41 @@ export const useFileSystemStore = create<FileSystemStore>()(
 
             setActiveUser: (userId: string) => {
                 const { allUserItems } = get();
-                // Se o usuário não tem file system ainda, cria um com o template
+                const defaults = createInitialItems();
+
                 if (!allUserItems[userId]) {
-                    const newItems = createInitialItems();
+                    // Usuário novo: usa o template completo
                     set({
                         activeUserId: userId,
-                        allUserItems: { ...allUserItems, [userId]: newItems },
-                        items: newItems,
+                        allUserItems: { ...allUserItems, [userId]: defaults },
+                        items: defaults,
                     });
                 } else {
+                    // Usuário existente: mescla novos itens padrão que ainda não existem
+                    const existing = allUserItems[userId];
+                    const merged = { ...existing };
+                    for (const [key, value] of Object.entries(defaults)) {
+                        if (!merged[key]) {
+                            merged[key] = value;
+                        }
+                    }
+
+                    // Remove duplicatas de atalho da lixeira (mantém apenas 'shortcut-4')
+                    for (const key of Object.keys(merged)) {
+                        if (key !== 'shortcut-4' && merged[key].targetId === 'recycle-bin') {
+                            delete merged[key];
+                        }
+                    }
+
+                    // Migra shortcut-2 de programa (my-projects) para atalho de pasta
+                    if (merged['shortcut-2']?.programId === 'my-projects') {
+                        merged['shortcut-2'] = defaults['shortcut-2'];
+                    }
+
                     set({
                         activeUserId: userId,
-                        items: allUserItems[userId],
+                        allUserItems: { ...allUserItems, [userId]: merged },
+                        items: merged,
                     });
                 }
             },

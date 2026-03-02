@@ -151,7 +151,7 @@ export default function Desktop() {
       },
       {
         label: 'Propriedades',
-        onClick: () => alert('Propriedades de Vídeo em breve!')
+        onClick: () => openWindow('error', { context: { title: 'Propriedades', message: 'Configurações de vídeo e personalização ainda não estão disponíveis.' } })
       },
     ];
     openContextMenu(e.clientX, e.clientY, items);
@@ -172,8 +172,12 @@ export default function Desktop() {
 
         if (item.type === 'folder') {
           iconUrl = item.iconUrl || folderIcon;
-          // Se for uma pasta, duplo clique abre o Explorer
-          onDoubleClick = () => openWindow('explorer', { fileId: item.id });
+          // Se for atalho de pasta (targetId), abre a pasta destino; senão abre a própria pasta
+          const folderId = item.targetId ?? item.id;
+          onDoubleClick = () => openWindow('explorer', { folderId });
+        } else if (item.type === 'file' && item.targetId) {
+          iconUrl = item.iconUrl || unknownFileIcon; // O ícone normalmente virá do FileSystemStore
+          onDoubleClick = () => openWindow('explorer', { folderId: item.targetId });
         } else if (item.type === 'file' && item.programId) {
           const program = PROGRAMS_MAP.get(item.programId);
 
@@ -215,13 +219,13 @@ export default function Desktop() {
             onMouseDown={(e) => handleMouseDown(e, item.id, currentLeft, currentTop)}
             onTouchStart={(e) => handleTouchStart(e, item.id, currentLeft, currentTop)}
             onContextMenu={(e) => {
-              if (item.id === 'recycle-bin') {
+              if (item.id === 'recycle-bin' || item.targetId === 'recycle-bin') {
                 e.preventDefault();
                 e.stopPropagation();
                 openContextMenu(e.clientX, e.clientY, [
                   {
                     label: 'Abrir',
-                    onClick: () => openWindow('explorer', { fileId: item.id })
+                    onClick: () => openWindow('explorer', { folderId: 'recycle-bin' })
                   },
                   {
                     label: 'Esvaziar Lixeira',

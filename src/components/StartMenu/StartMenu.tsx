@@ -163,6 +163,8 @@ export default function StartMenu() {
               onClick={() => {
                 if (link.type === 'folder') {
                   openWindow('explorer', { folderId: link.targetId });
+                } else if (link.targetId === 'error') {
+                  openWindow('error', { context: { title: link.name, message: 'Esta funcionalidade solicitada restrita ou não foi implementada no portfólio.' } });
                 } else {
                   openWindow(link.targetId);
                 }
