@@ -32,7 +32,7 @@ import paintIcon from '../assets/icons/paint.webp';
 
 import NotepadApp from '../components/apps/NotepadApp/NotepadApp';
 import MinesweeperApp from '../components/apps/MinesweeperApp/MinesweeperApp';
-const LazyAboutMeApp = lazy(() => import('../components/apps/AboutMeApp/AboutMeApp'));
+import AboutMeApp from '../components/apps/AboutMeApp/AboutMeApp';
 const LazyPaintApp = lazy(() => import('../components/apps/PaintApp/PaintApp'));
 const LazyKlondikeBoard = lazy(() => import('../components/apps/SolitaireApp/klondike/components/KlondikeBoard'));
 const LazyWebampApp = lazy(() => import('../components/apps/WebampApp/WebampApp'));
@@ -92,7 +92,7 @@ export const PROGRAMS: ProgramDefinition[] = [
     id: 'about-me',
     name: 'Sobre Mim',
     iconUrl: myComputerIcon,
-    component: LazyAboutMeApp,
+    component: AboutMeApp,
     defaultSize: { width: 450, height: 400 },
     minSize: { width: 380, height: 400 },
     isResizable: true,

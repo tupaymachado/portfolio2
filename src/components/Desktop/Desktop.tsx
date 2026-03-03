@@ -72,6 +72,11 @@ export default function Desktop() {
     startDrag(touch.clientX, touch.clientY, itemId, currentLeft, currentTop);
   };
 
+  // --- AUTO-OPEN: Sobre Mim ao chegar no desktop ---
+  useEffect(() => {
+    openWindow('about-me');
+  }, []);
+
   // --- GLOBAL MOVE/END HANDLERS ---
   useEffect(() => {
     if (!draggingItemId) return;
