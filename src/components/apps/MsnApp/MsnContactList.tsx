@@ -53,6 +53,7 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isAddContactOpen, setIsAddContactOpen] = useState(false);
   const [contacts, setContacts] = useState<ContactData[]>([]);
+  const [contactMetas, setContactMetas] = useState<{ uid: string; group: string }[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   // Obter música atual do Webamp
@@ -103,38 +104,19 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
       }
     });
 
-    // Listen to contacts
+    // Listen to contacts list — só UIDs e grupos, perfis em tempo real no effect abaixo
     const contactsRef = collection(firestoreDB, `users/${user.uid}/contacts`);
-    const unsubscribeContacts = onSnapshot(contactsRef, async (snapshot) => {
+    const unsubscribeContacts = onSnapshot(contactsRef, (snapshot) => {
       if (snapshot.empty) {
-        setContacts([]);
+        setContactMetas([]);
         return;
       }
-
-      // We need to fetch each contact's profile info from users/
-      const loadedContacts: ContactData[] = [];
-      const { getDoc, doc } = await import('firebase/firestore');
-
-      for (const contactDoc of snapshot.docs) {
-        const contactUid = contactDoc.id;
-        const contactMeta = contactDoc.data();
-
-        const uRef = doc(firestoreDB, `users/${contactUid}`);
-        const uSnap = await getDoc(uRef);
-        if (uSnap.exists()) {
-          const uData = uSnap.data();
-          loadedContacts.push({
-            uid: contactUid,
-            group: contactMeta.group || 'Outros Contatos',
-            email: uData.email,
-            displayName: uData.displayName,
-            photoURL: uData.photoURL,
-            personalMessage: uData.personalMessage,
-            status: uData.status || 'offline',
-          });
-        }
-      }
-      setContacts(loadedContacts);
+      setContactMetas(
+        snapshot.docs.map(d => ({
+          uid: d.id,
+          group: d.data().group || 'Outros Contatos',
+        }))
+      );
     });
 
     return () => {
@@ -190,6 +172,39 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
     };
   }, [contacts, user.uid, openWindow]);
 
+  // Listener em tempo real para o perfil de cada contato
+  useEffect(() => {
+    if (contactMetas.length === 0) {
+      setContacts([]);
+      return;
+    }
+
+    const profileMap = new Map<string, ContactData>();
+    const unsubs: (() => void)[] = [];
+
+    for (const meta of contactMetas) {
+      const userDocRef = doc(firestoreDB, `users/${meta.uid}`);
+      const unsub = onSnapshot(userDocRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          profileMap.set(meta.uid, {
+            uid: meta.uid,
+            group: meta.group,
+            email: data.email || '',
+            displayName: data.displayName || '',
+            photoURL: data.photoURL || '',
+            personalMessage: data.personalMessage || '',
+            status: data.status || 'offline',
+          });
+          setContacts(Array.from(profileMap.values()));
+        }
+      });
+      unsubs.push(unsub);
+    }
+
+    return () => unsubs.forEach(u => u());
+  }, [contactMetas]);
+
   const handleUpdateProfile = async (newName: string, newPhoto: string, newMessage: string) => {
     await msnUserService.updateUserProfile(user.uid, {
       displayName: newName,
@@ -205,6 +220,7 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
   };
 
   const handlePersonalMessageChange = async (e: React.FocusEvent<HTMLInputElement>) => {
+    if (currentTrack) return; // música tocando — não sobrescrever a mensagem real
     const newMessage = e.target.value;
     if (newMessage !== personalMessage) {
       await msnUserService.updateUserProfile(user.uid, {
