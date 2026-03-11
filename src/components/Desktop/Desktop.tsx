@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from './Desktop.module.css';
 import { useMemo, useState, useRef, useEffect } from 'react';
 import blissWallpaper from '../../assets/bgs/bliss-normal.webp';
@@ -17,6 +18,7 @@ const GRID_CELL_WIDTH = 90;
 const GRID_CELL_HEIGHT = 100;
 
 export default function Desktop() {
+  const { t } = useTranslation();
   // TODO: usar para responsividade
   // const isMobile = useSystemStore(state => state.isMobile);
   // const isSmallScreen = useSystemStore(state => state.isSmallScreen);
@@ -146,17 +148,17 @@ export default function Desktop() {
     e.preventDefault();
     const items: MenuItem[] = [
       {
-        label: 'Atualizar',
+        label: t('desktop.contextMenu.refresh'),
         onClick: () => window.location.reload()
       },
       {
-        label: 'Novo',
+        label: t('desktop.contextMenu.new'),
         disabled: true,
-        onClick: () => console.log('Criar novo...')
+        onClick: () => { }
       },
       {
-        label: 'Propriedades',
-        onClick: () => openWindow('error', { context: { title: 'Propriedades', message: 'Configurações de vídeo e personalização ainda não estão disponíveis.' } })
+        label: t('desktop.contextMenu.properties'),
+        onClick: () => openWindow('error', { context: { title: t('desktop.contextMenu.properties'), message: 'Configurações de vídeo e personalização ainda não estão disponíveis.' } })
       },
     ];
     openContextMenu(e.clientX, e.clientY, items);
@@ -229,13 +231,13 @@ export default function Desktop() {
                 e.stopPropagation();
                 openContextMenu(e.clientX, e.clientY, [
                   {
-                    label: 'Abrir',
+                    label: t('desktop.recycleBin.open'),
                     onClick: () => openWindow('explorer', { folderId: 'recycle-bin' })
                   },
                   {
-                    label: 'Esvaziar Lixeira',
+                    label: t('desktop.recycleBin.empty'),
                     onClick: () => {
-                      if (window.confirm('Tem certeza que deseja apagar todos os itens da lixeira permanentemente?')) {
+                      if (window.confirm(t('desktop.recycleBin.confirm'))) {
                         emptyRecycleBin();
                       }
                     }

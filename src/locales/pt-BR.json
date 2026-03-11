@@ -1,0 +1,201 @@
+{
+    "lang": "Português",
+    "langShort": "PT",
+
+    "system": {
+        "ok": "OK",
+        "cancel": "Cancelar",
+        "close": "Fechar",
+        "loading": "Carregando...",
+        "error": "Erro"
+    },
+
+    "programs": {
+        "msn": "MSN Messenger",
+        "msn-chat": "Bate-papo do MSN",
+        "explorer": "Windows Explorer",
+        "about-me": "Sobre Mim",
+        "ie": "Internet Explorer",
+        "paint": "Paint",
+        "notepad": "Bloco de Notas",
+        "minesweeper": "Campo Minado",
+        "solitaire": "Paciência",
+        "winamp": "Winamp"
+    },
+
+    "systemLinks": {
+        "sl-my-documents": "Meus Documentos",
+        "sl-my-pictures": "Minhas Imagens",
+        "sl-my-music": "Minha Música",
+        "sl-my-computer": "Meu Computador",
+        "sl-my-network": "Meus Locais de Rede",
+        "sl-control-panel": "Painel de Controle",
+        "sl-search": "Pesquisar",
+        "sl-run": "Executar..."
+    },
+
+    "startMenu": {
+        "allPrograms": "Todos os programas",
+        "logoff": "Fazer logoff",
+        "shutdown": "Desligar o computador",
+        "back": "Voltar"
+    },
+
+    "desktop": {
+        "contextMenu": {
+            "refresh": "Atualizar",
+            "new": "Novo",
+            "properties": "Propriedades"
+        },
+        "recycleBin": {
+            "open": "Abrir",
+            "empty": "Esvaziar Lixeira",
+            "confirm": "Tem certeza que deseja apagar todos os itens da lixeira permanentemente?"
+        }
+    },
+
+    "taskbar": {
+        "contextMenu": {
+            "taskManager": "Gerenciador de Tarefas",
+            "lockTaskbar": "Bloquear a barra de tarefas",
+            "properties": "Propriedades",
+            "close": "Fechar"
+        }
+    },
+
+    "notepad": {
+        "menu": {
+            "file": "Arquivo",
+            "new": "Novo",
+            "save": "Salvar",
+            "saveAs": "Salvar como...",
+            "edit": "Editar",
+            "undo": "Desfazer",
+            "cut": "Recortar",
+            "copy": "Copiar",
+            "paste": "Colar",
+            "selectAll": "Selecionar tudo",
+            "format": "Formatar",
+            "wordWrap": "Quebra automática de linha"
+        }
+    },
+
+    "paint": {
+        "menu": {
+            "file": "Arquivo",
+            "new": "Novo",
+            "open": "Abrir...",
+            "saveAs": "Salvar como PNG",
+            "edit": "Editar",
+            "undo": "Desfazer",
+            "view": "Exibir",
+            "image": "Imagem",
+            "colors": "Cores",
+            "help": "Ajuda"
+        },
+        "status": {
+            "hint": "Para obter ajuda, clique em Tópicos da Ajuda no menu Ajuda."
+        }
+    },
+
+    "ie": {
+        "menu": {
+            "file": "Arquivo",
+            "newWindow": "Nova janela",
+            "open": "Abrir...",
+            "saveAs": "Salvar como...",
+            "print": "Imprimir...",
+            "close": "Fechar",
+            "edit": "Editar",
+            "cut": "Recortar",
+            "copy": "Copiar",
+            "paste": "Colar",
+            "selectAll": "Selecionar tudo",
+            "find": "Localizar (nesta página)...",
+            "view": "Exibir",
+            "statusBar": "Barra de status",
+            "addressBar": "Barra de endereço",
+            "textSize": "Tamanho do texto",
+            "pageSource": "Código-fonte da página",
+            "refresh": "Atualizar",
+            "stop": "Parar",
+            "favorites": "Favoritos",
+            "addFavorite": "Adicionar aos Favoritos...",
+            "organizeFavorites": "Organizar Favoritos...",
+            "tools": "Ferramentas",
+            "internetOptions": "Opções da Internet...",
+            "help": "Ajuda",
+            "helpContents": "Sumário e índice",
+            "aboutIE": "Sobre o Internet Explorer"
+        },
+        "toolbar": {
+            "back": "Voltar",
+            "search": "Pesquisar",
+            "favorites": "Favoritos"
+        },
+        "address": {
+            "label": "Endereço"
+        },
+        "links": {
+            "label": "Links",
+            "myPortfolio": "Meu Portfólio"
+        },
+        "status": {
+            "done": "Concluído",
+            "loading": "Carregando...",
+            "connecting": "Conectando ao site...",
+            "stopped": "Interrompido",
+            "localZone": "Computador local",
+            "internetZone": "Internet"
+        }
+    },
+
+    "aboutMe": {
+        "tabs": {
+            "general":    "Geral",
+            "skills":     "Habilidades",
+            "experience": "Experiência",
+            "contact":    "Contato"
+        },
+        "general": {
+            "name":     "Seu Nome Aqui",
+            "title":    "Desenvolvedor Full-Stack",
+            "location": "📍 São Paulo, Brasil",
+            "bio1": "Olá! Sou um desenvolvedor apaixonado por criar experiências digitais únicas e funcionais. Tenho experiência com React, TypeScript, Node.js e outras tecnologias modernas de desenvolvimento web.",
+            "bio2": "Este portfólio foi construído com React + TypeScript simulando o ambiente clássico do Windows XP — porque nostalgia e tecnologia combinam muito bem."
+        },
+        "skills": {
+            "frontend":    "Front-end",
+            "backendTools": "Back-end & Ferramentas"
+        },
+        "experience": {
+            "items": [
+                {
+                    "date":        "2024 – Atual",
+                    "title":       "Desenvolvedor Front-end",
+                    "subtitle":    "Nome da Empresa",
+                    "description": "Descrição das responsabilidades e tecnologias utilizadas."
+                },
+                {
+                    "date":        "2022 – 2024",
+                    "title":       "Desenvolvedor Júnior",
+                    "subtitle":    "Nome da Empresa",
+                    "description": "Descrição das responsabilidades e tecnologias utilizadas."
+                },
+                {
+                    "date":        "2020 – 2023",
+                    "title":       "Bacharelado em Ciência da Computação",
+                    "subtitle":    "Nome da Universidade",
+                    "description": ""
+                }
+            ]
+        },
+        "contact": {
+            "intro":    "Fique à vontade para entrar em contato!",
+            "github":   "GitHub",
+            "linkedin": "LinkedIn",
+            "email":    "E-mail"
+        },
+        "ok": "OK"
+    }
+}

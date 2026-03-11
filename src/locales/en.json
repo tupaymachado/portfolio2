@@ -1,0 +1,201 @@
+{
+    "lang": "English",
+    "langShort": "EN",
+
+    "system": {
+        "ok": "OK",
+        "cancel": "Cancel",
+        "close": "Close",
+        "loading": "Loading...",
+        "error": "Error"
+    },
+
+    "programs": {
+        "msn": "MSN Messenger",
+        "msn-chat": "MSN Chat",
+        "explorer": "Windows Explorer",
+        "about-me": "About Me",
+        "ie": "Internet Explorer",
+        "paint": "Paint",
+        "notepad": "Notepad",
+        "minesweeper": "Minesweeper",
+        "solitaire": "Solitaire",
+        "winamp": "Winamp"
+    },
+
+    "systemLinks": {
+        "sl-my-documents": "My Documents",
+        "sl-my-pictures": "My Pictures",
+        "sl-my-music": "My Music",
+        "sl-my-computer": "My Computer",
+        "sl-my-network": "My Network Places",
+        "sl-control-panel": "Control Panel",
+        "sl-search": "Search",
+        "sl-run": "Run..."
+    },
+
+    "startMenu": {
+        "allPrograms": "All Programs",
+        "logoff": "Log Off",
+        "shutdown": "Turn Off Computer",
+        "back": "Back"
+    },
+
+    "desktop": {
+        "contextMenu": {
+            "refresh": "Refresh",
+            "new": "New",
+            "properties": "Properties"
+        },
+        "recycleBin": {
+            "open": "Open",
+            "empty": "Empty Recycle Bin",
+            "confirm": "Are you sure you want to permanently delete all items in the Recycle Bin?"
+        }
+    },
+
+    "taskbar": {
+        "contextMenu": {
+            "taskManager": "Task Manager",
+            "lockTaskbar": "Lock Taskbar",
+            "properties": "Properties",
+            "close": "Close"
+        }
+    },
+
+    "notepad": {
+        "menu": {
+            "file": "File",
+            "new": "New",
+            "save": "Save",
+            "saveAs": "Save As...",
+            "edit": "Edit",
+            "undo": "Undo",
+            "cut": "Cut",
+            "copy": "Copy",
+            "paste": "Paste",
+            "selectAll": "Select All",
+            "format": "Format",
+            "wordWrap": "Word Wrap"
+        }
+    },
+
+    "paint": {
+        "menu": {
+            "file": "File",
+            "new": "New",
+            "open": "Open...",
+            "saveAs": "Save as PNG",
+            "edit": "Edit",
+            "undo": "Undo",
+            "view": "View",
+            "image": "Image",
+            "colors": "Colors",
+            "help": "Help"
+        },
+        "status": {
+            "hint": "For help, click Help Topics on the Help Menu."
+        }
+    },
+
+    "ie": {
+        "menu": {
+            "file": "File",
+            "newWindow": "New Window",
+            "open": "Open...",
+            "saveAs": "Save As...",
+            "print": "Print...",
+            "close": "Close",
+            "edit": "Edit",
+            "cut": "Cut",
+            "copy": "Copy",
+            "paste": "Paste",
+            "selectAll": "Select All",
+            "find": "Find (on this page)...",
+            "view": "View",
+            "statusBar": "Status Bar",
+            "addressBar": "Address Bar",
+            "textSize": "Text Size",
+            "pageSource": "Source",
+            "refresh": "Refresh",
+            "stop": "Stop",
+            "favorites": "Favorites",
+            "addFavorite": "Add to Favorites...",
+            "organizeFavorites": "Organize Favorites...",
+            "tools": "Tools",
+            "internetOptions": "Internet Options...",
+            "help": "Help",
+            "helpContents": "Contents and Index",
+            "aboutIE": "About Internet Explorer"
+        },
+        "toolbar": {
+            "back": "Back",
+            "search": "Search",
+            "favorites": "Favorites"
+        },
+        "address": {
+            "label": "Address"
+        },
+        "links": {
+            "label": "Links",
+            "myPortfolio": "My Portfolio"
+        },
+        "status": {
+            "done": "Done",
+            "loading": "Loading...",
+            "connecting": "Connecting to site...",
+            "stopped": "Stopped",
+            "localZone": "Local computer",
+            "internetZone": "Internet"
+        }
+    },
+
+    "aboutMe": {
+        "tabs": {
+            "general":    "General",
+            "skills":     "Skills",
+            "experience": "Experience",
+            "contact":    "Contact"
+        },
+        "general": {
+            "name":     "Your Name Here",
+            "title":    "Full-Stack Developer",
+            "location": "📍 São Paulo, Brazil",
+            "bio1": "Hi! I'm a developer passionate about crafting unique and functional digital experiences. I have experience with React, TypeScript, Node.js, and other modern web technologies.",
+            "bio2": "This portfolio was built with React + TypeScript, simulating the classic Windows XP environment — because nostalgia and technology are a great match."
+        },
+        "skills": {
+            "frontend":     "Front-end",
+            "backendTools": "Back-end & Tools"
+        },
+        "experience": {
+            "items": [
+                {
+                    "date":        "2024 – Present",
+                    "title":       "Front-end Developer",
+                    "subtitle":    "Company Name",
+                    "description": "Description of responsibilities and technologies used."
+                },
+                {
+                    "date":        "2022 – 2024",
+                    "title":       "Junior Developer",
+                    "subtitle":    "Company Name",
+                    "description": "Description of responsibilities and technologies used."
+                },
+                {
+                    "date":        "2020 – 2023",
+                    "title":       "Bachelor's in Computer Science",
+                    "subtitle":    "University Name",
+                    "description": ""
+                }
+            ]
+        },
+        "contact": {
+            "intro":    "Feel free to get in touch!",
+            "github":   "GitHub",
+            "linkedin": "LinkedIn",
+            "email":    "Email"
+        },
+        "ok": "OK"
+    }
+}

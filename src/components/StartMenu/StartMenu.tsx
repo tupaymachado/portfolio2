@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './StartMenu.module.css';
 import { useWindowStore } from '../../stores/useWindowStore';
 import { useSystemStore } from '../../stores/useSystemStore';
@@ -23,6 +24,7 @@ export default function StartMenu() {
   const currentUser = useUserStore(state => state.getCurrentUser());
   const logoutUser = useUserStore(state => state.logout);
 
+  const { t } = useTranslation();
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Estado do submenu "Todos os programas"
@@ -140,7 +142,7 @@ export default function StartMenu() {
               onClick={() => openWindow(program.id)}
             >
               <img src={program.iconUrl} alt={program.name} className={styles.menuItemIcon} />
-              <span className={styles.menuItemName}>{program.name}</span>
+              <span className={styles.menuItemName}>{t(`programs.${program.id}`, { defaultValue: program.name })}</span>
             </button>
           ))}
           <div className={styles.containerAllPrograms}>
@@ -151,7 +153,7 @@ export default function StartMenu() {
               onMouseLeave={handleMouseLeaveTrigger}
               onClick={() => isMobile && setIsAllProgramsOpen(true)}
             >
-              Todos os programas <img src={arrowRight} alt="" />
+              {t('startMenu.allPrograms')} <img src={arrowRight} alt="" />
             </button>
           </div>
         </div>
@@ -171,7 +173,7 @@ export default function StartMenu() {
               }}
             >
               <img src={link.iconUrl} alt={link.name} className={styles.systemItemIcon} />
-              <span className={styles.systemItemName}>{link.name}</span>
+              <span className={styles.systemItemName}>{t(`systemLinks.${link.id}`, { defaultValue: link.name })}</span>
             </button>
           ))}
         </div>
@@ -190,7 +192,7 @@ export default function StartMenu() {
                   className={styles.backButton}
                   onClick={() => setIsAllProgramsOpen(false)}
                 >
-                  <img src={arrowLeft} alt="" /> Voltar
+                  <img src={arrowLeft} alt="" /> {t('startMenu.back')}
                 </button>
                 <div className={styles.submenuBorder}></div>
               </>
@@ -203,7 +205,7 @@ export default function StartMenu() {
                   onClick={() => openWindow(program.id)}
                 >
                   <img src={program.iconUrl} alt={program.name} className={styles.submenuItemIcon} />
-                  <span>{program.name}</span>
+                  <span>{t(`programs.${program.id}`, { defaultValue: program.name })}</span>
                 </button>
               ))}
             </div>
@@ -212,12 +214,12 @@ export default function StartMenu() {
       </main>
       <footer className={styles.startMenuFooter}>
         <div className={styles.powerButtons} onClick={logoutUser}>
-          <img src={logout} alt="Fazer logoff" />
-          <span>Fazer logoff</span>
+          <img src={logout} alt={t('startMenu.logoff')} />
+          <span>{t('startMenu.logoff')}</span>
         </div>
         <div className={styles.powerButtons} onClick={openShutdownDialog}>
-          <img src={power} alt="Desligar" />
-          <span>Desligar o computador</span>
+          <img src={power} alt={t('startMenu.shutdown')} />
+          <span>{t('startMenu.shutdown')}</span>
         </div>
       </footer>
     </div>

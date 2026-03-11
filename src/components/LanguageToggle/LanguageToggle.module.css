@@ -1,0 +1,41 @@
+.toggle {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 22px;
+    padding: 0 6px;
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: default;
+    font-family: Tahoma, 'Microsoft Sans Serif', sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    color: #fff;
+    user-select: none;
+    border-radius: 0;
+}
+
+.toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.toggle:active {
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.active {
+    color: #fff;
+    opacity: 1;
+}
+
+.inactive {
+    color: #fff;
+    opacity: 0.45;
+}
+
+.sep {
+    color: #fff;
+    opacity: 0.35;
+    margin: 0 1px;
+}

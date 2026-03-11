@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import AppMenuBar from '../../AppMenuBar/AppMenuBar';
 import type { AppMenuBarItem } from '../../AppMenuBar/AppMenuBar';
 
@@ -18,6 +19,8 @@ export default function NotepadMenuBar({
     onToggleWordWrap,
     textAreaRef,
 }: NotepadMenuBarProps) {
+    const { t } = useTranslation();
+
     const execCommand = (command: string) => {
         const textarea = textAreaRef.current;
         if (!textarea) return;
@@ -53,30 +56,30 @@ export default function NotepadMenuBar({
 
     const items: AppMenuBarItem[] = [
         {
-            label: 'Arquivo',
+            label: t('notepad.menu.file'),
             items: [
-                { label: 'Novo', onClick: onNew, shortcut: 'Ctrl+N' },
+                { label: t('notepad.menu.new'), onClick: onNew, shortcut: 'Ctrl+N' },
                 { separator: true },
-                { label: 'Salvar', onClick: onSave, shortcut: 'Ctrl+S' },
-                { label: 'Salvar como...', onClick: onSaveAs },
+                { label: t('notepad.menu.save'), onClick: onSave, shortcut: 'Ctrl+S' },
+                { label: t('notepad.menu.saveAs'), onClick: onSaveAs },
             ],
         },
         {
-            label: 'Editar',
+            label: t('notepad.menu.edit'),
             items: [
-                { label: 'Desfazer', onClick: () => execCommand('undo'), shortcut: 'Ctrl+Z' },
+                { label: t('notepad.menu.undo'), onClick: () => execCommand('undo'), shortcut: 'Ctrl+Z' },
                 { separator: true },
-                { label: 'Recortar', onClick: () => execCommand('cut'), shortcut: 'Ctrl+X' },
-                { label: 'Copiar', onClick: () => execCommand('copy'), shortcut: 'Ctrl+C' },
-                { label: 'Colar', onClick: () => execCommand('paste'), shortcut: 'Ctrl+V' },
+                { label: t('notepad.menu.cut'), onClick: () => execCommand('cut'), shortcut: 'Ctrl+X' },
+                { label: t('notepad.menu.copy'), onClick: () => execCommand('copy'), shortcut: 'Ctrl+C' },
+                { label: t('notepad.menu.paste'), onClick: () => execCommand('paste'), shortcut: 'Ctrl+V' },
                 { separator: true },
-                { label: 'Selecionar tudo', onClick: () => execCommand('selectAll'), shortcut: 'Ctrl+A' },
+                { label: t('notepad.menu.selectAll'), onClick: () => execCommand('selectAll'), shortcut: 'Ctrl+A' },
             ],
         },
         {
-            label: 'Formatar',
+            label: t('notepad.menu.format'),
             items: [
-                { label: 'Quebra automática de linha', onClick: onToggleWordWrap, checked: wordWrap },
+                { label: t('notepad.menu.wordWrap'), onClick: onToggleWordWrap, checked: wordWrap },
             ],
         },
     ];

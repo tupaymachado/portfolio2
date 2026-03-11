@@ -1,4 +1,5 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './PaintApp.module.css';
 import AppMenuBar from '../../AppMenuBar/AppMenuBar';
 import type { AppMenuBarItem } from '../../AppMenuBar/AppMenuBar';
@@ -81,6 +82,7 @@ function floodFill(ctx: CanvasRenderingContext2D, startX: number, startY: number
 
 
 export default function PaintApp() {
+  const { t } = useTranslation();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [tool, setTool] = useState<Tool>('pencil');
@@ -278,24 +280,24 @@ export default function PaintApp() {
 
   const menuItems: AppMenuBarItem[] = [
     {
-      label: 'Arquivo',
+      label: t('paint.menu.file'),
       items: [
-        { label: 'Novo', onClick: handleNew },
-        { label: 'Abrir...', onClick: handleOpen },
+        { label: t('paint.menu.new'), onClick: handleNew },
+        { label: t('paint.menu.open'), onClick: handleOpen },
         { separator: true },
-        { label: 'Salvar como PNG', onClick: handleSave },
+        { label: t('paint.menu.saveAs'), onClick: handleSave },
       ],
     },
     {
-      label: 'Editar',
+      label: t('paint.menu.edit'),
       items: [
-        { label: 'Desfazer', onClick: handleUndo },
+        { label: t('paint.menu.undo'), onClick: handleUndo },
       ],
     },
-    { label: 'Exibir' },
-    { label: 'Imagem' },
-    { label: 'Cores' },
-    { label: 'Ajuda' },
+    { label: t('paint.menu.view') },
+    { label: t('paint.menu.image') },
+    { label: t('paint.menu.colors') },
+    { label: t('paint.menu.help') },
   ];
 
   return (
@@ -387,7 +389,7 @@ export default function PaintApp() {
 
       {/* Status Bar */}
       <div className={styles.statusBar}>
-        {status ? `${status}px` : 'Para obter ajuda, clique em Tópicos da Ajuda no menu Ajuda.'}
+        {status ? `${status}px` : t('paint.status.hint')}
       </div>
     </div>
   );
