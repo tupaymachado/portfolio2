@@ -340,7 +340,10 @@
             "signInButton": "Entrar com Google",
             "footer": "Windows Live Messenger — Portfolio Edition"
         },
-        "error": "Erro ao fazer login"
+        "error": "Erro ao fazer login",
+        "rooms": {
+            "global": "Sala Global"
+        }
     },
 
     "aboutMe": {

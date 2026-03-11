@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { User } from 'firebase/auth';
 import { ref, onValue, set, onDisconnect, serverTimestamp, onChildAdded, query, limitToLast } from 'firebase/database';
 import { doc, onSnapshot, collection } from 'firebase/firestore';
@@ -38,12 +39,15 @@ interface ContactData {
   status: string;
 }
 
-const ROOMS = [
-  { id: 'global', name: 'Sala Global', emoji: '\uD83C\uDF0D' },
-];
-
 export default function MsnContactList({ user, initialStatus, onLogout }: MsnContactListProps) {
+  const { t } = useTranslation();
   const openWindow = useWindowStore(state => state.openWindow);
+
+  // Construir ROOMS dinamicamente usando traduções
+  const ROOMS = [
+    { id: 'global', name: t('msn.rooms.global'), emoji: '\uD83C\uDF0D' },
+  ];
+
   const [onlineCount, setOnlineCount] = useState(0);
   const [presenceMap, setPresenceMap] = useState<PresenceData>({});
   const [currentStatus, setCurrentStatus] = useState(initialStatus);

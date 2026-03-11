@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ref, push, onChildAdded, query, limitToLast, serverTimestamp } from 'firebase/database';
 import { db, firestoreDB } from '../../../config/firebase';
 import styles from './MsnChatWindow.module.css';
@@ -88,6 +89,7 @@ const ROOM_NAMES: Record<string, string> = {
 };
 
 export default function MsnChatWindow() {
+  const { t } = useTranslation();
   const { instanceId } = useWindowContext();
   const windowState = useWindowStore(state => state.openWindows.find(w => w.id === instanceId));
   const contactId = windowState?.initialFileId || 'global';
@@ -150,12 +152,12 @@ export default function MsnChatWindow() {
   // Atualizar título da janela OS
   useEffect(() => {
     if (contactId === 'global') {
-      useWindowStore.getState().updateWindowMeta(instanceId, { title: 'Sala Global - Bate-papo do MSN' });
+      useWindowStore.getState().updateWindowMeta(instanceId, { title: `${t('msn.rooms.global')} - ${t('programs.msn-chat')}` });
     } else if (contactInfo) {
       const titleName = contactInfo.displayName || contactInfo.email;
       useWindowStore.getState().updateWindowMeta(instanceId, { title: `${titleName} - Conversa` });
     }
-  }, [contactInfo, contactId, instanceId]);
+  }, [contactInfo, contactId, instanceId, t]);
 
   // Escutar novas mensagens
   useEffect(() => {
