@@ -150,6 +150,65 @@
         }
     },
 
+    "explorer": {
+        "contextMenu": {
+            "restore": "Restaurar",
+            "deleteForever": "Excluir permanentemente",
+            "delete": "Excluir",
+            "confirmDelete": "Tem certeza que deseja excluir '{name}' permanentemente?"
+        },
+        "emptyFolder": "Esta pasta está vazia.",
+        "sidebar": {
+            "hideContent": "Esconder o conteúdo desse drive",
+            "computer": "Meu Computador",
+            "pictures": "Minhas Imagens",
+            "music": "Minhas Músicas",
+            "videos": "Minhas Vídeos",
+            "newFolder": "Nova Pasta",
+            "restore": "Restaurar todos os itens",
+            "emptyBin": "Esvaziar a Lixeira",
+            "confirmEmptyBin": "Tem certeza que deseja apagar todos os itens da lixeira permanentemente?"
+        },
+        "sidebar_sections": {
+            "tasks": "Tarefas",
+            "files": "Arquivos",
+            "actions": "Ações"
+        },
+        "toolbar": {
+            "file": "Arquivo",
+            "view": "Exibir",
+            "favorites": "Favoritos",
+            "tools": "Ferramentas",
+            "help": "Ajuda",
+            "back": "Voltar",
+            "forward": "Avançar",
+            "up": "Acima",
+            "search": "Pesquisar",
+            "toggleSidebar": "Mostrar/Esconder Painel Lateral",
+            "closeSidebar": "Fechar Painel",
+            "address": "Endereço",
+            "go": "Ir"
+        }
+    },
+
+    "fileSystem": {
+        "root": "C:",
+        "desktop": "Desktop",
+        "recycle-bin": "Lixeira",
+        "my-documents": "Meus Documentos",
+        "my-pictures": "Minhas Imagens",
+        "my-music": "Minha Música",
+        "my-videos": "Minhas Vídeos",
+        "my-projects": "Meus Projetos",
+        "shortcut-1": "Sobre Mim",
+        "shortcut-2": "Meus Projetos",
+        "shortcut-3": "Bloco de Notas",
+        "shortcut-4": "Lixeira",
+        "url-portfolio": "Portfólio XP",
+        "url-projeto-2": "Projeto 2",
+        "url-projeto-3": "Projeto 3"
+    },
+
     "aboutMe": {
         "tabs": {
             "general":    "Geral",

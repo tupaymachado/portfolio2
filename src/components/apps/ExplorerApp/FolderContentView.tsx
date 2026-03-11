@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import styles from './FolderContentView.module.css';
 import { useFileSystemStore } from '../../../stores/useFileSystemStore';
 import { useWindowStore } from '../../../stores/useWindowStore';
 import DesktopIcon from '../../DesktopIcon/DesktopIcon';
 import { PROGRAMS } from '../../../data/programs';
+import { getDisplayName } from '../../../utils/fileSystemNames';
 
 // Imports de ícones para fallback
 import folderIcon from '../../../assets/icons/folder.webp';
@@ -14,6 +16,7 @@ interface FolderContentViewProps {
 }
 
 export default function FolderContentView({ folderId, onNavigate }: FolderContentViewProps) {
+    const { t } = useTranslation();
     const getItemsByParent = useFileSystemStore(state => state.getItemsByParent);
     const deleteItem = useFileSystemStore(state => state.deleteItem);
     const restoreItem = useFileSystemStore(state => state.restoreItem);
@@ -61,22 +64,23 @@ export default function FolderContentView({ folderId, onNavigate }: FolderConten
 
         const menuItems = [];
 
+        const displayName = getDisplayName(item.id, item.name, t);
         if (folderId === 'recycle-bin') {
             menuItems.push({
-                label: 'Restaurar',
+                label: t('explorer.contextMenu.restore'),
                 onClick: () => restoreItem(item.id)
             });
             menuItems.push({
-                label: 'Excluir permanentemente',
+                label: t('explorer.contextMenu.deleteForever'),
                 onClick: () => {
-                    if (window.confirm(`Tem certeza que deseja excluir '${item.name}' permanentemente?`)) {
+                    if (window.confirm(t('explorer.contextMenu.confirmDelete', { name: displayName }))) {
                         deleteItem(item.id);
                     }
                 }
             });
         } else {
             menuItems.push({
-                label: 'Excluir',
+                label: t('explorer.contextMenu.delete'),
                 onClick: () => deleteItem(item.id)
             });
         }
@@ -89,7 +93,7 @@ export default function FolderContentView({ folderId, onNavigate }: FolderConten
             {items.map(item => (
                 <div key={item.id} className={styles.iconWrapper} onContextMenu={(e) => handleContextMenu(e, item)}>
                     <DesktopIcon
-                        label={item.name}
+                        label={getDisplayName(item.id, item.name, t)}
                         iconUrl={getIconUrl(item)}
                         onClick={() => { }}
                         onDoubleClick={() => handleDoubleClick(item)}
@@ -98,7 +102,7 @@ export default function FolderContentView({ folderId, onNavigate }: FolderConten
                 </div>
             ))}
             {items.length === 0 && (
-                <p className={styles.emptyMessage}>Esta pasta está vazia.</p>
+                <p className={styles.emptyMessage}>{t('explorer.emptyFolder')}</p>
             )}
         </div>
     );

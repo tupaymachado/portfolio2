@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './ExplorerApp.module.css';
 import ExplorerToolbar from './ExplorerToobar';
 import FolderContentView from './FolderContentView';
@@ -7,6 +8,7 @@ import type { cardContent } from './ShortcutCard';
 import { useFileSystemStore } from '../../../stores/useFileSystemStore';
 import { useWindowStore, useWindowContext } from '../../../stores/useWindowStore';
 import { useSystemStore } from '../../../stores/useSystemStore';
+import { getDisplayName } from '../../../utils/fileSystemNames';
 import startMenuPrograms from '../../../assets/icons/start-menu-programs.webp'
 import programs from '../../../assets/icons/programs.webp'
 import search from '../../../assets/icons/search.webp'
@@ -70,6 +72,7 @@ const card3: cardContent[] = [
 ]
 
 export default function ExplorerApp() {
+  const { t } = useTranslation();
   const { instanceId } = useWindowContext();
   // Seletor otimizado: só re-renderiza quando o initialFolderId DESTA janela muda
   const initialFolderId = useWindowStore(
@@ -101,12 +104,13 @@ export default function ExplorerApp() {
   // Atualiza título e ícone da janela quando a pasta muda
   useEffect(() => {
     if (currentFolder) {
+      const displayName = getDisplayName(currentFolder.id, currentFolder.name, t);
       updateWindowMeta(instanceId, {
-        title: currentFolder.name,
+        title: displayName,
         iconUrl: currentFolder.iconUrl || folderIcon,
       });
     }
-  }, [currentFolder, instanceId, updateWindowMeta]);
+  }, [currentFolder, instanceId, updateWindowMeta, t]);
 
   const navigate = useCallback((folderId: string) => {
     console.log('[NAV] navigate to:', folderId);

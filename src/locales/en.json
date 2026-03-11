@@ -150,6 +150,65 @@
         }
     },
 
+    "explorer": {
+        "contextMenu": {
+            "restore": "Restore",
+            "deleteForever": "Delete permanently",
+            "delete": "Delete",
+            "confirmDelete": "Are you sure you want to permanently delete '{name}'?"
+        },
+        "emptyFolder": "This folder is empty.",
+        "sidebar": {
+            "hideContent": "Hide the contents of this drive",
+            "computer": "My Computer",
+            "pictures": "My Pictures",
+            "music": "My Music",
+            "videos": "My Videos",
+            "newFolder": "New Folder",
+            "restore": "Restore all items",
+            "emptyBin": "Empty Recycle Bin",
+            "confirmEmptyBin": "Are you sure you want to permanently delete all items in the Recycle Bin?"
+        },
+        "sidebar_sections": {
+            "tasks": "Tasks",
+            "files": "Files",
+            "actions": "Actions"
+        },
+        "toolbar": {
+            "file": "File",
+            "view": "View",
+            "favorites": "Favorites",
+            "tools": "Tools",
+            "help": "Help",
+            "back": "Back",
+            "forward": "Forward",
+            "up": "Up",
+            "search": "Search",
+            "toggleSidebar": "Show/Hide Sidebar",
+            "closeSidebar": "Close Panel",
+            "address": "Address",
+            "go": "Go"
+        }
+    },
+
+    "fileSystem": {
+        "root": "C:",
+        "desktop": "Desktop",
+        "recycle-bin": "Recycle Bin",
+        "my-documents": "My Documents",
+        "my-pictures": "My Pictures",
+        "my-music": "My Music",
+        "my-videos": "My Videos",
+        "my-projects": "My Projects",
+        "shortcut-1": "About Me",
+        "shortcut-2": "My Projects",
+        "shortcut-3": "Notepad",
+        "shortcut-4": "Recycle Bin",
+        "url-portfolio": "Portfolio XP",
+        "url-projeto-2": "Project 2",
+        "url-projeto-3": "Project 3"
+    },
+
     "aboutMe": {
         "tabs": {
             "general":    "General",
