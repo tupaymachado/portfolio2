@@ -23,6 +23,8 @@ interface UndoEntry {
 export interface Hint {
     from: Source;
     description: string; // ex: "Mover 5♥ para coluna 3"
+    messageKey?: string; // chave de tradução: "solitaire.hints.moveToFoundation"
+    params?: Record<string, string | number>; // parâmetros para interpolação: { card: "5♥", col: 3 }
 }
 
 export class KlondikeGame {
@@ -261,7 +263,13 @@ export class KlondikeGame {
         if (this.waste.length > 0) {
             const wasteTop = this.waste[this.waste.length - 1]!;
             if (this.foundations.some(f => f.canReceive(wasteTop))) {
-                return { from: { kind: 'waste' }, description: `Mover ${this.cardLabel(wasteTop)} para foundation` };
+                const cardLabel = this.cardLabel(wasteTop);
+                return {
+                    from: { kind: 'waste' },
+                    description: `Mover ${cardLabel} para foundation`,
+                    messageKey: 'solitaire.hints.moveToFoundation',
+                    params: { card: cardLabel }
+                };
             }
         }
         for (let i = 0; i < this.columns.length; i++) {
@@ -269,9 +277,12 @@ export class KlondikeGame {
             if (col.columnCards.length === 0) continue;
             const topCard = col.topCard!;
             if (this.foundations.some(f => f.canReceive(topCard))) {
+                const cardLabel = this.cardLabel(topCard);
                 return {
                     from: { kind: 'column', index: i, stackFrom: col.columnCards.length - 1 },
-                    description: `Mover ${this.cardLabel(topCard)} para foundation`,
+                    description: `Mover ${cardLabel} para foundation`,
+                    messageKey: 'solitaire.hints.moveToFoundation',
+                    params: { card: cardLabel }
                 };
             }
         }
@@ -290,9 +301,12 @@ export class KlondikeGame {
                 if (targetCol.canReceive(bottomFaceUp)) {
                     // Evitar mover Rei para coluna vazia se já está na base de coluna vazia
                     if (bottomFaceUp.rank === 'K' && faceUpStart === 0 && targetCol.columnCards.length === 0) continue;
+                    const cardLabel = this.cardLabel(bottomFaceUp);
                     return {
                         from: { kind: 'column', index: i, stackFrom: faceUpStart },
-                        description: `Mover ${this.cardLabel(bottomFaceUp)} para coluna ${j + 1}`,
+                        description: `Mover ${cardLabel} para coluna ${j + 1}`,
+                        messageKey: 'solitaire.hints.moveToColumn',
+                        params: { card: cardLabel, col: j + 1 }
                     };
                 }
             }
@@ -303,9 +317,12 @@ export class KlondikeGame {
             const wasteTop = this.waste[this.waste.length - 1]!;
             for (let j = 0; j < this.columns.length; j++) {
                 if (this.columns[j]!.canReceive(wasteTop)) {
+                    const cardLabel = this.cardLabel(wasteTop);
                     return {
                         from: { kind: 'waste' },
-                        description: `Mover ${this.cardLabel(wasteTop)} para coluna ${j + 1}`,
+                        description: `Mover ${cardLabel} para coluna ${j + 1}`,
+                        messageKey: 'solitaire.hints.moveToColumn',
+                        params: { card: cardLabel, col: j + 1 }
                     };
                 }
             }
@@ -313,7 +330,12 @@ export class KlondikeGame {
 
         // Prioridade 4: virar do stock
         if (this.stock.length > 0) {
-            return { from: { kind: 'waste' }, description: 'Virar carta do stock' };
+            return {
+                from: { kind: 'waste' },
+                description: 'Virar carta do stock',
+                messageKey: 'solitaire.hints.drawFromStock',
+                params: {}
+            };
         }
 
         return null; // sem movimentos disponíveis

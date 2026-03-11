@@ -305,6 +305,11 @@
             "undo": "Undo",
             "hint": "Hint",
             "autoComplete": "Auto-Complete"
+        },
+        "hints": {
+            "moveToFoundation": "Move {card} to foundation",
+            "moveToColumn": "Move {card} to column {col}",
+            "drawFromStock": "Draw from stock"
         }
     },
 

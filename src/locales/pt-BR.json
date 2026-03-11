@@ -305,6 +305,11 @@
             "undo": "Desfazer",
             "hint": "Dica",
             "autoComplete": "Auto-completar"
+        },
+        "hints": {
+            "moveToFoundation": "Mover {card} para foundation",
+            "moveToColumn": "Mover {card} para coluna {col}",
+            "drawFromStock": "Virar carta do stock"
         }
     },
 

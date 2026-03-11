@@ -356,7 +356,7 @@ export default function KlondikeBoard() {
                     {/* ─── Hint toast (position:absolute relativo ao board) ─── */}
                     {activeHint && (
                         <div className={styles.hintToast}>
-                            💡 {activeHint.description}
+                            💡 {activeHint.messageKey ? t(activeHint.messageKey, activeHint.params) : activeHint.description}
                         </div>
                     )}
 
