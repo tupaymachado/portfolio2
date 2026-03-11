@@ -6,6 +6,7 @@ import DesktopIcon from '../DesktopIcon/DesktopIcon';
 import { PROGRAMS_MAP } from '../../data/programs';
 import { useWindowStore } from '../../stores/useWindowStore';
 import { useFileSystemStore } from '../../stores/useFileSystemStore';
+import { getDisplayName } from '../../utils/fileSystemNames';
 // import { useSystemStore } from '../../stores/useSystemStore'; // TODO: usar para responsividade
 import type { MenuItem } from '../../stores/useWindowStore';
 import { useShallow } from 'zustand/shallow';
@@ -247,7 +248,7 @@ export default function Desktop() {
             }}
           >
             <DesktopIcon
-              label={item.name}
+              label={getDisplayName(item.id, item.name, t)}
               iconUrl={iconUrl}
               onClick={onClick}
               onDoubleClick={onDoubleClick}

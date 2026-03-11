@@ -1,8 +1,10 @@
+import { useTranslation } from 'react-i18next';
 import styles from './StartBtn.module.css';
 import WinLogo from '../../assets/icons/win-logo.webp';
 import { useWindowStore } from '../../stores/useWindowStore';
 
 export function StartBtn() {
+    const { t } = useTranslation();
     const toggleStartMenu = useWindowStore(state => state.toggleStartMenu);
     const handleClick = () => {
         toggleStartMenu();
@@ -16,7 +18,7 @@ export function StartBtn() {
                 alt="Windows Logo"
             />
             <span className={styles.startText}>
-                Iniciar
+                {t('startMenu.start')}
             </span>
         </button>
     );

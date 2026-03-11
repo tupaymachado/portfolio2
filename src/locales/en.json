@@ -35,6 +35,7 @@
     },
 
     "startMenu": {
+        "start": "Start",
         "allPrograms": "All Programs",
         "logoff": "Log Off",
         "shutdown": "Turn Off Computer",

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from './Window.module.css';
 import { useEffect, useRef, useState, Suspense } from 'react';
 import hourglassGif from '../../assets/icons/hourglass.gif';
@@ -17,6 +18,7 @@ interface WindowProps {
 }
 
 export default function Window({ instanceId, programId }: WindowProps) {
+  const { t } = useTranslation();
   // --- SELEÇÃO DE AÇÕES DO STORE (seletores individuais para evitar re-renders) ---
   const closeWindow = useWindowStore(state => state.closeWindow);
   const updateWindowPosition = useWindowStore(state => state.updateWindowPosition);
@@ -204,8 +206,8 @@ export default function Window({ instanceId, programId }: WindowProps) {
   const isActive = instance.id === activeWindowId;
   const maximizeIcon = instance.isMaximized ? restore : maximize;
 
-  // Título e ícone dinâmicos (instance override ou fallback do programa)
-  const windowTitle = instance.title || program.name;
+  // Título e ícone dinâmicos (instance override ou fallback do programa traduzido)
+  const windowTitle = instance.title || t(`programs.${programId}`, { defaultValue: program.name });
   const windowIcon = instance.iconUrl || program.iconUrl;
 
   return (

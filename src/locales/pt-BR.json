@@ -35,6 +35,7 @@
     },
 
     "startMenu": {
+        "start": "Iniciar",
         "allPrograms": "Todos os programas",
         "logoff": "Fazer logoff",
         "shutdown": "Desligar o computador",
