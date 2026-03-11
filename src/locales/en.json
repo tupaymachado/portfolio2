@@ -169,6 +169,18 @@
             "emptyBin": "Empty Recycle Bin",
             "confirmEmptyBin": "Are you sure you want to permanently delete all items in the Recycle Bin?"
         },
+        "taskDescriptions": {
+            "hideContent": "Hide the contents of this drive",
+            "installUninstall": "Add or remove programs",
+            "search": "Search for files or folders",
+            "myComputer": "My Computer",
+            "myPictures": "My Pictures",
+            "myMusic": "My Music",
+            "myVideos": "My Videos",
+            "newFolder": "New Folder",
+            "publishInternet": "Publish to the Internet",
+            "shareFolder": "Share Folder"
+        },
         "sidebar_sections": {
             "tasks": "Tasks",
             "files": "Files",
@@ -207,6 +219,127 @@
         "url-portfolio": "Portfolio XP",
         "url-projeto-2": "Project 2",
         "url-projeto-3": "Project 3"
+    },
+
+    "login": {
+        "shuttingDown": "Windows is shutting down...",
+        "welcome": "Welcome",
+        "instruction": "To begin, click your user name",
+        "loading": "Loading your personal settings...",
+        "deleteProfile": "Delete profile",
+        "createAccountBtn": "Create new account",
+        "createAccountTitle": "Create New Account",
+        "usernameLabel": "User name:",
+        "usernamePlaceholder": "Type your name...",
+        "avatarLabel": "Choose an avatar:",
+        "shutdownBtn": "Turn Off Computer",
+        "helpText": "After logging on, you can add or change accounts.<br />Go to Control Panel and click User Accounts.",
+        "createBtn": "Create Account",
+        "cancelBtn": "Cancel"
+    },
+
+    "paint": {
+        "menu": {
+            "file": "File",
+            "new": "New",
+            "open": "Open...",
+            "saveAs": "Save as PNG",
+            "edit": "Edit",
+            "undo": "Undo",
+            "view": "View",
+            "image": "Image",
+            "colors": "Colors",
+            "help": "Help"
+        },
+        "status": {
+            "hint": "For help, click Help Topics on the Help menu."
+        },
+        "tools": {
+            "freeselect": "Free Select",
+            "select": "Rectangle Select",
+            "eraser": "Eraser",
+            "fill": "Fill with Color",
+            "eyedropper": "Color Picker",
+            "magnifier": "Magnifier",
+            "pencil": "Pencil",
+            "brush": "Brush",
+            "airbrush": "Airbrush",
+            "text": "Text",
+            "line": "Line",
+            "curve": "Curve",
+            "rectangle": "Rectangle",
+            "polygon": "Polygon",
+            "ellipse": "Ellipse",
+            "roundrect": "Rounded Rectangle"
+        }
+    },
+
+    "notepad": {
+        "menu": {
+            "file": "File",
+            "new": "New",
+            "save": "Save",
+            "saveAs": "Save As...",
+            "edit": "Edit",
+            "undo": "Undo",
+            "cut": "Cut",
+            "copy": "Copy",
+            "paste": "Paste",
+            "selectAll": "Select All",
+            "format": "Format",
+            "wordWrap": "Word Wrap"
+        },
+        "untitled": "Untitled",
+        "statusBar": "Ln {line}, Col {col}"
+    },
+
+    "solitaire": {
+        "menu": {
+            "file": "File",
+            "game": "Game",
+            "help": "Help"
+        },
+        "buttons": {
+            "newGame": "New Game",
+            "undo": "Undo",
+            "hint": "Hint",
+            "autoComplete": "Auto-Complete"
+        }
+    },
+
+    "minesweeper": {
+        "difficulty": {
+            "beginner": "Beginner",
+            "intermediate": "Intermediate",
+            "advanced": "Advanced"
+        }
+    },
+
+    "msn": {
+        "menu": {
+            "file": "File",
+            "edit": "Edit",
+            "help": "Help"
+        },
+        "contextMenu": {
+            "sendMessage": "Send Message to {name}",
+            "addContact": "Add to Contacts"
+        },
+        "loading": "Loading...",
+        "loadingParticipants": "Loading participants...",
+        "login": {
+            "title": "MSN Messenger",
+            "subtitle": "Connect with your friends!",
+            "statusLabel": "Status:",
+            "statusOnline": "Online",
+            "statusBusy": "Busy",
+            "statusAway": "Away",
+            "statusBrb": "Be Right Back",
+            "signingIn": "Signing in...",
+            "signInButton": "Sign in with Google",
+            "footer": "Windows Live Messenger — Portfolio Edition"
+        },
+        "error": "Error signing in"
     },
 
     "aboutMe": {

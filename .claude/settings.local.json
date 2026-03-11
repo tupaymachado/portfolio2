@@ -5,7 +5,9 @@
       "Bash(npx tsc:*)",
       "Bash(npm run dev:*)",
       "Bash(netstat:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

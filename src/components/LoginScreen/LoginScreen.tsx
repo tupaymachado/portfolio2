@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './LoginScreen.module.css';
 import windowStyles from '../Window/Window.module.css';
 import { useUserStore, AVATAR_OPTIONS, type UserProfile } from '../../stores/useUserStore';
@@ -9,6 +10,7 @@ import closeIcon from '../../assets/icons/close.webp';
 import trashBinIcon from '../../assets/icons/trash-bin.webp';
 
 export default function LoginScreen() {
+    const { t } = useTranslation();
     const profiles = useUserStore(state => state.profiles);
     const login = useUserStore(state => state.login);
     const createProfile = useUserStore(state => state.createProfile);
@@ -95,7 +97,7 @@ export default function LoginScreen() {
                                 Windows<sup className={styles.xp}>xp</sup>
                             </p>
                         </div>
-                        <p className={styles.shutdownMessage}>O Windows está desligando...</p>
+                        <p className={styles.shutdownMessage}>{t('login.shuttingDown')}</p>
                     </div>
                 </div>
                 <div className={styles.bottomBar}></div>
@@ -112,7 +114,7 @@ export default function LoginScreen() {
                 {/* Lado esquerdo */}
                 <div className={styles.leftSection}>
                     {isLoading ? (
-                        <p className={styles.welcomeText}>Bem-vindo</p>
+                        <p className={styles.welcomeText}>{t('login.welcome')}</p>
                     ) : (
                         <>
                             <div className={styles.logoSection}>
@@ -129,7 +131,7 @@ export default function LoginScreen() {
                                 </p>
                             </div>
                             <p className={styles.logoTextBottom}>
-                                Para iniciar, clique no seu nome de usuário
+                                {t('login.instruction')}
                             </p>
                         </>
                     )}
@@ -156,7 +158,7 @@ export default function LoginScreen() {
                                     <div className={styles.userInfo}>
                                         <span className={styles.userName}>{profile.name}</span>
                                         {isSelected && isLoading && (
-                                            <span className={styles.loadingUserStatus}>Carregando suas configurações pessoais...</span>
+                                            <span className={styles.loadingUserStatus}>{t('login.loading')}</span>
                                         )}
                                     </div>
                                 </button>
@@ -164,7 +166,7 @@ export default function LoginScreen() {
                                     <button
                                         className={styles.deleteBtn}
                                         onClick={() => deleteProfile(profile.id)}
-                                        title="Excluir perfil"
+                                        title={t('login.deleteProfile')}
                                     >
                                         <img src={trashBinIcon} alt="Delete" />
                                     </button>
@@ -180,7 +182,7 @@ export default function LoginScreen() {
                             onClick={() => setShowCreateModal(true)}
                         >
                             <div className={styles.createAccountIcon}></div>
-                            <span className={styles.createAccountText}>Criar nova conta</span>
+                            <span className={styles.createAccountText}>{t('login.createAccountBtn')}</span>
                         </button>
                     )}
                 </div>
@@ -192,12 +194,10 @@ export default function LoginScreen() {
                     <div className={styles.shutdownIcon}>
                         <img src={shutdownIcon} alt="Shutdown" />
                     </div>
-                    <span>Desligar computador</span>
+                    <span>{t('login.shutdownBtn')}</span>
                 </button>
 
-                <p className={`${styles.helpText} ${isLoading ? styles.userCardHidden : ''}`}>
-                    Após o logon, você pode adicionar ou alterar contas.<br />
-                    Acesse o Painel de Controle e clique em Contas de Usuário.
+                <p className={`${styles.helpText} ${isLoading ? styles.userCardHidden : ''}`} dangerouslySetInnerHTML={{ __html: t('login.helpText') }}>
                 </p>
             </div>
 
@@ -207,7 +207,7 @@ export default function LoginScreen() {
                     <div className={styles.modal} onClick={e => e.stopPropagation()}>
                         <header className={`${windowStyles.titleBar} ${windowStyles.active}`}>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <span className={windowStyles.title} style={{ color: 'white' }}>Criar Nova Conta</span>
+                                <span className={windowStyles.title} style={{ color: 'white' }}>{t('login.createAccountTitle')}</span>
                             </div>
                             <div className={windowStyles.windowControls}>
                                 <button
@@ -221,20 +221,20 @@ export default function LoginScreen() {
 
                         <div className={styles.modalBody}>
                             <div className={styles.formGroup}>
-                                <label className={styles.formLabel}>Nome de usuário:</label>
+                                <label className={styles.formLabel}>{t('login.usernameLabel')}</label>
                                 <input
                                     type="text"
                                     className={styles.formInput}
                                     value={newName}
                                     onChange={e => setNewName(e.target.value)}
-                                    placeholder="Digite seu nome..."
+                                    placeholder={t('login.usernamePlaceholder')}
                                     autoFocus
                                     maxLength={20}
                                 />
                             </div>
 
                             <div className={styles.formGroup}>
-                                <label className={styles.formLabel}>Escolha um avatar:</label>
+                                <label className={styles.formLabel}>{t('login.avatarLabel')}</label>
                                 <div className={styles.avatarGrid}>
                                     {AVATAR_OPTIONS.map(avatar => (
                                         <button
@@ -256,14 +256,14 @@ export default function LoginScreen() {
                                 className={`${styles.modalBtn} ${styles.modalBtnSecondary}`}
                                 onClick={() => setShowCreateModal(false)}
                             >
-                                Cancelar
+                                {t('login.cancelBtn')}
                             </button>
                             <button
                                 className={`${styles.modalBtn} ${styles.modalBtnPrimary}`}
                                 onClick={handleCreateAccount}
                                 disabled={false}
                             >
-                                Criar Conta
+                                {t('login.createBtn')}
                             </button>
                         </div>
                     </div>

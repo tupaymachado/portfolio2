@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors, type DragStartEvent, type DragEndEvent } from "@dnd-kit/core";
 import { KlondikeGame, type Source, type Hint } from "../logic/KlondikeGame";
 import { DraggableCard, type DragData } from "./DraggableCard";
@@ -21,6 +22,7 @@ const suitSymbols: Record<Suits, string> = {
 // ─── Componente principal ─────────────────────────────────
 
 export default function KlondikeBoard() {
+    const { t } = useTranslation();
     const gameRef = useRef(new KlondikeGame());
     const [, forceUpdate] = useState(0);
     const game = gameRef.current;
@@ -223,11 +225,11 @@ export default function KlondikeBoard() {
 
                 {/* ─── Toolbar (fora do board verde, herda fundo da janela) ─── */}
                 <AppMenuBar items={[
-                    { label: 'Novo Jogo', onClick: newGame },
-                    { label: 'Desfazer', onClick: handleUndo, disabled: !game.canUndo || autoCompleting },
-                    { label: 'Dica', onClick: handleHint, disabled: autoCompleting },
+                    { label: t('solitaire.buttons.newGame'), onClick: newGame },
+                    { label: t('solitaire.buttons.undo'), onClick: handleUndo, disabled: !game.canUndo || autoCompleting },
+                    { label: t('solitaire.buttons.hint'), onClick: handleHint, disabled: autoCompleting },
                     {
-                        label: 'Auto-completar',
+                        label: t('solitaire.buttons.autoComplete'),
                         onClick: handleAutoComplete,
                         disabled: !game.canAutoComplete || autoCompleting,
                         highlight: game.canAutoComplete && !autoCompleting,

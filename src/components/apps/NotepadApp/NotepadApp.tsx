@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './NotepadApp.module.css';
 import NotepadMenuBar from './NotepadMenuBar';
 import { useWindowContext } from '../../../stores/useWindowStore';
@@ -9,6 +10,7 @@ import ErrorDialog from '../../ErrorDialog/ErrorDialog';
 import infoIcon from '../../../assets/icons/app.webp';
 
 export default function NotepadApp() {
+    const { t } = useTranslation();
     const { instanceId } = useWindowContext();
 
     // Busca initialFileId desta janela
@@ -25,7 +27,7 @@ export default function NotepadApp() {
 
     // Estado local
     const [content, setContent] = useState('');
-    const [fileName, setFileName] = useState('Sem título');
+    const [fileName, setFileName] = useState(t('notepad.untitled'));
     const [fileId, setFileId] = useState<string | null>(null);
     const [wordWrap, setWordWrap] = useState(true);
     const [cursorPos, setCursorPos] = useState({ line: 1, col: 1 });
@@ -48,9 +50,9 @@ export default function NotepadApp() {
     // Atualiza título da janela
     useEffect(() => {
         updateWindowMeta(instanceId, {
-            title: `${fileName} - Bloco de Notas`,
+            title: `${fileName} - ${t('programs.notepad')}`,
         });
-    }, [fileName, instanceId, updateWindowMeta]);
+    }, [fileName, instanceId, updateWindowMeta, t]);
 
     // Calcula posição do cursor
     const updateCursorPosition = useCallback(() => {
@@ -75,7 +77,7 @@ export default function NotepadApp() {
             setShowSaveDialog(true);
         } else {
             // Cria novo arquivo em "Meus Documentos"
-            const name = fileName === 'Sem título' ? 'Sem título.txt' : fileName;
+            const name = fileName === t('notepad.untitled') ? `${t('notepad.untitled')}.txt` : fileName;
             const newId = createFile('my-documents', name, 'notepad', content, 'txt');
             setFileId(newId);
             setFileName(name);
@@ -100,10 +102,10 @@ export default function NotepadApp() {
     // Novo arquivo
     const handleNew = useCallback(() => {
         setContent('');
-        setFileName('Sem título');
+        setFileName(t('notepad.untitled'));
         setFileId(null);
         setCursorPos({ line: 1, col: 1 });
-    }, []);
+    }, [t]);
 
     // Toggle word wrap
     const handleToggleWordWrap = useCallback(() => {
@@ -158,7 +160,7 @@ export default function NotepadApp() {
 
             <div className={styles.statusBar}>
                 <span className={styles.statusBarItem}>
-                    Ln {cursorPos.line}, Col {cursorPos.col}
+                    {t('notepad.statusBar', { line: cursorPos.line, col: cursorPos.col })}
                 </span>
             </div>
 

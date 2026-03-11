@@ -22,57 +22,32 @@ import shareFolder from '../../../assets/icons/shared-folder.webp'
 import folderIcon from '../../../assets/icons/folder.webp'
 import trashBinIcon from '../../../assets/icons/trash-bin.webp'
 
-const card1: cardContent[] = [
-  {
-    icon: startMenuPrograms,
-    description: 'Esconder o conteúdo desse drive'
-  },
-  {
-    icon: programs,
-    description: 'Adicionar ou remover programas'
-  },
-  {
-    icon: search,
-    description: 'Procurar por arquivos ou pastas'
-  }
-]
+const card1Keys = ['hideContent', 'installUninstall', 'search'];
+const card1Icons = [startMenuPrograms, programs, search];
 
-const card2: cardContent[] = [
-  {
-    icon: myComputer,
-    description: 'Meu Computador'
-  },
-  {
-    icon: myPictures,
-    description: 'Minhas Imagens'
-  },
-  {
-    icon: myMusic,
-    description: 'Minhas Músicas'
-  },
-  {
-    icon: myVideos,
-    description: 'Minhas Vídeos'
-  }
-]
+const card2Keys = ['myComputer', 'myPictures', 'myMusic', 'myVideos'];
+const card2Icons = [myComputer, myPictures, myMusic, myVideos];
 
-const card3: cardContent[] = [
-  {
-    icon: newFolder,
-    description: 'Nova Pasta'
-  },
-  {
-    icon: publishToInternet,
-    description: 'Publicar na Internet'
-  },
-  {
-    icon: shareFolder,
-    description: 'Compartilhar Pasta'
-  }
-]
+const card3Keys = ['newFolder', 'publishInternet', 'shareFolder'];
+const card3Icons = [newFolder, publishToInternet, shareFolder];
 
 export default function ExplorerApp() {
   const { t } = useTranslation();
+
+  const card1: cardContent[] = card1Keys.map((key, idx) => ({
+    icon: card1Icons[idx],
+    description: t(`explorer.taskDescriptions.${key}`)
+  }));
+
+  const card2: cardContent[] = card2Keys.map((key, idx) => ({
+    icon: card2Icons[idx],
+    description: t(`explorer.taskDescriptions.${key}`)
+  }));
+
+  const card3: cardContent[] = card3Keys.map((key, idx) => ({
+    icon: card3Icons[idx],
+    description: t(`explorer.taskDescriptions.${key}`)
+  }));
   const { instanceId } = useWindowContext();
   // Seletor otimizado: só re-renderiza quando o initialFolderId DESTA janela muda
   const initialFolderId = useWindowStore(

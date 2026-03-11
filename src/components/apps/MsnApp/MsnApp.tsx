@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { onAuthStateChanged, signInAnonymously, type User } from 'firebase/auth';
 import { auth } from '../../../config/firebase';
 import MsnLogin from './MsnLogin';
@@ -9,6 +10,7 @@ import styles from './MsnApp.module.css';
 export type MsnScreen = 'login' | 'contacts' | 'chat';
 
 export default function MsnApp() {
+  const { t } = useTranslation();
   const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
   const [screen, setScreen] = useState<MsnScreen>('login');
   const [isLoading, setIsLoading] = useState(true);
@@ -70,7 +72,7 @@ export default function MsnApp() {
   };
 
   if (isLoading) {
-    return <div className={styles.container}>Carregando...</div>;
+    return <div className={styles.container}>{t('msn.loading')}</div>;
   }
 
   return (

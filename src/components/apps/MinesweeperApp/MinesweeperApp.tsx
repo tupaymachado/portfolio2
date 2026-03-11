@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSystemStore } from '../../../stores/useSystemStore';
 import styles from './MinesweeperApp.module.css';
 import { useWindowContext, useWindowStore } from '../../../stores/useWindowStore';
@@ -10,10 +11,10 @@ interface Difficulty {
     mines: number;
 }
 
-const DIFFICULTIES: Record<string, Difficulty> = {
-    beginner: { label: 'Iniciante', rows: 9, cols: 9, mines: 10 },
-    intermediate: { label: 'Intermediário', rows: 16, cols: 16, mines: 40 },
-    expert: { label: 'Avançado', rows: 16, cols: 30, mines: 99 },
+const DIFFICULTIES: Record<string, Omit<Difficulty, 'label'>> = {
+    beginner: { rows: 9, cols: 9, mines: 10 },
+    intermediate: { rows: 16, cols: 16, mines: 40 },
+    expert: { rows: 16, cols: 30, mines: 99 },
 };
 
 const DIRECTIONS = [
@@ -145,13 +146,14 @@ function LcdDisplay({ value }: { value: number }) {
 }
 
 export default function MinesweeperApp() {
+    const { t } = useTranslation();
     const isMobile = useSystemStore(state => state.isMobile);
     const { instanceId } = useWindowContext();
     const updateWindowSize = useWindowStore(state => state.updateWindowSize);
 
     const [diffKey, setDiffKey] = useState<string>('beginner');
     // Configuração inicial baseada no modo (mobile ou desktop)
-    const [config, setConfig] = useState<Difficulty>(DIFFICULTIES['beginner']);
+    const [config, setConfig] = useState<{ rows: number; cols: number; mines: number }>(DIFFICULTIES['beginner']);
     const [cellSize, setCellSize] = useState(isMobile ? 32 : 24);
 
     const [board, setBoard] = useState<Cell[]>(() => createEmptyBoard(config.rows, config.cols));
@@ -216,13 +218,13 @@ export default function MinesweeperApp() {
         const mines = Math.max(3, Math.floor(rows * cols * density)); // Mínimo 3 minas
 
         return {
-            config: { label: baseDiff.label, rows, cols, mines },
+            config: { rows, cols, mines },
             cellSize: 32
         };
     }, []);
 
     // Calcula tamanho da janela do programa (OS window)
-    const calcWindowSize = useCallback((d: Difficulty, cSize: number) => ({
+    const calcWindowSize = useCallback((d: { rows: number; cols: number; mines: number }, cSize: number) => ({
         width: d.cols * cSize + 42,
         height: d.rows * cSize + 130, // Header + borders
     }), []);
@@ -347,7 +349,7 @@ export default function MinesweeperApp() {
                         className={`${styles.diffButton} ${key === diffKey ? styles.diffButtonActive : ''}`}
                         onClick={() => changeDifficulty(key)}
                     >
-                        {d.label}
+                        {t(`minesweeper.difficulty.${key}`)}
                     </button>
                 ))}
             </div>

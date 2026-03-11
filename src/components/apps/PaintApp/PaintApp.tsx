@@ -14,23 +14,23 @@ type Tool =
   | 'rectangle' | 'polygon'
   | 'ellipse' | 'roundrect';
 
-const TOOLS: { id: Tool; symbol: string; label: string }[] = [
-  { id: 'freeselect', symbol: '✦', label: 'Seleção livre' },
-  { id: 'select',     symbol: '⊡', label: 'Seleção retangular' },
-  { id: 'eraser',     symbol: '▭', label: 'Borracha' },
-  { id: 'fill',       symbol: '◢', label: 'Preenchimento com cor' },
-  { id: 'eyedropper', symbol: '◈', label: 'Conta-gotas' },
-  { id: 'magnifier',  symbol: '⊕', label: 'Lupa' },
-  { id: 'pencil',     symbol: '✏', label: 'Lápis' },
-  { id: 'brush',      symbol: '▋', label: 'Pincel' },
-  { id: 'airbrush',   symbol: '⋰', label: 'Aerógrafo' },
-  { id: 'text',       symbol: 'A', label: 'Texto' },
-  { id: 'line',       symbol: '╱', label: 'Linha' },
-  { id: 'curve',      symbol: '∿', label: 'Curva' },
-  { id: 'rectangle',  symbol: '□', label: 'Retângulo' },
-  { id: 'polygon',    symbol: '▱', label: 'Polígono' },
-  { id: 'ellipse',    symbol: '○', label: 'Elipse' },
-  { id: 'roundrect',  symbol: '▢', label: 'Ret. arredondado' },
+const TOOLS: { id: Tool; symbol: string }[] = [
+  { id: 'freeselect', symbol: '✦' },
+  { id: 'select',     symbol: '⊡' },
+  { id: 'eraser',     symbol: '▭' },
+  { id: 'fill',       symbol: '◢' },
+  { id: 'eyedropper', symbol: '◈' },
+  { id: 'magnifier',  symbol: '⊕' },
+  { id: 'pencil',     symbol: '✏' },
+  { id: 'brush',      symbol: '▋' },
+  { id: 'airbrush',   symbol: '⋰' },
+  { id: 'text',       symbol: 'A' },
+  { id: 'line',       symbol: '╱' },
+  { id: 'curve',      symbol: '∿' },
+  { id: 'rectangle',  symbol: '□' },
+  { id: 'polygon',    symbol: '▱' },
+  { id: 'ellipse',    symbol: '○' },
+  { id: 'roundrect',  symbol: '▢' },
 ];
 
 const PALETTE: string[] = [
@@ -315,14 +315,14 @@ export default function PaintApp() {
         {/* Tool Panel */}
         <div className={styles.toolbar}>
           <div className={styles.toolGrid}>
-            {TOOLS.map(t => (
+            {TOOLS.map(toolDef => (
               <button
-                key={t.id}
-                className={`${styles.toolBtn} ${tool === t.id ? styles.toolActive : ''}`}
-                onClick={() => setTool(t.id)}
-                title={t.label}
+                key={toolDef.id}
+                className={`${styles.toolBtn} ${tool === toolDef.id ? styles.toolActive : ''}`}
+                onClick={() => setTool(toolDef.id)}
+                title={t(`paint.tools.${toolDef.id}`)}
               >
-                {t.symbol}
+                {toolDef.symbol}
               </button>
             ))}
           </div>

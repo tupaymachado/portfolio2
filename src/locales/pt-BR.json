@@ -169,6 +169,18 @@
             "emptyBin": "Esvaziar a Lixeira",
             "confirmEmptyBin": "Tem certeza que deseja apagar todos os itens da lixeira permanentemente?"
         },
+        "taskDescriptions": {
+            "hideContent": "Esconder o conteúdo desse drive",
+            "installUninstall": "Adicionar ou remover programas",
+            "search": "Procurar por arquivos ou pastas",
+            "myComputer": "Meu Computador",
+            "myPictures": "Minhas Imagens",
+            "myMusic": "Minhas Músicas",
+            "myVideos": "Minhas Vídeos",
+            "newFolder": "Nova Pasta",
+            "publishInternet": "Publicar na Internet",
+            "shareFolder": "Compartilhar Pasta"
+        },
         "sidebar_sections": {
             "tasks": "Tarefas",
             "files": "Arquivos",
@@ -207,6 +219,127 @@
         "url-portfolio": "Portfólio XP",
         "url-projeto-2": "Projeto 2",
         "url-projeto-3": "Projeto 3"
+    },
+
+    "login": {
+        "shuttingDown": "O Windows está desligando...",
+        "welcome": "Bem-vindo",
+        "instruction": "Para iniciar, clique no seu nome de usuário",
+        "loading": "Carregando suas configurações pessoais...",
+        "deleteProfile": "Excluir perfil",
+        "createAccountBtn": "Criar nova conta",
+        "createAccountTitle": "Criar Nova Conta",
+        "usernameLabel": "Nome de usuário:",
+        "usernamePlaceholder": "Digite seu nome...",
+        "avatarLabel": "Escolha um avatar:",
+        "shutdownBtn": "Desligar computador",
+        "helpText": "Após o logon, você pode adicionar ou alterar contas.<br />Acesse o Painel de Controle e clique em Contas de Usuário.",
+        "createBtn": "Criar Conta",
+        "cancelBtn": "Cancelar"
+    },
+
+    "paint": {
+        "menu": {
+            "file": "Arquivo",
+            "new": "Novo",
+            "open": "Abrir...",
+            "saveAs": "Salvar como PNG",
+            "edit": "Editar",
+            "undo": "Desfazer",
+            "view": "Exibir",
+            "image": "Imagem",
+            "colors": "Cores",
+            "help": "Ajuda"
+        },
+        "status": {
+            "hint": "Para obter ajuda, clique em Tópicos da Ajuda no menu Ajuda."
+        },
+        "tools": {
+            "freeselect": "Seleção livre",
+            "select": "Seleção retangular",
+            "eraser": "Borracha",
+            "fill": "Preenchimento com cor",
+            "eyedropper": "Conta-gotas",
+            "magnifier": "Lupa",
+            "pencil": "Lápis",
+            "brush": "Pincel",
+            "airbrush": "Aerógrafo",
+            "text": "Texto",
+            "line": "Linha",
+            "curve": "Curva",
+            "rectangle": "Retângulo",
+            "polygon": "Polígono",
+            "ellipse": "Elipse",
+            "roundrect": "Ret. arredondado"
+        }
+    },
+
+    "notepad": {
+        "menu": {
+            "file": "Arquivo",
+            "new": "Novo",
+            "save": "Salvar",
+            "saveAs": "Salvar como...",
+            "edit": "Editar",
+            "undo": "Desfazer",
+            "cut": "Recortar",
+            "copy": "Copiar",
+            "paste": "Colar",
+            "selectAll": "Selecionar tudo",
+            "format": "Formatar",
+            "wordWrap": "Quebra automática de linha"
+        },
+        "untitled": "Sem título",
+        "statusBar": "Ln {line}, Col {col}"
+    },
+
+    "solitaire": {
+        "menu": {
+            "file": "Arquivo",
+            "game": "Jogo",
+            "help": "Ajuda"
+        },
+        "buttons": {
+            "newGame": "Novo Jogo",
+            "undo": "Desfazer",
+            "hint": "Dica",
+            "autoComplete": "Auto-completar"
+        }
+    },
+
+    "minesweeper": {
+        "difficulty": {
+            "beginner": "Iniciante",
+            "intermediate": "Intermediário",
+            "advanced": "Avançado"
+        }
+    },
+
+    "msn": {
+        "menu": {
+            "file": "Arquivo",
+            "edit": "Editar",
+            "help": "Ajuda"
+        },
+        "contextMenu": {
+            "sendMessage": "Enviar Mensagem para {name}",
+            "addContact": "Adicionar aos Contatos"
+        },
+        "loading": "Carregando...",
+        "loadingParticipants": "Carregando participantes...",
+        "login": {
+            "title": "MSN Messenger",
+            "subtitle": "Conecte-se com seus amigos!",
+            "statusLabel": "Status:",
+            "statusOnline": "Online",
+            "statusBusy": "Ocupado",
+            "statusAway": "Ausente",
+            "statusBrb": "Já volto",
+            "signingIn": "Conectando...",
+            "signInButton": "Entrar com Google",
+            "footer": "Windows Live Messenger — Portfolio Edition"
+        },
+        "error": "Erro ao fazer login"
     },
 
     "aboutMe": {
