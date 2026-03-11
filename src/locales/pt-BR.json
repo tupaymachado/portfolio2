@@ -291,7 +291,7 @@
             "wordWrap": "Quebra automática de linha"
         },
         "untitled": "Sem título",
-        "statusBar": "Ln {line}, Col {col}"
+        "statusBar": "Ln {{line}}, Col {{col}}"
     },
 
     "solitaire": {
@@ -307,8 +307,8 @@
             "autoComplete": "Auto-completar"
         },
         "hints": {
-            "moveToFoundation": "Mover {card} para foundation",
-            "moveToColumn": "Mover {card} para coluna {col}",
+            "moveToFoundation": "Mover {{card}} para foundation",
+            "moveToColumn": "Mover {{card}} para coluna {{col}}",
             "drawFromStock": "Virar carta do stock"
         }
     },
@@ -317,7 +317,7 @@
         "difficulty": {
             "beginner": "Iniciante",
             "intermediate": "Intermediário",
-            "advanced": "Avançado"
+            "expert": "Especialista"
         }
     },
 
@@ -328,7 +328,7 @@
             "help": "Ajuda"
         },
         "contextMenu": {
-            "sendMessage": "Enviar Mensagem para {name}",
+            "sendMessage": "Enviar Mensagem para {{name}}",
             "addContact": "Adicionar aos Contatos"
         },
         "loading": "Carregando...",
@@ -348,6 +348,76 @@
         "error": "Erro ao fazer login",
         "rooms": {
             "global": "Sala Global"
+        },
+        "status": {
+            "online": "Online",
+            "offline": "Offline",
+            "busy": "Ocupado",
+            "away": "Ausente",
+            "brb": "Já volto"
+        },
+        "contactList": {
+            "changeAvatarTitle": "Alterar imagem ou nome",
+            "personalMessagePlaceholder": "Digite uma mensagem pessoal",
+            "nowPlayingTitle": "Música em reprodução",
+            "personalMessageTitle": "Mensagem Pessoal",
+            "addContact": "Adicionar um Contato",
+            "chatRooms": "Salas de Bate-Papo ({{count}} online)",
+            "onlineGroup": "Online ({{count}})",
+            "offlineGroup": "Offline ({{count}})",
+            "searchPlaceholder": "Procurar contatos...",
+            "logout": "Sair"
+        },
+        "chat": {
+            "menu": {
+                "file": "Ficheiro",
+                "edit": "Editar",
+                "actions": "Acções",
+                "tools": "Ferramentas",
+                "help": "Ajuda"
+            },
+            "to": "Para:",
+            "participants": "👥 Participantes",
+            "emptyState": "Nenhuma mensagem ainda. Diga oi!",
+            "says": "diz:",
+            "nudgeSent": "Você acaba de enviar uma chamadela!",
+            "nudgeReceived": "{{name}} acaba de enviar uma chamadela!",
+            "voiceClip": "🎙️ Clip de Voz",
+            "nudgeBtn": "📳 Chamar Atenção",
+            "nudgeTitle": "Chamar a Atenção",
+            "send": "Enviar",
+            "roomParticipants": "Participantes da Sala",
+            "conversation": "Conversa",
+            "loading": "Carregando...",
+            "editProfile": "Editar perfil"
+        },
+        "addContact": {
+            "title": "Adicionar um Contato",
+            "description": "Por favor, introduza o endereço de e-mail do contato que você deseja adicionar.",
+            "emailLabel": "Endereço de e-mail:",
+            "emailPlaceholder": "exemplo@hotmail.com",
+            "success": "Contato adicionado com sucesso!",
+            "adding": "Adicionando...",
+            "next": "Avançar >",
+            "cancel": "Cancelar",
+            "error": "Erro ao adicionar contato"
+        },
+        "profile": {
+            "title": "Opções - Pessoal",
+            "myProfile": "Meu Perfil",
+            "uploading": "Carregando...",
+            "changeImage": "Alterar Imagem...",
+            "displayNameLabel": "Meu nome de exibição:",
+            "personalMessageLabel": "Mensagem Pessoal:",
+            "personalMessagePlaceholder": "Digite algo legal aqui...",
+            "saving": "Salvando...",
+            "ok": "OK",
+            "cancel": "Cancelar"
+        },
+        "participants": {
+            "clickOptions": "Clique para ver opções",
+            "online": "(Online)",
+            "offline": "(Offline)"
         }
     },
 

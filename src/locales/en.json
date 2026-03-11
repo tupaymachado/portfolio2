@@ -291,7 +291,7 @@
             "wordWrap": "Word Wrap"
         },
         "untitled": "Untitled",
-        "statusBar": "Ln {line}, Col {col}"
+        "statusBar": "Ln {{line}}, Col {{col}}"
     },
 
     "solitaire": {
@@ -307,8 +307,8 @@
             "autoComplete": "Auto-Complete"
         },
         "hints": {
-            "moveToFoundation": "Move {card} to foundation",
-            "moveToColumn": "Move {card} to column {col}",
+            "moveToFoundation": "Move {{card}} to foundation",
+            "moveToColumn": "Move {{card}} to column {{col}}",
             "drawFromStock": "Draw from stock"
         }
     },
@@ -317,7 +317,7 @@
         "difficulty": {
             "beginner": "Beginner",
             "intermediate": "Intermediate",
-            "advanced": "Advanced"
+            "expert": "Expert"
         }
     },
 
@@ -328,7 +328,7 @@
             "help": "Help"
         },
         "contextMenu": {
-            "sendMessage": "Send Message to {name}",
+            "sendMessage": "Send Message to {{name}}",
             "addContact": "Add to Contacts"
         },
         "loading": "Loading...",
@@ -348,6 +348,76 @@
         "error": "Error signing in",
         "rooms": {
             "global": "Global Room"
+        },
+        "status": {
+            "online": "Online",
+            "offline": "Offline",
+            "busy": "Busy",
+            "away": "Away",
+            "brb": "Be Right Back"
+        },
+        "contactList": {
+            "changeAvatarTitle": "Change picture or name",
+            "personalMessagePlaceholder": "Enter a personal message",
+            "nowPlayingTitle": "Now playing",
+            "personalMessageTitle": "Personal Message",
+            "addContact": "Add a Contact",
+            "chatRooms": "Chat Rooms ({{count}} online)",
+            "onlineGroup": "Online ({{count}})",
+            "offlineGroup": "Offline ({{count}})",
+            "searchPlaceholder": "Search contacts...",
+            "logout": "Sign Out"
+        },
+        "chat": {
+            "menu": {
+                "file": "File",
+                "edit": "Edit",
+                "actions": "Actions",
+                "tools": "Tools",
+                "help": "Help"
+            },
+            "to": "To:",
+            "participants": "👥 Participants",
+            "emptyState": "No messages yet. Say hi!",
+            "says": "says:",
+            "nudgeSent": "You just sent a nudge!",
+            "nudgeReceived": "{{name}} just sent a nudge!",
+            "voiceClip": "🎙️ Voice Clip",
+            "nudgeBtn": "📳 Nudge",
+            "nudgeTitle": "Send Nudge",
+            "send": "Send",
+            "roomParticipants": "Room Participants",
+            "conversation": "Conversation",
+            "loading": "Loading...",
+            "editProfile": "Edit profile"
+        },
+        "addContact": {
+            "title": "Add a Contact",
+            "description": "Please enter the email address of the contact you want to add.",
+            "emailLabel": "Email address:",
+            "emailPlaceholder": "example@hotmail.com",
+            "success": "Contact added successfully!",
+            "adding": "Adding...",
+            "next": "Next >",
+            "cancel": "Cancel",
+            "error": "Error adding contact"
+        },
+        "profile": {
+            "title": "Options - Personal",
+            "myProfile": "My Profile",
+            "uploading": "Uploading...",
+            "changeImage": "Change Image...",
+            "displayNameLabel": "My display name:",
+            "personalMessageLabel": "Personal Message:",
+            "personalMessagePlaceholder": "Type something cool here...",
+            "saving": "Saving...",
+            "ok": "OK",
+            "cancel": "Cancel"
+        },
+        "participants": {
+            "clickOptions": "Click to see options",
+            "online": "(Online)",
+            "offline": "(Offline)"
         }
     },
 

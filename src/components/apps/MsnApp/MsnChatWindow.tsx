@@ -84,9 +84,6 @@ interface ChatMessage {
   type?: 'text' | 'nudge';
 }
 
-const ROOM_NAMES: Record<string, string> = {
-  global: 'Sala Global',
-};
 
 export default function MsnChatWindow() {
   const { t } = useTranslation();
@@ -103,7 +100,7 @@ export default function MsnChatWindow() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const roomName = ROOM_NAMES[contactId] || contactId;
+  const roomName = contactId === 'global' ? t('msn.rooms.global') : contactId;
 
   const [contactInfo, setContactInfo] = useState<{ displayName: string; email: string; photoURL: string } | null>(null);
   const [isShaking, setIsShaking] = useState(false);
@@ -155,7 +152,7 @@ export default function MsnChatWindow() {
       useWindowStore.getState().updateWindowMeta(instanceId, { title: `${t('msn.rooms.global')} - ${t('programs.msn-chat')}` });
     } else if (contactInfo) {
       const titleName = contactInfo.displayName || contactInfo.email;
-      useWindowStore.getState().updateWindowMeta(instanceId, { title: `${titleName} - Conversa` });
+      useWindowStore.getState().updateWindowMeta(instanceId, { title: `${titleName} - ${t('msn.chat.conversation')}` });
     }
   }, [contactInfo, contactId, instanceId, t]);
 
@@ -263,11 +260,11 @@ export default function MsnChatWindow() {
     <div className={`${styles.chatWindow} ${isShaking ? styles.shake : ''}`}>
       {/* Menu Fictício Estilo MSN Clássico */}
       <div className={styles.classicMenuBar}>
-        <span>Ficheiro</span>
-        <span>Editar</span>
-        <span>Acções</span>
-        <span>Ferramentas</span>
-        <span>Ajuda</span>
+        <span>{t('msn.chat.menu.file')}</span>
+        <span>{t('msn.chat.menu.edit')}</span>
+        <span>{t('msn.chat.menu.actions')}</span>
+        <span>{t('msn.chat.menu.tools')}</span>
+        <span>{t('msn.chat.menu.help')}</span>
       </div>
 
       <div className={styles.mainLayout}>
@@ -276,16 +273,16 @@ export default function MsnChatWindow() {
         <div className={styles.leftColumn}>
 
           <div className={styles.chatHeader}>
-            <span className={styles.toLabel}>Para: </span>
+            <span className={styles.toLabel}>{t('msn.chat.to')} </span>
             <span className={styles.toValue}>
-              {contactId === 'global' ? roomName : contactInfo?.email || 'Carregando...'}
+              {contactId === 'global' ? roomName : contactInfo?.email || t('msn.chat.loading')}
             </span>
             {roomId === 'global' && (
               <button
                 className={styles.mobileParticipantsBtn}
                 onClick={() => setIsParticipantsOpen(!isParticipantsOpen)}
               >
-                👥 Participantes
+                {t('msn.chat.participants')}
               </button>
             )}
           </div>
@@ -293,19 +290,19 @@ export default function MsnChatWindow() {
           <div className={styles.messagesBox}>
             <div className={styles.messagesArea}>
               {messages.length === 0 && (
-                <div className={styles.emptyState}>Nenhuma mensagem ainda. Diga oi!</div>
+                <div className={styles.emptyState}>{t('msn.chat.emptyState')}</div>
               )}
               {messages.map(msg => (
                 <div key={msg.id} className={styles.messageItem}>
                   <div className={styles.msgHeader}>
-                    <span className={styles.msgName}>{msg.name} diz:</span>
+                    <span className={styles.msgName}>{msg.name} {t('msn.chat.says')}</span>
                   </div>
                   <div className={styles.msgBody}>
                     {msg.type === 'nudge' ? (
                       <p className={styles.nudgeText}>
                         {msg.uid === user?.uid
-                          ? 'Você acaba de enviar uma chamadela!'
-                          : `${msg.name} acaba de enviar uma chamadela!`}
+                          ? t('msn.chat.nudgeSent')
+                          : t('msn.chat.nudgeReceived', { name: msg.name })}
                       </p>
                     ) : (
                       <p className={styles.msgText}>{parseEmoticons(msg.text)}</p>
@@ -347,15 +344,15 @@ export default function MsnChatWindow() {
                 )}
               </div>
 
-              <button className={styles.formatBtn}>🎙️ Clip de Voz</button>
+              <button className={styles.formatBtn}>{t('msn.chat.voiceClip')}</button>
               <div className={styles.toolbarDivider}></div>
               <button
                 className={styles.formatBtn}
                 onClick={sendNudge}
                 disabled={!canNudge}
-                title="Chamar a Atenção"
+                title={t('msn.chat.nudgeTitle')}
               >
-                📳 Chamar Atenção
+                {t('msn.chat.nudgeBtn')}
               </button>
             </div>
 
@@ -373,7 +370,7 @@ export default function MsnChatWindow() {
                 onClick={sendMessage}
                 disabled={!inputText.trim()}
               >
-                Enviar
+                {t('msn.chat.send')}
               </button>
             </div>
           </div>
@@ -384,7 +381,7 @@ export default function MsnChatWindow() {
           <div className={`${styles.rightColumn} ${styles.globalColumn} ${isParticipantsOpen ? styles.mobileOpen : ''}`}>
             {/* O cabeçalho no mobile ajuda a fechar */}
             <div className={styles.participantsHeaderMobile}>
-              <span>Participantes da Sala</span>
+              <span>{t('msn.chat.roomParticipants')}</span>
               <button onClick={() => setIsParticipantsOpen(false)}>✕</button>
             </div>
 
@@ -410,7 +407,7 @@ export default function MsnChatWindow() {
                 referrerPolicy="no-referrer"
                 onClick={() => setIsProfileModalOpen(true)}
                 style={{ cursor: 'pointer' }}
-                title="Editar perfil"
+                title={t('msn.chat.editProfile')}
               />
             </div>
           </div>

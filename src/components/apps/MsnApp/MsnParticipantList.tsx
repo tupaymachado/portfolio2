@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { ref, onValue } from 'firebase/database';
 import { firestoreDB, db, auth } from '../../../config/firebase';
@@ -15,6 +16,7 @@ interface UserParticipant {
 }
 
 export default function MsnParticipantList() {
+    const { t } = useTranslation();
     const [participants, setParticipants] = useState<UserParticipant[]>([]);
     const [onlineUids, setOnlineUids] = useState<Set<string>>(new Set());
     const [isLoading, setIsLoading] = useState(true);
@@ -75,13 +77,13 @@ export default function MsnParticipantList() {
 
         openContextMenu(e.clientX, e.clientY, [
             {
-                label: `Enviar Mensagem para ${participant.displayName}`,
+                label: t('msn.contextMenu.sendMessage', { name: participant.displayName }),
                 onClick: () => {
                     openWindow('msn-chat', { fileId: participant.uid });
                 },
             },
             {
-                label: `Adicionar aos Contatos`,
+                label: t('msn.contextMenu.addContact'),
                 onClick: async () => {
                     if (!currentUser) return;
                     try {
@@ -101,7 +103,7 @@ export default function MsnParticipantList() {
     };
 
     if (isLoading) {
-        return <div className={styles.loading}>Carregando participantes...</div>;
+        return <div className={styles.loading}>{t('msn.loadingParticipants')}</div>;
     }
 
     const sortedParticipants = [...participants].sort((a, b) => {
@@ -123,12 +125,12 @@ export default function MsnParticipantList() {
                             key={participant.uid}
                             className={`${styles.participantItem} ${!isOnline ? styles.offlineWrapper : ''}`}
                             onClick={(e) => handleParticipantClick(e, participant)}
-                            title="Clique para ver opções"
+                            title={t('msn.participants.clickOptions')}
                         >
                             <img
                                 src={isOnline ? msnFigureOnline : msnFigureOffline}
                                 className={styles.statusIcon}
-                                alt={isOnline ? "Online" : "Offline"}
+                                alt={isOnline ? t('msn.participants.online') : t('msn.participants.offline')}
                             />
                             <img
                                 src={participant.photoURL}
@@ -139,7 +141,7 @@ export default function MsnParticipantList() {
                             <div className={styles.participantInfo}>
                                 <span className={styles.participantName}>{participant.displayName}</span>
                                 <span className={styles.participantStatus}>
-                                    {isOnline ? '(Online)' : '(Offline)'}
+                                    {isOnline ? t('msn.participants.online') : t('msn.participants.offline')}
                                 </span>
                             </div>
                         </div>

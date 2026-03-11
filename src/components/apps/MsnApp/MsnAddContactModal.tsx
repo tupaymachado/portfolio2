@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { msnUserService } from '../../../services/msnUserService';
 import styles from './MsnAddContactModal.module.css';
 import userIcon from '../../../assets/icons/msn.webp';
@@ -10,6 +11,7 @@ interface MsnAddContactModalProps {
 }
 
 export default function MsnAddContactModal({ isOpen, onClose, uid }: MsnAddContactModalProps) {
+    const { t } = useTranslation();
     const [email, setEmail] = useState('');
     const [isAdding, setIsAdding] = useState(false);
     const [error, setError] = useState('');
@@ -33,7 +35,7 @@ export default function MsnAddContactModal({ isOpen, onClose, uid }: MsnAddConta
                 setSuccess(false);
             }, 1500);
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Erro ao adicionar contato');
+            setError(err instanceof Error ? err.message : t('msn.addContact.error'));
         } finally {
             setIsAdding(false);
         }
@@ -43,7 +45,7 @@ export default function MsnAddContactModal({ isOpen, onClose, uid }: MsnAddConta
         <div className={styles.overlay}>
             <div className={styles.modal}>
                 <div className={styles.header}>
-                    <span>Adicionar um Contato</span>
+                    <span>{t('msn.addContact.title')}</span>
                     <button className={styles.closeBtn} onClick={onClose}>×</button>
                 </div>
 
@@ -51,22 +53,22 @@ export default function MsnAddContactModal({ isOpen, onClose, uid }: MsnAddConta
                     <div className={styles.content}>
                         <img src={userIcon} alt="User" className={styles.userIcon} />
                         <div className={styles.textContainer}>
-                            <p>Por favor, introduza o endereço de e-mail do contato que você deseja adicionar.</p>
+                            <p>{t('msn.addContact.description')}</p>
 
                             <div className={styles.inputGroup}>
-                                <label>Endereço de e-mail:</label>
+                                <label>{t('msn.addContact.emailLabel')}</label>
                                 <input
                                     type="email"
                                     className={styles.input}
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="exemplo@hotmail.com"
+                                    placeholder={t('msn.addContact.emailPlaceholder')}
                                     disabled={isAdding || success}
                                 />
                             </div>
 
                             {error && <p className={styles.error}>{error}</p>}
-                            {success && <p className={styles.success}>Contato adicionado com sucesso!</p>}
+                            {success && <p className={styles.success}>{t('msn.addContact.success')}</p>}
                         </div>
                     </div>
                 </div>
@@ -77,10 +79,10 @@ export default function MsnAddContactModal({ isOpen, onClose, uid }: MsnAddConta
                         onClick={handleAddContact}
                         disabled={isAdding || success || !email.trim()}
                     >
-                        {isAdding ? 'Adicionando...' : 'Avançar >'}
+                        {isAdding ? t('msn.addContact.adding') : t('msn.addContact.next')}
                     </button>
                     <button className={styles.button} onClick={onClose} disabled={isAdding}>
-                        Cancelar
+                        {t('msn.addContact.cancel')}
                     </button>
                 </div>
             </div>

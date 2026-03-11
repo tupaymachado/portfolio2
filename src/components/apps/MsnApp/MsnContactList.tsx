@@ -286,7 +286,7 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
             referrerPolicy="no-referrer"
             onClick={() => setIsProfileModalOpen(true)}
             style={{ cursor: 'pointer' }}
-            title="Alterar imagem ou nome"
+            title={t('msn.contactList.changeAvatarTitle')}
           />
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
             <div className={styles.userDetails}>
@@ -294,7 +294,7 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
                 className={styles.userName}
                 onClick={() => setIsProfileModalOpen(true)}
                 style={{ cursor: 'pointer' }}
-                title="Alterar imagem ou nome"
+                title={t('msn.contactList.changeAvatarTitle')}
               >
                 {displayName}
               </span>
@@ -303,16 +303,16 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
                 value={currentStatus}
                 onChange={handleStatusChange}
               >
-                <option value="online">(Online)</option>
-                <option value="busy">(Ocupado)</option>
-                <option value="away">(Ausente)</option>
-                <option value="brb">(Já volto)</option>
+                <option value="online">({t('msn.login.statusOnline')})</option>
+                <option value="busy">({t('msn.login.statusBusy')})</option>
+                <option value="away">({t('msn.login.statusAway')})</option>
+                <option value="brb">({t('msn.login.statusBrb')})</option>
               </select>
             </div>
 
             <div className={styles.personalMessageRow}>
               {currentTrack && (
-                <span className={styles.musicBadge} title={`Tocando: ${currentTrack}`}>
+                <span className={styles.musicBadge} title={t('msn.contactList.nowPlayingTitle')}>
                   <span className={styles.musicIcon}>🎵</span>
                   {/* Se houver música, podemos mostrar o nome da música ou só o ícone. Vamos por enquanto deixar as duas opções fluirem juntas */}
                 </span>
@@ -320,7 +320,7 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
               <input
                 type="text"
                 className={styles.personalMessageInput}
-                placeholder="Digite uma mensagem pessoal"
+                placeholder={t('msn.contactList.personalMessagePlaceholder')}
                 value={currentTrack ? `${currentTrack}` : personalMessage}
                 onChange={(e) => {
                   if (!currentTrack) setPersonalMessage(e.target.value)
@@ -332,7 +332,7 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
                   }
                 }}
                 readOnly={!!currentTrack}
-                title={currentTrack ? "Música em reprodução" : "Mensagem Pessoal"}
+                title={currentTrack ? t('msn.contactList.nowPlayingTitle') : t('msn.contactList.personalMessageTitle')}
               />
             </div>
           </div>
@@ -360,13 +360,13 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
         onClick={() => setIsAddContactOpen(true)}
       >
         <span className={styles.addContactIcon}><img src={msnFigureOnline} />+</span>
-        <span>Adicionar um Contato</span>
+        <span>{t('msn.contactList.addContact')}</span>
       </div>
 
       {/* Lista de salas */}
       <div className={styles.roomList}>
         <div className={styles.groupHeader} style={{ marginTop: 8 }}>
-          Salas de Bate-Papo ({onlineCount} online)
+          {t('msn.contactList.chatRooms', { count: onlineCount })}
         </div>
 
         {ROOMS.map(room => (
@@ -384,7 +384,7 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
         ))}
 
         <div className={styles.groupHeader}>
-          Online ({onlineContacts.length})
+          {t('msn.contactList.onlineGroup', { count: onlineContacts.length })}
         </div>
 
         {onlineContacts.map(contact => (
@@ -402,7 +402,7 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
             />
             <div className={styles.contactInfo}>
               <span className={styles.contactName}>
-                {contact.displayName} <span className={styles.contactStatusText}>({contact.status})</span>
+                {contact.displayName} <span className={styles.contactStatusText}>({t(`msn.status.${contact.status}`, { defaultValue: contact.status })})</span>
               </span>
               {contact.personalMessage && (
                 <span className={styles.contactMessage}> - {contact.personalMessage}</span>
@@ -412,7 +412,7 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
         ))}
 
         <div className={styles.groupHeader}>
-          Offline ({offlineContacts.length})
+          {t('msn.contactList.offlineGroup', { count: offlineContacts.length })}
         </div>
 
         {offlineContacts.map(contact => (
@@ -429,7 +429,7 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
             />
             <div className={styles.contactInfo}>
               <span className={styles.contactName}>
-                {contact.displayName} <span className={styles.contactStatusText}>({contact.status})</span>
+                {contact.displayName} <span className={styles.contactStatusText}>({t(`msn.status.${contact.status}`, { defaultValue: contact.status })})</span>
               </span>
               {contact.personalMessage && (
                 <span className={styles.contactMessage}> - {contact.personalMessage}</span>
@@ -445,13 +445,13 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
           <input
             type="text"
             className={styles.searchInput}
-            placeholder="Procurar contatos..."
+            placeholder={t('msn.contactList.searchPlaceholder')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         <button className={styles.logoutButton} onClick={onLogout}>
-          Sair
+          {t('msn.contactList.logout')}
         </button>
       </div>
     </div>
