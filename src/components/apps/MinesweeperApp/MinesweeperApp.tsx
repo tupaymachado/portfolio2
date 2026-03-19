@@ -343,7 +343,7 @@ export default function MinesweeperApp() {
         >
             {/* Seletor de dificuldade */}
             <div className={styles.difficultyBar}>
-                {Object.entries(DIFFICULTIES).map(([key, d]) => (
+                {Object.entries(DIFFICULTIES).map(([key]) => (
                     <button
                         key={key}
                         className={`${styles.diffButton} ${key === diffKey ? styles.diffButtonActive : ''}`}
