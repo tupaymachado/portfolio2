@@ -8,15 +8,15 @@ type Tab = 'geral' | 'habilidades' | 'experiencia' | 'contato';
 
 // Níveis das habilidades — não precisam de tradução
 const SKILL_LEVELS = {
-  frontend:    [{ name: 'React', level: 90 }, { name: 'TypeScript', level: 85 }, { name: 'CSS / SCSS', level: 80 }, { name: 'HTML', level: 95 }],
-  backendTools:[{ name: 'Node.js', level: 70 }, { name: 'Firebase', level: 75 }, { name: 'Git', level: 85 }, { name: 'Figma', level: 65 }],
+  frontend: [{ name: 'React', level: 90 }, { name: 'TypeScript', level: 85 }, { name: 'CSS / SCSS', level: 80 }, { name: 'HTML', level: 95 }],
+  backendTools: [{ name: 'Node.js', level: 70 }, { name: 'Firebase', level: 75 }, { name: 'Git', level: 85 }, { name: 'Figma', level: 65 }],
 };
 
 // URLs dos contatos — não precisam de tradução
 const CONTACT_URLS = [
-  { key: 'github',   url: 'https://github.com/tupaymachado',        emoji: '💻' },
-  { key: 'linkedin', url: 'https://linkedin.com/in/seu-perfil',      emoji: '💼' },
-  { key: 'email',    url: 'mailto:seuemail@example.com',             emoji: '✉️' },
+  { key: 'github', url: 'https://github.com/tupaymachado', emoji: '💻' },
+  { key: 'linkedin', url: 'https://www.linkedin.com/in/tupaymachado', emoji: '💼' },
+  { key: 'email', url: 'mailto:tupay.machado@gmail.com', emoji: '✉️' },
 ];
 
 interface ExperienceItem {
@@ -33,14 +33,14 @@ export default function AboutMeApp() {
   const closeWindow = useWindowStore(state => state.closeWindow);
 
   const TABS: { id: Tab; label: string }[] = [
-    { id: 'geral',      label: t('aboutMe.tabs.general') },
-    { id: 'habilidades', label: t('aboutMe.tabs.skills') },
+    { id: 'geral', label: t('aboutMe.tabs.general') },
     { id: 'experiencia', label: t('aboutMe.tabs.experience') },
-    { id: 'contato',    label: t('aboutMe.tabs.contact') },
+    { id: 'habilidades', label: t('aboutMe.tabs.skills') },
+    { id: 'contato', label: t('aboutMe.tabs.contact') },
   ];
 
   const SKILLS = [
-    { category: t('aboutMe.skills.frontend'),    items: SKILL_LEVELS.frontend },
+    { category: t('aboutMe.skills.frontend'), items: SKILL_LEVELS.frontend },
     { category: t('aboutMe.skills.backendTools'), items: SKILL_LEVELS.backendTools },
   ];
 
@@ -67,7 +67,7 @@ export default function AboutMeApp() {
               <div className={styles.geralHeader}>
                 <img src={profilePhoto} alt="Foto de perfil" className={styles.avatar} />
                 <div className={styles.geralInfo}>
-                  <span className={styles.geralName}>{t('aboutMe.general.name')}</span>
+                  <span className={styles.geralName}>Tupay Machado</span>
                   <span className={styles.geralTitle}>{t('aboutMe.general.title')}</span>
                   <span className={styles.geralLocation}>{t('aboutMe.general.location')}</span>
                 </div>
@@ -75,6 +75,22 @@ export default function AboutMeApp() {
               <div className={styles.divider} />
               <p className={styles.geralBio}>{t('aboutMe.general.bio1')}</p>
               <p className={styles.geralBio}>{t('aboutMe.general.bio2')}</p>
+              <p className={styles.geralBio}>{t('aboutMe.general.bio3')}</p>
+            </div>
+          )}
+
+          {activeTab === 'experiencia' && (
+            <div className={styles.timeline}>
+              {EXPERIENCE.map((item, i) => (
+                <div key={i} className={styles.timelineItem}>
+                  <span className={styles.timelineDate}>{item.date}</span>
+                  <span className={styles.timelineTitle}>{item.title}</span>
+                  <span className={styles.timelineSubtitle}>{item.subtitle}</span>
+                  {item.description && (
+                    <span className={styles.timelineDescription}>{item.description}</span>
+                  )}
+                </div>
+              ))}
             </div>
           )}
 
@@ -92,21 +108,6 @@ export default function AboutMeApp() {
                       <span className={styles.skillPercent}>{skill.level}%</span>
                     </div>
                   ))}
-                </div>
-              ))}
-            </div>
-          )}
-
-          {activeTab === 'experiencia' && (
-            <div className={styles.timeline}>
-              {EXPERIENCE.map((item, i) => (
-                <div key={i} className={styles.timelineItem}>
-                  <span className={styles.timelineDate}>{item.date}</span>
-                  <span className={styles.timelineTitle}>{item.title}</span>
-                  <span className={styles.timelineSubtitle}>{item.subtitle}</span>
-                  {item.description && (
-                    <span className={styles.timelineDescription}>{item.description}</span>
-                  )}
                 </div>
               ))}
             </div>

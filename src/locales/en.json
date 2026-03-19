@@ -1,7 +1,6 @@
 {
     "lang": "English",
     "langShort": "EN",
-
     "system": {
         "ok": "OK",
         "cancel": "Cancel",
@@ -9,7 +8,6 @@
         "loading": "Loading...",
         "error": "Error"
     },
-
     "programs": {
         "msn": "MSN Messenger",
         "msn-chat": "MSN Chat",
@@ -22,7 +20,6 @@
         "solitaire": "Solitaire",
         "winamp": "Winamp"
     },
-
     "systemLinks": {
         "sl-my-documents": "My Documents",
         "sl-my-pictures": "My Pictures",
@@ -33,7 +30,6 @@
         "sl-search": "Search",
         "sl-run": "Run..."
     },
-
     "startMenu": {
         "start": "Start",
         "allPrograms": "All Programs",
@@ -41,7 +37,6 @@
         "shutdown": "Turn Off Computer",
         "back": "Back"
     },
-
     "desktop": {
         "contextMenu": {
             "refresh": "Refresh",
@@ -54,7 +49,6 @@
             "confirm": "Are you sure you want to permanently delete all items in the Recycle Bin?"
         }
     },
-
     "taskbar": {
         "contextMenu": {
             "taskManager": "Task Manager",
@@ -63,7 +57,6 @@
             "close": "Close"
         }
     },
-
     "notepad": {
         "menu": {
             "file": "File",
@@ -80,7 +73,6 @@
             "wordWrap": "Word Wrap"
         }
     },
-
     "paint": {
         "menu": {
             "file": "File",
@@ -98,7 +90,6 @@
             "hint": "For help, click Help Topics on the Help Menu."
         }
     },
-
     "ie": {
         "menu": {
             "file": "File",
@@ -150,7 +141,6 @@
             "internetZone": "Internet"
         }
     },
-
     "explorer": {
         "contextMenu": {
             "restore": "Restore",
@@ -203,7 +193,6 @@
             "go": "Go"
         }
     },
-
     "fileSystem": {
         "root": "C:",
         "desktop": "Desktop",
@@ -221,7 +210,6 @@
         "url-projeto-2": "Project 2",
         "url-projeto-3": "Project 3"
     },
-
     "login": {
         "shuttingDown": "Windows is shutting down...",
         "welcome": "Welcome",
@@ -238,7 +226,6 @@
         "createBtn": "Create Account",
         "cancelBtn": "Cancel"
     },
-
     "paint": {
         "menu": {
             "file": "File",
@@ -274,7 +261,6 @@
             "roundrect": "Rounded Rectangle"
         }
     },
-
     "notepad": {
         "menu": {
             "file": "File",
@@ -293,7 +279,6 @@
         "untitled": "Untitled",
         "statusBar": "Ln {{line}}, Col {{col}}"
     },
-
     "solitaire": {
         "menu": {
             "file": "File",
@@ -312,7 +297,6 @@
             "drawFromStock": "Draw from stock"
         }
     },
-
     "minesweeper": {
         "difficulty": {
             "beginner": "Beginner",
@@ -320,7 +304,6 @@
             "expert": "Expert"
         }
     },
-
     "msn": {
         "menu": {
             "file": "File",
@@ -420,52 +403,57 @@
             "offline": "(Offline)"
         }
     },
-
     "aboutMe": {
         "tabs": {
-            "general":    "General",
-            "skills":     "Skills",
+            "general": "General",
+            "skills": "Skills",
             "experience": "Experience",
-            "contact":    "Contact"
+            "contact": "Contact"
         },
         "general": {
-            "name":     "Your Name Here",
-            "title":    "Full-Stack Developer",
-            "location": "📍 São Paulo, Brazil",
-            "bio1": "Hi! I'm a developer passionate about crafting unique and functional digital experiences. I have experience with React, TypeScript, Node.js, and other modern web technologies.",
-            "bio2": "This portfolio was built with React + TypeScript, simulating the classic Windows XP environment — because nostalgia and technology are a great match."
+            "title": "Full-Stack Developer",
+            "location": "📍 Brazil",
+            "bio1": "Hello! Welcome to my portfolio! I am a Web Developer passionate about technology. Here I'll showcase a bit of what I've done and what I'm currently developing, besides serving as a small portal to the past in the form of a nostalgic experience with classic Windows XP!",
+            "bio2": "Although I did not start my academic and professional life in technology, it has always been working behind the scenes. I have a degree in Business Administration and a Master's degree in Sociology, both from UFPel. Professionally, I've worked on various fronts: from organizing events and accounting routines to working independently as an IT technician, solving hardware and software issues. I entered the programming field in 2023 when I realized I could solve some of the pain points of my work at the time through simple automation tools.",
+            "bio3": "Today, my greatest technical background is in front-end, but I keep studying to diversify my skills: back-end, API development, AI integrations, optimizations, and architecture. I believe my past experiences, both academic and professional, have given me a unique set of perspectives that makes my work as a dev much more complete than it would be without them: soft skills, organization, systemic vision, ease of communication, focus on problem-solving, and a real understanding of the business."
         },
         "skills": {
-            "frontend":     "Front-end",
+            "frontend": "Front-end",
             "backendTools": "Back-end & Tools"
         },
         "experience": {
             "items": [
                 {
-                    "date":        "2024 – Present",
-                    "title":       "Front-end Developer",
-                    "subtitle":    "Company Name",
-                    "description": "Description of responsibilities and technologies used."
+                    "date": "Oct 2025 - Present",
+                    "title": "Front-end Developer",
+                    "subtitle": "NOC Project",
+                    "description": "Working since conception on building a NOC (Network Operations Center) system. Accelerated development using advanced Artificial Intelligence tools (LLMs) as code co-pilots, ensuring fast deliveries and a scalable architecture. Focus on creating efficient interfaces and optimizing costs and performance — including refactoring AI API-based validation flows into faster and more economical internal logic."
                 },
                 {
-                    "date":        "2022 – 2024",
-                    "title":       "Junior Developer",
-                    "subtitle":    "Company Name",
-                    "description": "Description of responsibilities and technologies used."
+                    "date": "Oct 2024 - Oct 2025",
+                    "title": "Junior Developer",
+                    "subtitle": "Grupo Elevato",
+                    "description": "Development of customized web solutions and process automation, acting as the bridge between business and technology. Created a lead management system (CRM) from scratch and a logistics tracker that eliminated internal package losses. Highlighted by substituting manual routines with systems that reduced price alteration time from hours to minutes. Strong focus on translating operational challenges into functional solutions."
                 },
                 {
-                    "date":        "2020 – 2023",
-                    "title":       "Bachelor's in Computer Science",
-                    "subtitle":    "University Name",
-                    "description": ""
+                    "date": "2014 - 2022",
+                    "title": "IT Technician",
+                    "subtitle": "Freelancer",
+                    "description": "An extra income project that ended up being bigger than planned for a while. I provided hardware and software technical support services for end customers and some companies. It was a fantastic experience for developing my problem-solving perception and technical communication for clients."
+                },
+                {
+                    "date": "2012 - 2023",
+                    "title": "Administrative and Operational Routines",
+                    "subtitle": "Various Companies",
+                    "description": "Diverse experiences dealing with the public, organizing events, and administrative routines. This period developed my resilience, emotional intelligence, and ability to work under pressure. The direct interaction with bottlenecks and manual processes in these areas was what motivated me to learn programming, seeking to create automations to optimize my own day-to-day in the accounting sector."
                 }
             ]
         },
         "contact": {
-            "intro":    "Feel free to get in touch!",
-            "github":   "GitHub",
+            "intro": "Feel free to get in touch!",
+            "github": "GitHub",
             "linkedin": "LinkedIn",
-            "email":    "Email"
+            "email": "Email"
         },
         "ok": "OK"
     }

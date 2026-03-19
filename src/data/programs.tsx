@@ -96,8 +96,8 @@ export const PROGRAMS: ProgramDefinition[] = [
     iconUrl: myComputerIcon,
     component: AboutMeApp,
     hideFromStartMenu: true,
-    defaultSize: { width: 450, height: 400 },
-    minSize: { width: 380, height: 400 },
+    defaultSize: { width: 450, height: 602 },
+    minSize: { width: 380, height: 602 },
     isResizable: true,
   },
   {

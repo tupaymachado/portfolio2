@@ -1,7 +1,6 @@
 {
     "lang": "Português",
     "langShort": "PT",
-
     "system": {
         "ok": "OK",
         "cancel": "Cancelar",
@@ -9,7 +8,6 @@
         "loading": "Carregando...",
         "error": "Erro"
     },
-
     "programs": {
         "msn": "MSN Messenger",
         "msn-chat": "Bate-papo do MSN",
@@ -22,7 +20,6 @@
         "solitaire": "Paciência",
         "winamp": "Winamp"
     },
-
     "systemLinks": {
         "sl-my-documents": "Meus Documentos",
         "sl-my-pictures": "Minhas Imagens",
@@ -33,7 +30,6 @@
         "sl-search": "Pesquisar",
         "sl-run": "Executar..."
     },
-
     "startMenu": {
         "start": "Iniciar",
         "allPrograms": "Todos os programas",
@@ -41,7 +37,6 @@
         "shutdown": "Desligar o computador",
         "back": "Voltar"
     },
-
     "desktop": {
         "contextMenu": {
             "refresh": "Atualizar",
@@ -54,7 +49,6 @@
             "confirm": "Tem certeza que deseja apagar todos os itens da lixeira permanentemente?"
         }
     },
-
     "taskbar": {
         "contextMenu": {
             "taskManager": "Gerenciador de Tarefas",
@@ -63,7 +57,6 @@
             "close": "Fechar"
         }
     },
-
     "notepad": {
         "menu": {
             "file": "Arquivo",
@@ -80,7 +73,6 @@
             "wordWrap": "Quebra automática de linha"
         }
     },
-
     "paint": {
         "menu": {
             "file": "Arquivo",
@@ -98,7 +90,6 @@
             "hint": "Para obter ajuda, clique em Tópicos da Ajuda no menu Ajuda."
         }
     },
-
     "ie": {
         "menu": {
             "file": "Arquivo",
@@ -150,7 +141,6 @@
             "internetZone": "Internet"
         }
     },
-
     "explorer": {
         "contextMenu": {
             "restore": "Restaurar",
@@ -203,7 +193,6 @@
             "go": "Ir"
         }
     },
-
     "fileSystem": {
         "root": "C:",
         "desktop": "Desktop",
@@ -221,7 +210,6 @@
         "url-projeto-2": "Projeto 2",
         "url-projeto-3": "Projeto 3"
     },
-
     "login": {
         "shuttingDown": "O Windows está desligando...",
         "welcome": "Bem-vindo",
@@ -238,7 +226,6 @@
         "createBtn": "Criar Conta",
         "cancelBtn": "Cancelar"
     },
-
     "paint": {
         "menu": {
             "file": "Arquivo",
@@ -274,7 +261,6 @@
             "roundrect": "Ret. arredondado"
         }
     },
-
     "notepad": {
         "menu": {
             "file": "Arquivo",
@@ -293,7 +279,6 @@
         "untitled": "Sem título",
         "statusBar": "Ln {{line}}, Col {{col}}"
     },
-
     "solitaire": {
         "menu": {
             "file": "Arquivo",
@@ -312,7 +297,6 @@
             "drawFromStock": "Virar carta do stock"
         }
     },
-
     "minesweeper": {
         "difficulty": {
             "beginner": "Iniciante",
@@ -320,7 +304,6 @@
             "expert": "Especialista"
         }
     },
-
     "msn": {
         "menu": {
             "file": "Arquivo",
@@ -420,52 +403,57 @@
             "offline": "(Offline)"
         }
     },
-
     "aboutMe": {
         "tabs": {
-            "general":    "Geral",
-            "skills":     "Habilidades",
+            "general": "Geral",
+            "skills": "Habilidades",
             "experience": "Experiência",
-            "contact":    "Contato"
+            "contact": "Contato"
         },
         "general": {
-            "name":     "Seu Nome Aqui",
-            "title":    "Desenvolvedor Full-Stack",
-            "location": "📍 São Paulo, Brasil",
-            "bio1": "Olá! Sou um desenvolvedor apaixonado por criar experiências digitais únicas e funcionais. Tenho experiência com React, TypeScript, Node.js e outras tecnologias modernas de desenvolvimento web.",
-            "bio2": "Este portfólio foi construído com React + TypeScript simulando o ambiente clássico do Windows XP — porque nostalgia e tecnologia combinam muito bem."
+            "title": "Desenvolvedor Full-Stack",
+            "location": "📍 Brasil",
+            "bio1": "Olá! Seja bem-vindo ao meu portfólio! Sou um Desenvolvedor Web apaixonado por tecnologia. Aqui vou apresentar um pouco do que já fiz e do que ainda estou desenvolvendo, além de servir como um pequeno portal para o passado na forma de uma experiência nostálgica com o clássico Windows XP!",
+            "bio2": "Apesar de não ter começado minha vida acadêmica e profissional com a tecnologia, ela é algo que sempre esteve nos bastidores. Sou formado em Administração e tenho passagem pelo mestrado em Sociologia, ambos pela UFPel. Profissionalmente, já atuei em diversas frentes: desde a organização de eventos e rotinas contábeis até trabalhar por conta própria como técnico de informática, resolvendo problemas de hardware e software. Entrei na área da programação em 2023, quando percebi que podia resolver algumas dores do meu trabalho da época através de ferramentas de automação simples.",
+            "bio3": "Hoje, minha maior bagagem técnica está no front-end, mas sigo estudando para diversificar minhas habilidades: backend, desenvolvimento de APIs, integrações com IA, otimizações e arquitetura. Acredito que minhas experiências passadas, tanto acadêmicas quanto profissionais, me deram um conjunto único de perspectivas que torna meu trabalho como dev muito mais completo do que seria sem elas: soft skills, organização, visão sistêmica, facilidade de comunicação, foco na resolução de problemas e entendimento real do negócio."
         },
         "skills": {
-            "frontend":    "Front-end",
+            "frontend": "Front-end",
             "backendTools": "Back-end & Ferramentas"
         },
         "experience": {
             "items": [
                 {
-                    "date":        "2024 – Atual",
-                    "title":       "Desenvolvedor Front-end",
-                    "subtitle":    "Nome da Empresa",
-                    "description": "Descrição das responsabilidades e tecnologias utilizadas."
+                    "date": "Out 2025 - Atual",
+                    "title": "Desenvolvedor Front-end",
+                    "subtitle": "Projeto NOC",
+                    "description": "Atuação desde a concepção na construção de um sistema de NOC (Network Operations Center). Desenvolvimento acelerado utilizando ferramentas avançadas de Inteligência Artificial (LLMs) como co-pilotos de código, garantindo entregas rápidas e arquitetura escalável. Foco na criação de interfaces eficientes e otimização de custos e performance — incluindo a refatoração de fluxos de validação baseados em APIs de IA para lógicas internas mais rápidas e econômicas."
                 },
                 {
-                    "date":        "2022 – 2024",
-                    "title":       "Desenvolvedor Júnior",
-                    "subtitle":    "Nome da Empresa",
-                    "description": "Descrição das responsabilidades e tecnologias utilizadas."
+                    "date": "Out 2024 - Out 2025",
+                    "title": "Desenvolvedor Júnior",
+                    "subtitle": "Grupo Elevato",
+                    "description": "Desenvolvimento de soluções web customizadas e automação de processos, atuando como a ponte entre negócios e tecnologia. Criação de um sistema de gestão de leads (CRM) do zero e de um rastreador logístico que eliminou extravios internos. Destaque para a substituição de rotinas manuais por sistemas que reduziram o tempo de alteração de preços de horas para minutos. Forte foco em traduzir desafios operacionais em soluções funcionais."
                 },
                 {
-                    "date":        "2020 – 2023",
-                    "title":       "Bacharelado em Ciência da Computação",
-                    "subtitle":    "Nome da Universidade",
-                    "description": ""
+                    "date": "2014 - 2022",
+                    "title": "Técnico em Informática",
+                    "subtitle": "Profissional Autônomo",
+                    "description": "Um projeto de renda extra que acabou sendo maior que o planejado por um tempo. Prestava serviços de suporte técnico de hardware e software para clientes finais e algumas empresas. Foi uma experiência fantástica para o desenvolvimento da minha percepção de resolução de problemas e comunicação técnica para clientes."
+                },
+                {
+                    "date": "2012 - 2023",
+                    "title": "Rotinas Administrativas e Operacionais",
+                    "subtitle": "Diversas Empresas",
+                    "description": "Experiências diversas com atendimento a público, organização de eventos e rotinas administrativas. Esse período desenvolveu minha resiliência, inteligência emocional e capacidade de trabalhar sob pressão. O convívio direto com os gargalos e processos manuais dessas áreas foi o que me motivou a aprender programação, buscando criar automações para otimizar meu próprio dia a dia no setor contábil."
                 }
             ]
         },
         "contact": {
-            "intro":    "Fique à vontade para entrar em contato!",
-            "github":   "GitHub",
+            "intro": "Fique à vontade para entrar em contato!",
+            "github": "GitHub",
             "linkedin": "LinkedIn",
-            "email":    "E-mail"
+            "email": "E-mail"
         },
         "ok": "OK"
     }
