@@ -146,3 +146,68 @@ textarea,
 select {
   font: inherit;
 }
+
+/* ==========================================================================
+   CUSTOM SCROLLBAR - ESTILO WINDOWS XP (Global)
+   ========================================================================== */
+
+::-webkit-scrollbar {
+  width: 17px;
+}
+
+::-webkit-scrollbar-track {
+  background: #ececec;
+  border-left: 1px solid #aeb2c6;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #B7C9F0;
+  border-radius: 0px;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='9' viewBox='0 0 11 9'%3E%3Crect x='0' y='1' width='11' height='1' fill='%23717d9a'/%3E%3Crect x='0' y='4' width='11' height='1' fill='%23717d9a'/%3E%3Crect x='0' y='7' width='11' height='1' fill='%23717d9a'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0b8e8;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='9' viewBox='0 0 11 9'%3E%3Crect x='0' y='1' width='11' height='1' fill='%23717d9a'/%3E%3Crect x='0' y='4' width='11' height='1' fill='%23717d9a'/%3E%3Crect x='0' y='7' width='11' height='1' fill='%23717d9a'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+::-webkit-scrollbar-button {
+  display: block;
+  height: 17px;
+  background: #B7C9F0;
+  border-radius: 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.9);
+  border-left: 1px solid rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid #AEBAC2;
+  border-right: 1px solid #AEBAC2;
+}
+
+::-webkit-scrollbar-button:vertical:decrement {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 11 L8 5 L13 11' fill='none' stroke='%23435478' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 15px;
+}
+
+::-webkit-scrollbar-button:vertical:increment {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 5 L8 11 L13 5' fill='none' stroke='%23435478' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 15px;
+}
+
+::-webkit-scrollbar-button:hover {
+  background-color: #d8e0f5;
+}
+
+/* Hide the duplicate buttons: the ▼ at the top and ▲ at the bottom */
+::-webkit-scrollbar-button:vertical:increment:start,
+::-webkit-scrollbar-button:vertical:decrement:end {
+  display: none;
+}

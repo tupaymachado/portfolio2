@@ -1,0 +1,19 @@
+{
+  "rules": {
+    // Presence: qualquer autenticado lê, só o próprio usuário escreve
+    "presence": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.uid == $uid"
+      }
+    },
+
+    // Mensagens: qualquer autenticado pode ler e escrever (chat global + privado)
+    "messages": {
+      "$roomId": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    }
+  }
+}

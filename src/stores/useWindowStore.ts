@@ -142,7 +142,7 @@ export const useWindowStore = create<WindowState>((set, get) => ({
             isMinimized: false,
             isMaximized: shouldMaximize,
             zIndex: get().zIndexCounter,
-            position: { x: 150 + openWindows.length * 20, y: 100 + openWindows.length * 20 },
+            position: { x: 80 + openWindows.length * 20, y: 10 + openWindows.length * 20 },
             size: program.defaultSize || { width: 600, height: 400 },
             minSize: program.minSize || { width: 150, height: 100 },
             isResizable: program.isResizable !== false,
