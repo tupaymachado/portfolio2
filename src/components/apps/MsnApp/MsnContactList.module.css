@@ -3,6 +3,7 @@
   flex-direction: column;
   height: 100%;
   background: #fff;
+  overflow: hidden;
 }
 
 .header {
@@ -224,62 +225,7 @@
   padding: 4px 0;
 }
 
-/* Custom Scrollbar for roomList */
-.roomList::-webkit-scrollbar {
-  width: 17px;
-}
 
-.roomList::-webkit-scrollbar-track {
-  background: #dbdff1;
-  /* Fundo sólido do track da imagem */
-  border-left: 1px solid #aeb2c6;
-}
-
-.roomList::-webkit-scrollbar-thumb {
-  background: #ccd4ec;
-  border: 1px solid #aeb2c6;
-  border-radius: 0px;
-  /* Bordas retas como na imagem */
-  /* SVG in background to create the 3 horizontal lines (grip) */
-  background-image:
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9"><rect x="0" y="1" width="11" height="1" fill="%23717d9a"/><rect x="0" y="4" width="11" height="1" fill="%23717d9a"/><rect x="0" y="7" width="11" height="1" fill="%23717d9a"/></svg>');
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
-.roomList::-webkit-scrollbar-thumb:hover {
-  background: #b5c3e4;
-  background-image:
-    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9"><rect x="0" y="1" width="11" height="1" fill="%23717d9a"/><rect x="0" y="4" width="11" height="1" fill="%23717d9a"/><rect x="0" y="7" width="11" height="1" fill="%23717d9a"/></svg>');
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
-/* Base styles for webkit scrollbar buttons */
-.roomList::-webkit-scrollbar-button {
-  display: block;
-  height: 17px;
-  background: #e9ecf8;
-  border: 1px solid #aeb2c6;
-}
-
-.roomList::-webkit-scrollbar-button:vertical:decrement {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M4 10 L8 5 L12 10 Z" fill="%23435478"/></svg>');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 11px;
-}
-
-.roomList::-webkit-scrollbar-button:vertical:increment {
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M4 6 L8 11 L12 6 Z" fill="%23435478"/></svg>');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 11px;
-}
-
-.roomList::-webkit-scrollbar-button:hover {
-  background-color: #d8e0f5;
-}
 
 .footer {
   padding: 8px 12px;
