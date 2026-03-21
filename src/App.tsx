@@ -68,6 +68,7 @@ function App() {
     <div
       className={styles.appContainer}
       onMouseDown={deselectAllWindows}
+      onContextMenu={(e) => e.preventDefault()}
     >
       <div>
         <Desktop />

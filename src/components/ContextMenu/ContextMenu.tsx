@@ -69,7 +69,7 @@ export default function ContextMenu() {
   }
 
   const handleItemClick = (item: MenuItem) => {
-    if (item.disabled) return;
+    if (item.disabled || !item.onClick) return;
     item.onClick();
     closeContextMenu();
   };
@@ -84,13 +84,17 @@ export default function ContextMenu() {
       <ul>
         {items.map((item, index) => (
           <li key={index}>
-            <button
-              className={styles.menuItem}
-              onClick={() => handleItemClick(item)}
-              disabled={item.disabled}
-            >
-              {item.label}
-            </button>
+            {item.isSeparator ? (
+              <hr className={styles.separator} />
+            ) : (
+              <button
+                className={styles.menuItem}
+                onClick={() => handleItemClick(item)}
+                disabled={item.disabled}
+              >
+                {item.label}
+              </button>
+            )}
           </li>
         ))}
       </ul>

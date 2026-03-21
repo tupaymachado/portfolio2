@@ -3,6 +3,7 @@ import { createContext, useContext } from 'react';
 import type { WindowInstance } from '../types/window';
 import { PROGRAMS } from '../data/programs';
 import { useSystemStore } from './useSystemStore';
+import i18n from '../i18n';
 
 // --- WINDOW CONTEXT (para passar instanceId para filhos) ---
 interface WindowContextValue {
@@ -19,9 +20,10 @@ export function useWindowContext() {
 
 // --- TYPES ---
 export type MenuItem = {
-    label: string;
-    onClick: () => void;
+    label?: string;
+    onClick?: () => void;
     disabled?: boolean;
+    isSeparator?: boolean;
 };
 
 interface WindowState {
@@ -73,11 +75,23 @@ export const useWindowStore = create<WindowState>((set, get) => ({
 
     openContextMenu: (x, y, items) => {
         get().closeStartMenu();
+
+        // Sempre adicionamos o separador e o item genérico de Informações
+        const globalInfoItems: MenuItem[] = [
+            { isSeparator: true },
+            {
+                label: i18n.t('desktop.contextMenu.info', { defaultValue: 'Como isto foi feito?' }),
+                onClick: () => {
+                    get().openWindow('about-me', { context: { tab: 'creditos' } });
+                }
+            }
+        ];
+
         set({
             contextMenu: {
                 isOpen: true,
                 position: { x, y },
-                items,
+                items: [...items, ...globalInfoItems],
             }
         });
     },

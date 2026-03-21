@@ -25,15 +25,15 @@ export default function LoginScreen() {
     const [loadingProfile, setLoadingProfile] = useState<UserProfile | null>(null);
 
     // Em dev, pula a tela de login automaticamente
-    useEffect(() => {
-        if (!import.meta.env.DEV) return;
-
-        let profile = profiles[0];
-        if (!profile) {
-            profile = createProfile('Dev', AVATAR_OPTIONS[0]);
-        }
-        login(profile.id);
-    }, []);
+    /*     useEffect(() => {
+            if (!import.meta.env.DEV) return;
+    
+            let profile = profiles[0];
+            if (!profile) {
+                profile = createProfile('Dev', AVATAR_OPTIONS[0]);
+            }
+            login(profile.id);
+        }, []); */
 
     const handleLogin = (profile: UserProfile) => {
         // Inicia a animação de welcome
@@ -220,7 +220,7 @@ export default function LoginScreen() {
                             </div>
                         </header>
 
-                        <div className={`${windowStyles.windowBody} ${windowStyles.active} ${styles.modalBody}`}>
+                        <div className={`${windowStyles.active} ${styles.modalBody}`}>
                             <div className={styles.formGroup}>
                                 <label className={styles.formLabel}>{t('login.usernameLabel')}</label>
                                 <input

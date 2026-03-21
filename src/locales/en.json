@@ -41,7 +41,8 @@
         "contextMenu": {
             "refresh": "Refresh",
             "new": "New",
-            "properties": "Properties"
+            "properties": "Properties",
+            "info": "How was this made?"
         },
         "recycleBin": {
             "open": "Open",

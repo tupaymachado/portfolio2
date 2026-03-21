@@ -41,7 +41,8 @@
         "contextMenu": {
             "refresh": "Atualizar",
             "new": "Novo",
-            "properties": "Propriedades"
+            "properties": "Propriedades",
+            "info": "Como isto foi feito?"
         },
         "recycleBin": {
             "open": "Abrir",
