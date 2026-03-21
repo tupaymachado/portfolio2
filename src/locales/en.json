@@ -406,8 +406,9 @@
     "aboutMe": {
         "tabs": {
             "general": "General",
-            "skills": "Skills",
+            "skills": "Use Cases",
             "experience": "Experience",
+            "credits": "Credits",
             "contact": "Contact"
         },
         "general": {
@@ -423,19 +424,35 @@
                     "title": "Cost Optimization: AI vs. Regex",
                     "category": "Software Engineering & Logic",
                     "description": "Not every complex problem demands an expensive solution. In a recent project, I encountered a flow that relied heavily on an Artificial Intelligence API to identify and validate strings in text, generating high operational costs. I analyzed the data patterns and replaced the entire AI integration with optimized regular expressions (Regex). The result? The same validation accuracy, with instant performance and a drastic reduction in infrastructure costs.",
-                    "skills": ["Regex", "Programming Logic", "Cost Optimization", "Business Sense"]
+                    "skills": [
+                        "Regex",
+                        "Programming Logic",
+                        "Cost Optimization",
+                        "Business Sense"
+                    ]
                 },
                 {
                     "title": "Agile Automation with Low-Code",
                     "category": "Integrations & Processes",
                     "description": "During my experience in Porto Alegre, I focused on rapidly building solutions using low-code tools such as Bubble and Make (Integromat). More than just 'dragging blocks', the real challenge here was architectural modeling: understanding companies' manual processes, designing data flows, and integrating different APIs to make systems communicate with each other in an automated, invisible way for the end user.",
-                    "skills": ["Bubble", "Make (Integromat)", "API Integration", "Process Automation", "Rapid Prototyping"]
+                    "skills": [
+                        "Bubble",
+                        "Make (Integromat)",
+                        "API Integration",
+                        "Process Automation",
+                        "Rapid Prototyping"
+                    ]
                 },
                 {
                     "title": "Sustainable Software in Production",
                     "category": "Architecture & Maintainability",
                     "description": "One of my greatest prides is not just delivering fast code, but delivering code that stands the test of time. Over two years ago, I developed an internal application for a company where I worked, and that system continues in full production use to this day, with no need for constant refactoring. This proves my focus on writing sustainable code, resilient architectures, and centering on what truly matters: solving the user's problem for the long run.",
-                    "skills": ["Clean Code", "Maintainability", "Software Architecture", "Troubleshooting"]
+                    "skills": [
+                        "Clean Code",
+                        "Maintainability",
+                        "Software Architecture",
+                        "Troubleshooting"
+                    ]
                 }
             ]
         },
@@ -472,6 +489,40 @@
             "github": "GitHub",
             "linkedin": "LinkedIn",
             "email": "Email"
+        },
+        "credits": {
+            "intro": "This project was built on the shoulders of giants. Here are some of the main tools, libraries, and open-source resources that made this portfolio possible:",
+            "items": [
+                {
+                    "name": "Webamp",
+                    "description": "A nostalgic and incredibly faithful recreation of the classic Winamp 2.91 player in HTML5 and JavaScript, built by Captbaritone. Used in the Winamp app.",
+                    "url": "https://webamp.org/"
+                },
+                {
+                    "name": "React & Vite",
+                    "description": "The powerful engine behind the entire interface of our fake operating system, ensuring modularity when building windows and absurd performance.",
+                    "url": "https://react.dev/"
+                },
+                {
+                    "name": "@dnd-kit",
+                    "description": "A lightweight, modular, and accessible drag-and-drop toolkit. Used in the mechanics of the Solitaire game.",
+                    "url": "https://dndkit.com/"
+                },
+                {
+                    "name": "Zustand",
+                    "description": "A minimalist state manager that keeps track of which windows are open, z-index ordering (which screen is in front), and files.",
+                    "url": "https://zustand-demo.pmnd.rs/"
+                },
+                {
+                    "name": "Firebase",
+                    "description": "Google's ecosystem that brings the MSN Messenger app to life, providing a real-time database for global chats.",
+                    "url": "https://firebase.google.com/"
+                },
+                {
+                    "name": "Windows XP Assets",
+                    "description": "Most of the original icons and sounds belong to and were created by Microsoft Corporation. They are being used here under fair use strictly as a nostalgic homage."
+                }
+            ]
         },
         "ok": "OK"
     }

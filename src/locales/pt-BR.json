@@ -406,8 +406,9 @@
     "aboutMe": {
         "tabs": {
             "general": "Geral",
-            "skills": "Habilidades",
+            "skills": "Casos de Uso",
             "experience": "Experiência",
+            "credits": "Créditos",
             "contact": "Contato"
         },
         "general": {
@@ -423,19 +424,37 @@
                     "title": "Otimização de Custos: IA vs. Regex",
                     "category": "Engenharia de Software e Lógica",
                     "description": "Nem todo problema complexo exige uma solução cara. Em um projeto recente, me deparei com um fluxo que dependia massivamente de uma API de Inteligência Artificial para identificar e validar strings em textos, gerando altos custos operacionais. Analisei os padrões dos dados e substituí toda essa integração de IA por expressões regulares (Regex) otimizadas. O resultado? A mesma precisão na validação, com uma performance instantânea e uma redução drástica nos custos da infraestrutura.",
-                    "skills": ["Regex", "Lógica de Programação", "Otimização de Custos", "Visão de Negócios (Business Sense)"]
+                    "skills": [
+                        "Regex",
+                        "Lógica de Programação",
+                        "Otimização de Custos",
+                        "Visão de Negócios (Business Sense)",
+                        "Inteligência Artificial"
+                    ]
                 },
                 {
                     "title": "Automação Ágil com Low-Code",
                     "category": "Integrações e Processos",
-                    "description": "Durante minha experiência em Porto Alegre, atuei focado na construção rápida de soluções utilizando ferramentas low-code como Bubble e Make (Integromat). Mais do que 'arrastar blocos', o verdadeiro desafio aqui foi a modelagem arquitetural: entender os processos manuais das empresas, desenhar os fluxos de dados e integrar diferentes APIs para fazer os sistemas conversarem entre si de forma automatizada e invisível para o usuário final.",
-                    "skills": ["Bubble", "Make (Integromat)", "Integração de APIs", "Automação de Processos", "Prototipagem Rápida"]
+                    "description": "Durante minha experiência em Porto Alegre, atuei focado na construção rápida de soluções utilizando ferramentas low-code como Bubble e Make (Integromat). Mais do que 'arrastar blocos', o verdadeiro desafio aqui foi a modelagem arquitetural: entender os processos manuais das empresas, desenhar os fluxos de dados e integrar diferentes APIs para fazer os sistemas conversarem entre si de forma automatizada e invisível para o usuário final - tudo isso mantendo a agilidade e rapidez na entrega.",
+                    "skills": [
+                        "Bubble",
+                        "Make (Integromat)",
+                        "Integração de APIs",
+                        "Automação de Processos",
+                        "Prototipagem Rápida"
+                    ]
                 },
                 {
                     "title": "Software Sustentável em Produção",
                     "category": "Arquitetura e Manutenibilidade",
-                    "description": "Um dos meus maiores orgulhos não é apenas entregar um código rápido, mas entregar um código que sobrevive ao tempo. Há mais de dois anos, desenvolvi uma aplicação interna para uma empresa onde atuei, e esse sistema continua em pleno uso na produção até hoje, sem necessidade de refatorações constantes. Isso comprova meu foco em escrever códigos sustentáveis, arquiteturas resilientes e focar no que realmente importa: resolver o problema do usuário a longo prazo.",
-                    "skills": ["Clean Code", "Manutenibilidade", "Arquitetura de Software", "Troubleshooting"]
+                    "description": "Um pequeno orgulho meu é meu primeiro projeto um pouco maior. Um sistema, em React, que recebia um excel com produtos e novos preços, tratava os dados, e rodava alguns algorítimos para determinar quais desses produtos a realmente precisam mudar de preço: quais a loja tem em exposição, se a etiqueta atual tem um preço diferente, se o produto está entrando ou saindo de promoção, etc. Uma atividade de horas virou uma simples tarefa de minutos. Mesmo quase 2 anos após minha saída, ela continua online e funcionando.",
+                    "skills": [
+                        "Clean Code",
+                        "Durabilidade",
+                        "Arquitetura de Software",
+                        "React",
+                        "Firebase"
+                    ]
                 }
             ]
         },
@@ -472,6 +491,40 @@
             "github": "GitHub",
             "linkedin": "LinkedIn",
             "email": "E-mail"
+        },
+        "credits": {
+            "intro": "Este projeto foi construído sobre os ombros de gigantes. Aqui estão algumas das principais ferramentas, bibliotecas e recursos de código aberto que tornaram este portfólio possível:",
+            "items": [
+                {
+                    "name": "Webamp",
+                    "description": "Uma recriação nostálgica e incrivelmente fiel do player clássico Winamp 2.91 em HTML5 e JavaScript, construída por Captbaritone. Usado no Winamp.",
+                    "url": "https://webamp.org/"
+                },
+                {
+                    "name": "React & Vite",
+                    "description": "O motor poderoso por trás de toda a interface do nosso sistema operacional de mentirinha, garantindo modularidade na construção das janelas e performance absurda.",
+                    "url": "https://react.dev/"
+                },
+                {
+                    "name": "@dnd-kit",
+                    "description": "Um kit de ferramentas de arrastar e soltar (drag and drop) leve, modular e acessível. Utilizado na mecânica do jogo de Paciência.",
+                    "url": "https://dndkit.com/"
+                },
+                {
+                    "name": "Zustand",
+                    "description": "Um gerenciador de estado minimalista que mantêm o controle de quais janelas estão abertas, ordenação pro z-index (qual tela está na frente) e os arquivos.",
+                    "url": "https://zustand-demo.pmnd.rs/"
+                },
+                {
+                    "name": "Firebase",
+                    "description": "O ecossistema do Google que dá vida ao aplicativo MSN Messenger, fornecendo banco de dados em tempo real para os chats globais.",
+                    "url": "https://firebase.google.com/"
+                },
+                {
+                    "name": "Assets do Windows XP",
+                    "description": "A maioria dos ícones e sons originais pertencem e foram criados pela Microsoft Corporation. Eles estão sendo usados aqui de forma justa estritamente como uma homenagem nostálgica."
+                }
+            ]
         },
         "ok": "OK"
     }

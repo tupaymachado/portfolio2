@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './AboutMeApp.module.css';
 import profilePhoto from '../../../assets/icons/main.png';
+import githubIcon from '../../../assets/icons/github.png';
+import linkedinIcon from '../../../assets/icons/linkedin.png';
+import emailIcon from '../../../assets/icons/email.webp';
 
-type Tab = 'geral' | 'habilidades' | 'experiencia' | 'contato';
+type Tab = 'geral' | 'casos de uso' | 'experiencia' | 'creditos' | 'contato';
 
 interface SkillCard {
   title: string;
@@ -12,11 +15,17 @@ interface SkillCard {
   skills: string[];
 }
 
+interface CreditItem {
+  name: string;
+  description: string;
+  url?: string;
+}
+
 // URLs dos contatos — não precisam de tradução
 const CONTACT_URLS = [
-  { key: 'github', url: 'https://github.com/tupaymachado', emoji: '💻' },
-  { key: 'linkedin', url: 'https://www.linkedin.com/in/tupaymachado', emoji: '💼' },
-  { key: 'email', url: 'mailto:tupay.machado@gmail.com', emoji: '✉️' },
+  { key: 'github', url: 'https://github.com/tupaymachado', icon: githubIcon },
+  { key: 'linkedin', url: 'https://www.linkedin.com/in/tupaymachado', icon: linkedinIcon },
+  { key: 'email', url: 'mailto:tupay.machado@gmail.com', icon: emailIcon },
 ];
 
 interface ExperienceItem {
@@ -33,13 +42,16 @@ export default function AboutMeApp() {
   const TABS: { id: Tab; label: string }[] = [
     { id: 'geral', label: t('aboutMe.tabs.general') },
     { id: 'experiencia', label: t('aboutMe.tabs.experience') },
-    { id: 'habilidades', label: t('aboutMe.tabs.skills') },
+    { id: 'casos de uso', label: t('aboutMe.tabs.skills') },
     { id: 'contato', label: t('aboutMe.tabs.contact') },
+    { id: 'creditos', label: t('aboutMe.tabs.credits') },
   ];
 
   const SKILL_CARDS = t('aboutMe.skills.items', { returnObjects: true }) as SkillCard[];
 
   const EXPERIENCE = t('aboutMe.experience.items', { returnObjects: true }) as ExperienceItem[];
+
+  const CREDITS = t('aboutMe.credits.items', { returnObjects: true }) as CreditItem[];
 
   return (
     <div className={styles.container}>
@@ -89,20 +101,39 @@ export default function AboutMeApp() {
             </div>
           )}
 
-          {activeTab === 'habilidades' && (
-            <div className={styles.skillsGrid}>
+          {activeTab === 'casos de uso' && (
+            <div className={styles.timeline}>
               {SKILL_CARDS.map((card, i) => (
-                <div key={i} className={styles.skillCard}>
-                  <span className={styles.skillCardCategory}>{card.category}</span>
-                  <div className={styles.skillCardTitle}>{card.title}</div>
-                  <p className={styles.skillCardDescription}>{card.description}</p>
-                  <div className={styles.skillCardTags}>
-                    {card.skills.map(tag => (
-                      <span key={tag} className={styles.skillTag}>{tag}</span>
-                    ))}
-                  </div>
+                <div key={i} className={styles.timelineItem}>
+                  <span className={styles.timelineDate}>{card.category}</span>
+                  <span className={styles.timelineTitle}>{card.title}</span>
+                  {card.description && (
+                    <span className={styles.timelineDescription}>{card.description}</span>
+                  )}
+                  <span className={styles.timelineSubtitle} style={{ marginTop: '4px' }}>{card.skills.join(' • ')}</span>
                 </div>
               ))}
+            </div>
+          )}
+
+          {activeTab === 'creditos' && (
+            <div className={styles.creditsTab}>
+              <p className={styles.creditsIntro}>{t('aboutMe.credits.intro')}</p>
+              <div className={styles.creditsList}>
+                {CREDITS.map((item, i) => (
+                  <div key={i} className={styles.creditItem}>
+                    <div className={styles.creditItemHeader}>
+                      <span className={styles.creditName}>{item.name}</span>
+                      {item.url && (
+                        <a href={item.url} target="_blank" rel="noopener noreferrer" className={styles.creditLink}>
+                          Link ↗
+                        </a>
+                      )}
+                    </div>
+                    <p className={styles.creditDesc}>{item.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
@@ -118,7 +149,7 @@ export default function AboutMeApp() {
                     rel="noopener noreferrer"
                     className={styles.contactBtn}
                   >
-                    <span className={styles.contactEmoji}>{c.emoji}</span>
+                    <img src={c.icon} alt="" className={styles.contactIcon} />
                     {t(`aboutMe.contact.${c.key}`)}
                   </a>
                 ))}

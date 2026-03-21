@@ -153,7 +153,7 @@ const createInitialItems = (): Record<string, FileSystemItem> => ({
         type: 'folder',
         targetId: 'recycle-bin',
         iconUrl: trashBinIcon,
-        gridPosition: { row: 5, col: 3 },
+        gridPosition: { row: 2, col: 1 },
         createdAt: Date.now(),
     },
 });
