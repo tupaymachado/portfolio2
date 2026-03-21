@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './AboutMeApp.module.css';
-import { useWindowStore, useWindowContext } from '../../../stores/useWindowStore';
 import profilePhoto from '../../../assets/icons/main.png';
 
 type Tab = 'geral' | 'habilidades' | 'experiencia' | 'contato';
 
-// Níveis das habilidades — não precisam de tradução
-const SKILL_LEVELS = {
-  frontend: [{ name: 'React', level: 90 }, { name: 'TypeScript', level: 85 }, { name: 'CSS / SCSS', level: 80 }, { name: 'HTML', level: 95 }],
-  backendTools: [{ name: 'Node.js', level: 70 }, { name: 'Firebase', level: 75 }, { name: 'Git', level: 85 }, { name: 'Figma', level: 65 }],
-};
+interface SkillCard {
+  title: string;
+  category: string;
+  description: string;
+  skills: string[];
+}
 
 // URLs dos contatos — não precisam de tradução
 const CONTACT_URLS = [
@@ -29,8 +29,6 @@ interface ExperienceItem {
 export default function AboutMeApp() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<Tab>('geral');
-  const { instanceId } = useWindowContext();
-  const closeWindow = useWindowStore(state => state.closeWindow);
 
   const TABS: { id: Tab; label: string }[] = [
     { id: 'geral', label: t('aboutMe.tabs.general') },
@@ -39,10 +37,7 @@ export default function AboutMeApp() {
     { id: 'contato', label: t('aboutMe.tabs.contact') },
   ];
 
-  const SKILLS = [
-    { category: t('aboutMe.skills.frontend'), items: SKILL_LEVELS.frontend },
-    { category: t('aboutMe.skills.backendTools'), items: SKILL_LEVELS.backendTools },
-  ];
+  const SKILL_CARDS = t('aboutMe.skills.items', { returnObjects: true }) as SkillCard[];
 
   const EXPERIENCE = t('aboutMe.experience.items', { returnObjects: true }) as ExperienceItem[];
 
@@ -96,18 +91,16 @@ export default function AboutMeApp() {
 
           {activeTab === 'habilidades' && (
             <div className={styles.skillsGrid}>
-              {SKILLS.map(category => (
-                <div key={category.category} className={styles.skillCategory}>
-                  <div className={styles.skillCategoryTitle}>{category.category}</div>
-                  {category.items.map(skill => (
-                    <div key={skill.name} className={styles.skillRow}>
-                      <span className={styles.skillName}>{skill.name}</span>
-                      <div className={styles.skillBarBg}>
-                        <div className={styles.skillBarFill} style={{ width: `${skill.level}%` }} />
-                      </div>
-                      <span className={styles.skillPercent}>{skill.level}%</span>
-                    </div>
-                  ))}
+              {SKILL_CARDS.map((card, i) => (
+                <div key={i} className={styles.skillCard}>
+                  <span className={styles.skillCardCategory}>{card.category}</span>
+                  <div className={styles.skillCardTitle}>{card.title}</div>
+                  <p className={styles.skillCardDescription}>{card.description}</p>
+                  <div className={styles.skillCardTags}>
+                    {card.skills.map(tag => (
+                      <span key={tag} className={styles.skillTag}>{tag}</span>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
@@ -132,12 +125,6 @@ export default function AboutMeApp() {
               </div>
             </div>
           )}
-        </div>
-
-        <div className={styles.footer}>
-          <button className={styles.footerBtn} onClick={() => closeWindow(instanceId)}>
-            {t('aboutMe.ok')}
-          </button>
         </div>
       </div>
     </div>

@@ -418,13 +418,31 @@
             "bio3": "Today, my greatest technical background is in front-end, but I keep studying to diversify my skills: back-end, API development, AI integrations, optimizations, and architecture. I believe my past experiences, both academic and professional, have given me a unique set of perspectives that makes my work as a dev much more complete than it would be without them: soft skills, organization, systemic vision, ease of communication, focus on problem-solving, and a real understanding of the business."
         },
         "skills": {
-            "frontend": "Front-end",
-            "backendTools": "Back-end & Tools"
+            "items": [
+                {
+                    "title": "Cost Optimization: AI vs. Regex",
+                    "category": "Software Engineering & Logic",
+                    "description": "Not every complex problem demands an expensive solution. In a recent project, I encountered a flow that relied heavily on an Artificial Intelligence API to identify and validate strings in text, generating high operational costs. I analyzed the data patterns and replaced the entire AI integration with optimized regular expressions (Regex). The result? The same validation accuracy, with instant performance and a drastic reduction in infrastructure costs.",
+                    "skills": ["Regex", "Programming Logic", "Cost Optimization", "Business Sense"]
+                },
+                {
+                    "title": "Agile Automation with Low-Code",
+                    "category": "Integrations & Processes",
+                    "description": "During my experience in Porto Alegre, I focused on rapidly building solutions using low-code tools such as Bubble and Make (Integromat). More than just 'dragging blocks', the real challenge here was architectural modeling: understanding companies' manual processes, designing data flows, and integrating different APIs to make systems communicate with each other in an automated, invisible way for the end user.",
+                    "skills": ["Bubble", "Make (Integromat)", "API Integration", "Process Automation", "Rapid Prototyping"]
+                },
+                {
+                    "title": "Sustainable Software in Production",
+                    "category": "Architecture & Maintainability",
+                    "description": "One of my greatest prides is not just delivering fast code, but delivering code that stands the test of time. Over two years ago, I developed an internal application for a company where I worked, and that system continues in full production use to this day, with no need for constant refactoring. This proves my focus on writing sustainable code, resilient architectures, and centering on what truly matters: solving the user's problem for the long run.",
+                    "skills": ["Clean Code", "Maintainability", "Software Architecture", "Troubleshooting"]
+                }
+            ]
         },
         "experience": {
             "items": [
                 {
-                    "date": "Oct 2025 - Present",
+                    "date": "Oct 2025 - Mar 26",
                     "title": "Front-end Developer",
                     "subtitle": "NOC Project",
                     "description": "Working since conception on building a NOC (Network Operations Center) system. Accelerated development using advanced Artificial Intelligence tools (LLMs) as code co-pilots, ensuring fast deliveries and a scalable architecture. Focus on creating efficient interfaces and optimizing costs and performance — including refactoring AI API-based validation flows into faster and more economical internal logic."

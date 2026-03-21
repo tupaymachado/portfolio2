@@ -1,18 +1,72 @@
 {
   "rules": {
-    // Presence: qualquer autenticado lê, só o próprio usuário escreve
+    // ──────────────────────────────────────────────────────────────────────
+    // PRESENCE: cada usuário só escreve a própria entrada; qualquer
+    // autenticado pode ler (necessário para a lista de contatos e o
+    // painel de participantes mostrarem quem está online).
+    // ──────────────────────────────────────────────────────────────────────
     "presence": {
       "$uid": {
-        ".read": "auth != null",
-        ".write": "auth != null && auth.uid == $uid"
+        ".read":  "auth != null",
+        ".write": "auth != null && auth.uid == $uid",
+
+        // Valida os campos que o app escreve em presence/{uid}
+        ".validate": "newData.hasChildren(['name', 'status'])",
+
+        "name":     { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100" },
+        "photoURL": { ".validate": "newData.isString() && newData.val().length <= 500" },
+        "status":   { ".validate": "newData.val() === 'online' || newData.val() === 'offline' || newData.val() === 'busy' || newData.val() === 'away' || newData.val() === 'brb'" },
+        "lastSeen": { ".validate": "newData.isNumber() || newData.val() == null" },
+
+        "$other":   { ".validate": false }
       }
     },
 
-    // Mensagens: qualquer autenticado pode ler e escrever (chat global + privado)
+    // ──────────────────────────────────────────────────────────────────────
+    // MESSAGES: o roomId pode ser "global" ou "uid1_uid2" (dois UIDs
+    // concatenados em ordem alfabética).
+    //
+    //   • Sala global  → qualquer autenticado lê e escreve.
+    //   • Sala privada → só os dois participantes envolvidos podem
+    //                    ler e escrever (uid1 e uid2 fazem parte do roomId).
+    // ──────────────────────────────────────────────────────────────────────
     "messages": {
+      "global": {
+        ".read":  "auth != null",
+        ".write": "auth != null",
+
+        "$messageId": {
+          ".validate": "newData.hasChildren(['uid', 'name', 'text', 'timestamp', 'type'])",
+
+          "uid":       { ".validate": "newData.isString() && newData.val() == auth.uid" },
+          "name":      { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100" },
+          "photoURL":  { ".validate": "newData.isString() && newData.val().length <= 500" },
+          "text":      { ".validate": "newData.isString() && newData.val().length <= 2000" },
+          "type":      { ".validate": "newData.val() === 'text' || newData.val() === 'nudge'" },
+          "timestamp": { ".validate": "newData.isNumber() || newData.val() == null" },
+
+          "$other":    { ".validate": false }
+        }
+      },
+
       "$roomId": {
-        ".read": "auth != null",
-        ".write": "auth != null"
+        // Salas privadas: roomId é formado por uid1_uid2 ordenados.
+        // A regra verifica que o uid do usuário autenticado está contido no roomId.
+        ".read":  "auth != null && ($roomId.contains(auth.uid))",
+        ".write": "auth != null && ($roomId.contains(auth.uid))",
+
+        "$messageId": {
+          ".validate": "newData.hasChildren(['uid', 'name', 'text', 'timestamp', 'type'])",
+
+          "uid":       { ".validate": "newData.isString() && newData.val() == auth.uid" },
+          "name":      { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 100" },
+          "photoURL":  { ".validate": "newData.isString() && newData.val().length <= 500" },
+          "text":      { ".validate": "newData.isString() && newData.val().length <= 2000" },
+          "type":      { ".validate": "newData.val() === 'text' || newData.val() === 'nudge'" },
+          "timestamp": { ".validate": "newData.isNumber() || newData.val() == null" },
+
+          "$other":    { ".validate": false }
+        }
       }
     }
   }

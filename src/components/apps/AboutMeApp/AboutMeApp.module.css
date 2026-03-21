@@ -119,60 +119,53 @@
 .skillsGrid {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
-.skillCategory {
+.skillCard {
+  background: #fff;
+  border: 1px solid #919b9c;
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  box-shadow: inset 1px 1px #fcfcfe;
 }
 
-.skillCategoryTitle {
+.skillCardCategory {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #3c68a8;
+  font-weight: bold;
+}
+
+.skillCardTitle {
   font-weight: bold;
   font-size: 11px;
-  border-bottom: 1px solid #c0bdb5;
-  padding-bottom: 3px;
-  margin-bottom: 2px;
+  color: #000;
 }
 
-.skillRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.skillName {
-  width: 80px;
+.skillCardDescription {
   font-size: 11px;
-  text-align: right;
-  flex-shrink: 0;
+  line-height: 1.6;
+  color: #333;
+  margin: 0;
 }
 
-.skillBarBg {
-  flex: 1;
-  height: 14px;
-  background: #fff;
-  border: 1px solid #848484;
-  position: relative;
-  overflow: hidden;
+.skillCardTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
 }
 
-.skillBarFill {
-  height: 100%;
-  background: linear-gradient(to bottom, #5b9bd5, #2a6099);
-  position: absolute;
-  left: 0;
-  top: 0;
-  transition: width 0.3s ease;
-}
-
-.skillPercent {
+.skillTag {
   font-size: 10px;
-  width: 28px;
-  text-align: right;
-  color: #555;
-  flex-shrink: 0;
+  background: #d4d0c8;
+  border: 1px solid #848484;
+  padding: 1px 6px;
+  color: #222;
 }
 
 /* ── EXPERIÊNCIA ── */
@@ -231,7 +224,7 @@
   gap: 8px;
 }
 
-.contactBtn {
+/* .contactBtn {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -253,7 +246,7 @@
 
 .contactBtn:active {
   border-color: #848484 #fff #fff #848484;
-}
+} */
 
 .contactEmoji {
   font-size: 14px;
@@ -269,7 +262,7 @@
   border-top: 1px solid #c0bdb5;
 }
 
-.footerBtn {
+.contactBtn {
   font-family: Tahoma, Arial;
   font-size: 11px;
   box-sizing: border-box;
@@ -277,20 +270,20 @@
   background: linear-gradient(180deg, #fff, #ecebe5 86%, #d8d0c4);
   box-shadow: none;
   border-radius: 3px;
-  min-width: 75px;
+  width: 75px;
   min-height: 23px;
   padding: 0 12px;
   text-align: center;
 }
 
-.footerBtn:hover {
+.contactBtn:hover {
   box-shadow: inset -1px 1px #fff0cf, inset 1px 2px #fdd889, inset -2px 2px #fbc761, inset 2px -2px #e5a01a;
 }
 
-.footerBtn:focus {
+.contactBtn:focus {
   box-shadow: inset -1px 1px #cee7ff, inset 1px 2px #98b8ea, inset -2px 2px #bcd4f6, inset 1px -1px #89ade4, inset 2px -2px #89ade4;
 }
 
-.footerBtn:active {
+.contactBtn:active {
   border-color: #848484 #fff #fff #848484;
 }

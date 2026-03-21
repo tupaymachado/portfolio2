@@ -418,15 +418,33 @@
             "bio3": "Hoje, minha maior bagagem técnica está no front-end, mas sigo estudando para diversificar minhas habilidades: backend, desenvolvimento de APIs, integrações com IA, otimizações e arquitetura. Acredito que minhas experiências passadas, tanto acadêmicas quanto profissionais, me deram um conjunto único de perspectivas que torna meu trabalho como dev muito mais completo do que seria sem elas: soft skills, organização, visão sistêmica, facilidade de comunicação, foco na resolução de problemas e entendimento real do negócio."
         },
         "skills": {
-            "frontend": "Front-end",
-            "backendTools": "Back-end & Ferramentas"
+            "items": [
+                {
+                    "title": "Otimização de Custos: IA vs. Regex",
+                    "category": "Engenharia de Software e Lógica",
+                    "description": "Nem todo problema complexo exige uma solução cara. Em um projeto recente, me deparei com um fluxo que dependia massivamente de uma API de Inteligência Artificial para identificar e validar strings em textos, gerando altos custos operacionais. Analisei os padrões dos dados e substituí toda essa integração de IA por expressões regulares (Regex) otimizadas. O resultado? A mesma precisão na validação, com uma performance instantânea e uma redução drástica nos custos da infraestrutura.",
+                    "skills": ["Regex", "Lógica de Programação", "Otimização de Custos", "Visão de Negócios (Business Sense)"]
+                },
+                {
+                    "title": "Automação Ágil com Low-Code",
+                    "category": "Integrações e Processos",
+                    "description": "Durante minha experiência em Porto Alegre, atuei focado na construção rápida de soluções utilizando ferramentas low-code como Bubble e Make (Integromat). Mais do que 'arrastar blocos', o verdadeiro desafio aqui foi a modelagem arquitetural: entender os processos manuais das empresas, desenhar os fluxos de dados e integrar diferentes APIs para fazer os sistemas conversarem entre si de forma automatizada e invisível para o usuário final.",
+                    "skills": ["Bubble", "Make (Integromat)", "Integração de APIs", "Automação de Processos", "Prototipagem Rápida"]
+                },
+                {
+                    "title": "Software Sustentável em Produção",
+                    "category": "Arquitetura e Manutenibilidade",
+                    "description": "Um dos meus maiores orgulhos não é apenas entregar um código rápido, mas entregar um código que sobrevive ao tempo. Há mais de dois anos, desenvolvi uma aplicação interna para uma empresa onde atuei, e esse sistema continua em pleno uso na produção até hoje, sem necessidade de refatorações constantes. Isso comprova meu foco em escrever códigos sustentáveis, arquiteturas resilientes e focar no que realmente importa: resolver o problema do usuário a longo prazo.",
+                    "skills": ["Clean Code", "Manutenibilidade", "Arquitetura de Software", "Troubleshooting"]
+                }
+            ]
         },
         "experience": {
             "items": [
                 {
-                    "date": "Out 2025 - Atual",
+                    "date": "Out 2025 - Mar 26",
                     "title": "Desenvolvedor Front-end",
-                    "subtitle": "Projeto NOC",
+                    "subtitle": "Projeto NOC.ai",
                     "description": "Atuação desde a concepção na construção de um sistema de NOC (Network Operations Center). Desenvolvimento acelerado utilizando ferramentas avançadas de Inteligência Artificial (LLMs) como co-pilotos de código, garantindo entregas rápidas e arquitetura escalável. Foco na criação de interfaces eficientes e otimização de custos e performance — incluindo a refatoração de fluxos de validação baseados em APIs de IA para lógicas internas mais rápidas e econômicas."
                 },
                 {

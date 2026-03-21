@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { User } from 'firebase/auth';
 import { ref, onValue, set, onDisconnect, serverTimestamp, onChildAdded, query, limitToLast } from 'firebase/database';
@@ -62,6 +62,12 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
 
   // Obter música atual do Webamp
   const currentTrack = useWebampStore(state => state.currentTrack);
+
+  // Refs para sincronizar música com Firebase
+  const personalMessageRef = useRef(personalMessage);
+  personalMessageRef.current = personalMessage; // always up-to-date, sem closure stale
+  const isMusicActiveRef = useRef(false);
+  const originalMsgRef = useRef('');
 
   // Escutar presença e Registrar própria presença
   useEffect(() => {
@@ -136,6 +142,26 @@ export default function MsnContactList({ user, initialStatus, onLogout }: MsnCon
       unsubscribeContacts();
     };
   }, [user.uid, user.displayName, user.photoURL]);
+
+  // Sincronizar faixa atual com Firebase para que outros usuários vejam
+  useEffect(() => {
+    if (currentTrack) {
+      if (!isMusicActiveRef.current) {
+        // Música começou agora — salva a mensagem real antes de sobrescrever
+        originalMsgRef.current = personalMessageRef.current;
+        isMusicActiveRef.current = true;
+      }
+      msnUserService.updateUserProfile(user.uid, {
+        personalMessage: `🎵 ${currentTrack}`,
+      });
+    } else if (isMusicActiveRef.current) {
+      // Música parou — restaura a mensagem pessoal original
+      isMusicActiveRef.current = false;
+      msnUserService.updateUserProfile(user.uid, {
+        personalMessage: originalMsgRef.current,
+      });
+    }
+  }, [currentTrack, user.uid]);
 
   // Auto-open chat when an incoming message arrives from a contact
   useEffect(() => {
