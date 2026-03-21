@@ -204,9 +204,10 @@ export default function LoginScreen() {
             {/* Modal de criar conta */}
             {showCreateModal && (
                 <div className={styles.modalOverlay} onClick={() => setShowCreateModal(false)}>
-                    <div className={styles.modal} onClick={e => e.stopPropagation()}>
+                    <div className={`${windowStyles.window} ${windowStyles.active} ${styles.modal}`} onClick={e => e.stopPropagation()}>
                         <header className={`${windowStyles.titleBar} ${windowStyles.active}`}>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <img className={windowStyles.icon} src={winLogo} alt="Windows icon" />
                                 <span className={windowStyles.title} style={{ color: 'white' }}>{t('login.createAccountTitle')}</span>
                             </div>
                             <div className={windowStyles.windowControls}>
@@ -219,7 +220,7 @@ export default function LoginScreen() {
                             </div>
                         </header>
 
-                        <div className={styles.modalBody}>
+                        <div className={`${windowStyles.windowBody} ${windowStyles.active} ${styles.modalBody}`}>
                             <div className={styles.formGroup}>
                                 <label className={styles.formLabel}>{t('login.usernameLabel')}</label>
                                 <input
